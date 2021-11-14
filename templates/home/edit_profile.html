@@ -1,0 +1,111 @@
+<div class="heading"> Edit Profile </div>
+<br>
+<div id="msg_edit_profile" class="alert alert-danger" style="display:none"></div>
+<form action="" method="post" enctype="multipart/form-data" id="frm_edit_profile">
+    {% csrf_token %} 
+    <table>
+        <h3>EDIT PROFILE</h3>
+        <tr>
+            <td>&nbsp;</td> 
+            <td>Identity Number: </td>
+            <td><input type="text" id="txtbx_edit_profile_id" placeholder="Identity Number" disabled></td>
+           
+        </tr>
+        <tr>
+            <td>&nbsp;</td> 
+            <td>User Name / E-Mail: </td>
+            <td><input type="text" id="txtbx_edit_profile_username" placeholder="EMAIL/USERNAME" disabled></td>
+           
+        </tr>
+        <tr>
+            <td>&nbsp;</td> 
+            <td>Status: </td>
+            <td><input type="text" id="txtbx_edit_profile_status" placeholder="STATUS" disabled></td>
+           
+        </tr>
+        <tr>
+            <td>&nbsp;</td> 
+            <td>First Name: </td>
+            <td><input type="text" id="txtbx_edit_profile_fname" placeholder="First Name"></td>
+           
+        </tr>
+        <tr>
+            <td>&nbsp;</td> 
+            <td>Last Name: </td>
+            <td><input type="text" id="txtbx_edit_profile_lname" placeholder="Last Name"></td>
+           
+        </tr>
+        <tr>
+            <td>&nbsp;</td> 
+            <td>E-Mail: </td>
+            <td><input type="text" id="txtbx_edit_profile_email" placeholder="EMAIL" ></td>
+           
+        </tr>
+        <tr>
+            <td>&nbsp;</td> 
+            <td style="text-align:right">Verification Id Type:</td>
+            
+            <td>
+                <select id="select_edit_profile_Verification_id_type" name="select_edit_profile_Verification_id_type" >
+                    <option value="none" selected disabled hidden>Select Your Id</option>                
+                    <option value="Adhar Card">Adhar Card</option>
+                    <option value="PAN Card">PAN Card </option>
+                    <option value="Passport">Passport</option>
+                    <option value="Voter Id Card">Voter Id Card</option>
+                    <option value="Government Id Card">Government Id Card</option>
+                    <option value="Other">Other</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td> 
+            <td>Verification Id: </td>
+            <td><input type="text" id="txtbx_edit_profile_verification_id" placeholder="Verification Id Number"></td>
+           
+        </tr>
+        <tr>
+            <td>&nbsp;</td> 
+            <td>Contact1: </td>
+            <td><input type="text" id="txtbx_edit_profile_contact1" placeholder="Contact Number#1"></td>
+           
+        </tr>
+        <tr>
+            <td>&nbsp;</td> 
+            <td>Contact2: </td>
+            <td><input type="text" id="txtbx_edit_profile_contact2" placeholder="Contact Number#2"></td>
+           
+        </tr>
+        <tr>
+            <td>&nbsp;</td> 
+            <td>Address: </td>
+            <td><input type="text" id="txtbx_edit_profile_address" placeholder="Contact Address"></td>
+           
+        </tr>
+        
+        <tr>
+            <td>&nbsp;</td> 
+            <td>Profile Photo: </td>
+            <td><input type='file' id="file_edit_profile_pic" name="file_edit_profile_pic"  onchange="readProfilePicURL(this);" accept="image/*"/> 
+            <br> <img id="img_profile_pic_preview" src="" alt=""  width="250px" height="250px" style="border-radius:3px;border:5px solid rgb(121, 118, 118);"/></td>
+        </tr>
+        
+            
+              
+              
+        <tr>
+            <td>
+                
+            </td>
+            <td> 
+                             
+            </td>
+            
+            <td>
+                <input type="button" value="Cancel" id="btn_edit_profile_cancel">
+                <input type="button" value="Save"   id="btn_edit_profile_save"> 
+            </td>
+        </tr>
+    </table>
+</form>
+{% include "home/edit_profile_ajax.html" %}
+{% include "home/common_functions.html" %}

@@ -1,0 +1,223 @@
+<script>
+$(document).ready(function () {
+	//alert("Bp----");
+
+});
+
+//save details
+$("#btn_edit_profile_save").click(function(){
+	event.preventDefault();
+	let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+	let vDbId=$("#txtbx_edit_profile_id").val();
+	let vNameFirst=$("#txtbx_edit_profile_fname").val();
+	let vNameLast=$("#txtbx_edit_profile_lname").val();
+	let vContact1=$("#txtbx_edit_profile_contact1").val();
+	let vContact2=$("#txtbx_edit_profile_contact2").val();
+	let vEmailId=$("#txtbx_edit_profile_email").val();        
+	let vAddress=$("#txtbx_edit_profile_address").val();
+	let vVerificationIdType=$("#select_edit_profile_Verification_id_type").val();
+	let vVerificationId=$("#txtbx_edit_profile_verification_id").val();		
+	let vProfilePicPath=$("#img_profile_pic_preview");
+	
+	///validation 
+	$("#msg_edit_profile").show();
+	if(vNameFirst==""){
+		$("#msg_edit_profile").text("Enter First Name !!!");
+		
+	}else if(vNameLast==""){
+		$("#msg_edit_profile").text("Enter Last Name !!!");
+		
+	}else if(validate_email(vEmailId)==false){
+		$("#msg_edit_profile").text("Invalid EmailId !!!");
+		
+	}else if(vVerificationIdType==null){
+		$("#msg_edit_profile").text("Select Your Verification Id !!!");
+		
+	}else if(vVerificationId==""){
+		$("#msg_edit_profile").text("Enter Verification Id !!!");
+		
+	}else if(vContact1=="" && vContact2==""){            
+		$("#msg_edit_profile").text("Enter Contact Number !!!");
+		
+	}else if(vAddress==""){
+		$("#msg_edit_profile").text("Enter Address !!!");
+		
+	}else if(vProfilePicPath==null){
+		$("#msg_edit_profile").text("Select Your Profile Photo !!!");
+		
+	}else{            
+		$("#msg_edit_profile").hide()
+	}	
+	//prepare data
+	vDataSendToServer={ 
+                csrfmiddlewaretoken:vCsrfToken,
+                hDbId:vDbId,
+				hNameFirst:vNameFirst,
+                hNameLast:vNameLast,
+                hContact1:vContact1,
+                hContact2:vContact2,
+                hEmailId:vEmailId,
+                hAddress:vAddress,
+                hVerificationIdType:vVerificationIdType,
+                hVerificationId:vVerificationId,
+                                              
+        };
+	
+	///Save in Database 
+	//let vFormData = new FormData($("#frm_edit_profile").get(0)); // Not Used
+	//console.log(vFormData);
+	$.ajax({url:"{% url 'profile_details_save' %}",
+				method:"POST",
+				data:vDataSendToServer,
+				dataType:"json",
+				success:function(response){
+					vSuccess=response['djStatus'];
+						if(vSuccess=="1"){
+                            $("#msg_edit_profile").show();
+                            $("#msg_edit_profile").text("Profile Edited Successfully !!!");
+        					
+							////// AJAX to save picture (START) on Success Status==1
+							let vFormData = new FormData($("#frm_edit_profile").get(0));              		          
+							vFormData.append('hDbId',vDbId)
+							vFormData.append('hContact1',vContact1)
+							vFormData.append('hContact2',vContact2)
+							vFormData.append('hAddress',vAddress)
+							vFormData.append('hVerificationIdType',vVerificationIdType)
+							vFormData.append('hVerificationId',vVerificationId)
+							
+							$.ajax({
+								url:"{% url 'profile_extra_details_save' %}",
+								method:"POST",
+								data:vFormData,
+								processData: false,
+								contentType: false,                
+								mimeType:"multipart/form-data",
+								success:function(response){
+									var vSuccess=JSON.parse(response);
+                      				var vStatus=vSuccess.djStatus;																				
+									if(vStatus=="1"){
+										///	
+										$("#msg_edit_profile").text("Data & Image saved successfully !!!");
+        								$("#msg_edit_profile").show();
+
+										
+									}else{
+										$("#msg_edit_profile").text("Image Saving Failed !!!");
+        								$("#msg_edit_profile").show();
+									}
+										
+								},
+							
+
+							});
+                            
+						}else{
+                            $("#msg_edit_profile").text("Profile Editing Failed !!!");
+        					$("#msg_edit_profile").show();
+						}
+								
+					},
+				
+
+            });
+			setTimeout(function(){								
+				$("#msg_edit_profile").hide()
+			}, 10000);
+	
+});
+
+document.getElementById("btn_edit_profile").addEventListener("click",function(){
+    document.getElementById("div_edit_profile").style.display="block";
+	document.getElementById("btn_edit_profile").disabled=true;
+	document.getElementById("div_after_login_menu").style.display="none";
+	loadProfileDetails();
+});
+
+document.getElementById("btn_edit_profile_cancel").addEventListener("click",function(){
+	document.getElementById("div_edit_profile").style.display="none";
+	document.getElementById("btn_edit_profile").disabled=false;
+	document.getElementById("div_after_login_menu").style.display="block";
+	document.getElementById("msg_edit_profile").style.display="none";
+});
+
+//===================================Functions ==============
+
+function loadProfileDetails(){
+	let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+	vDataSendToServer={ 
+		csrfmiddlewaretoken:vCsrfToken,
+    };
+	$.ajax({url:"{% url 'profile_details' %}",
+		method:"POST",
+		data:vDataSendToServer,
+		dataType:"json",
+		success:function(response){
+				vSuccess=response['djStatus'];
+					
+				if(vSuccess==1){
+					$("#msg_edit_profile").hide();
+					////
+					vUserDataList= response['djUserDetails']; 
+					vId=vUserDataList[0]['id']  
+					vUserId=vUserDataList[0]['username']  
+					vUserFistName=vUserDataList[0]['first_name']  
+					vUserLastName=vUserDataList[0]['last_name']  
+					vUserName=vUserFistName+" "+ vUserLastName
+					vUserContact1=vUserDataList[0]['user_extra_info__contact1']  
+					vUserContact2=vUserDataList[0]['user_extra_info__contact2']  
+					vUserEmail=vUserDataList[0]['email']  
+					vUserAddress=vUserDataList[0]['user_extra_info__address']  
+					vUserVerificationId=vUserDataList[0]['user_extra_info__verification_id']  
+					vUserVerificationIdType=vUserDataList[0]['user_extra_info__verification_id_type']  
+					vUserProfilePicPath=vUserDataList[0]['user_extra_info__profile_pic_path']  
+					vUserStatus=vUserDataList[0]['user_extra_info__status']  
+					
+					/////
+					$("#txtbx_edit_profile_id").val(vId);
+					$("#txtbx_edit_profile_username").val(vUserId);					
+					$("#txtbx_edit_profile_status").val(vUserStatus);					
+					$("#txtbx_edit_profile_fname").val(vUserFistName);
+					$("#txtbx_edit_profile_lname").val(vUserLastName);
+					$("#txtbx_edit_profile_contact1").val(vUserContact1);
+					$("#txtbx_edit_profile_contact2").val(vUserContact2);
+					$("#txtbx_edit_profile_address").val(vUserAddress);
+					$("#txtbx_edit_profile_email").val(vUserEmail);
+					$("#txtbx_edit_profile_verification_id").val(vUserVerificationId);
+					//
+					document.getElementById("select_edit_profile_Verification_id_type").value=vUserVerificationIdType;
+                					
+					$("#img_profile_pic_preview").attr("src", "/media/"+vUserProfilePicPath); 
+					
+					////
+					
+				} else{
+					$("#msg_edit_profile").text("Profile Retrieve Failed !!!");
+					$("#msg_edit_profile").show();
+				}
+						
+			},
+				
+
+     });	
+	setTimeout(function(){								
+		document.getElementById("msg_edit_profile").style.display="none";
+	}, 5000); 
+}
+
+
+function readProfilePicURL(input) {
+    if (input.files && input.files[0]) {        
+        var reader = new FileReader();        
+        reader.onload = function (e) {
+            $('#img_profile_pic_preview').attr('src', e.target.result);
+            vImagePath="";            
+        };
+        reader.readAsDataURL(input.files[0]);
+    }else{
+      
+      $('#img_profile_pic_preview').attr('src', null);
+    }
+    
+}
+    
+</script>

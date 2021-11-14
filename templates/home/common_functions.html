@@ -1,0 +1,388 @@
+<script>
+	var vSLNO=0; //this is a common/global variable to display serial number  
+	//----get today date 
+	function GetTodayDate() {
+		var date = new Date();
+		var currentDate = date.toISOString().substring(0,10);
+		return currentDate;
+	}
+
+	// program to create a two dimensional array
+	function create2DArray(pRows, pCols) {
+		let arr = [];
+
+		// creating two dimensional array
+		for (let i = 0; i< pRows; i++) {
+			for(let j = 0; j< pCols; j++) {
+				arr[i] = [];
+			}
+		}
+		// initializing elements to array
+		for (let i = 0; i< pRows; i++) {
+			for(let j = 0; j< pCols; j++) {
+				arr[i][j] = j;
+			}
+		}
+		return arr;
+	}
+
+  function initialize2DArray(pArray) { 
+    //alert("Initalize The Array \nRows"+pArray.length+"\nCols"+pArray[0].length);
+    for(var i=0;i<pArray.length;i++){
+      for (var j=0;j<pArray[i].length;j++){
+        pArray[i][j]="NA";
+      }
+    }
+    return pArray;
+  }
+
+	//---find  next character 
+	function nextChar(c) {
+      return String.fromCharCode(c.charCodeAt(0) + 1);
+    }
+    
+	//---find  previous character 
+	function prevChar(c) {
+      return String.fromCharCode(c.charCodeAt(0) - 1);
+    }
+
+	//---find  no of element in array 
+	function getArrayElementsCount(pArray){
+		var count = 0;
+		for(var i = 0; i < pArray.length; ++i){
+			if(pArray[i] != "")
+				count++;
+		}
+		return count;
+	}
+
+//----How to access each elements of an array row wise & column wise
+function rectifyOptTag(pArray){
+  for(var i = 0; i < pArray.length; ++i){		
+		for (var j = 0; j<pArray[i].length; j++) {
+			console.log( "Row "+i+" & Column "+j+":"+pArray[i][j]);         	      
+    	}	
+	}
+
+  
+}
+
+//---check if any white space inside given string
+function isWhiteSpaceInsideString(pString) {
+   pString=pString.trim();
+   return pString.indexOf(' ') >= 0;
+}
+
+
+//----Remove all LI items from UL
+function removeItemsFromUnOrderedList(pUL){
+  var ul = document.getElementById(pUL);
+	while(ul.firstChild){    
+    ul.removeChild(ul.firstChild);
+  }   
+  		
+      
+}
+
+
+//================Search Question=======(START)====== 
+function searchListItem(pInputBoxId,pUlContent) {
+  
+  // Declare variables
+  var input, filter, ul, li, a, i, txtValue;
+  input = document.getElementById(pInputBoxId);
+  filter = input.value.toUpperCase();
+  ul = document.getElementById(pUlContent);
+  li = ul.getElementsByTagName('li');
+
+  // Loop through all list items, and hide those who don't match the search query
+  for (i = 0; i < li.length; i++) {
+    a = li[i].getElementsByTagName("a")[0];
+    txtValue = a.textContent || a.innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      li[i].style.display = "";
+    } else {
+      li[i].style.display = "none";
+    }
+  }
+}
+//================Search Question=======(END)====== 
+
+
+//================Delete Id from UL-List=======(START)====== 
+function deleteListItem(pInputBoxId,pUlContent) {
+  // Declare variables
+  var input, filter, ul, li, a, i, txtValue;
+  input = document.getElementById(pInputBoxId);
+  filter = input.value.toUpperCase();
+  ul = document.getElementById(pUlContent);
+  li = ul.getElementsByTagName('li');
+
+  // Loop through all list items, and hide those who don't match the search query
+  for (i = 0; i < li.length; i++) {
+    a = li[i].getElementsByTagName("a")[0];
+    txtValue = a.textContent || a.innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {    
+		
+	  ul.removeChild(ul.childNodes[i]);
+    } 
+  }
+
+}
+//===============Delete Id from UL-List======(END)====== 
+
+function getCheckedRadioValue(pOptionButtonName){
+  return $("input[type='radio'][name='"+pOptionButtonName+"']:checked").val();
+
+}
+
+function setOptionButtonChecked(pOptionButtonName, pValue) {
+	pValue=String(pValue).trim();
+	// console.log("Option Button Name "+pOptionButtonName);
+	// console.log("Option Button Value "+pValue);
+  $('input[name="' + pOptionButtonName+ '"][value="' + pValue + '"]').prop('checked', true);
+}
+
+function setOptionButtonDisable(pOptionButtonName, pValue) {
+	pValue=String(pValue).trim();
+	// console.log("Option Button Name "+pOptionButtonName);
+	// console.log("Option Button Value "+pValue);
+  $('input[name="' + pOptionButtonName+ '"][value="' + pValue + '"]').prop('disabled', true);
+}
+
+function setOptionButtonEnable(pOptionButtonName, pValue) {
+	pValue=String(pValue).trim();
+	// console.log("Option Button Name "+pOptionButtonName);
+	// console.log("Option Button Value "+pValue);
+  $('input[name="' + pOptionButtonName+ '"][value="' + pValue + '"]').prop('disabled', false);
+}
+
+// function addItemInUL_OLD(pULId,pGetDetailFunctionName,pUId){
+  
+//   var ulist = document.getElementById(pULId);
+//   var newItem = document.createElement("li");
+//   var a = document.createElement("a");
+  
+//   a.textContent = pUId;
+//   a.setAttribute('href', 'javascript:'+pGetDetailFunctionName+'("'+pUId+'")');
+//   newItem.appendChild(a);
+//   ulist.appendChild(newItem);  
+
+// }
+
+function addItemInUL(pULId,pGetDetailFunctionName,pUId,pSLNO){  
+  var ulist = document.getElementById(pULId);
+  var newItem = document.createElement("li");
+  var a = document.createElement("a");  
+  a.textContent = "#"+pSLNO+"|"+pUId;
+  a.setAttribute('href', 'javascript:'+pGetDetailFunctionName+'("'+pUId+'")');
+  newItem.appendChild(a);
+  ulist.appendChild(newItem);  
+
+}
+
+//----this function displays DB_ID as well.
+function addItemInUL2(pULId,pGetDetailFunctionName,pUId,pSLNO,pDbId){  
+  var ulist = document.getElementById(pULId);
+  var newItem = document.createElement("li");
+  var a = document.createElement("a");  
+  a.textContent = "#"+pSLNO+"|"+pDbId+"|"+pUId;
+  a.setAttribute('href', 'javascript:'+pGetDetailFunctionName+'("'+pDbId+'","'+pUId+'")');
+  newItem.appendChild(a);
+  ulist.appendChild(newItem);  
+
+}
+//this function finds End Date and time of the exam based on given duration 
+//out of this function is string, which can be directly assigned in the datetime-local input of html
+//if you want further date processing on the o/p of this function then you have to convert this in to proper date by below genral code
+// vDate=new Date(getEndDate(vStartDateTime,vDuration))  
+function getEndDate(pStartDateTime,pDuration,){
+    vDuration=pDuration;
+    vYear=pStartDateTime.getFullYear();
+    vMonth=pStartDateTime.getMonth()+1; // 1 is added becasue it is zero index i.e. // Be careful! January is 0, not 1
+    vDay=pStartDateTime.getDate();
+    vHours=pStartDateTime.getHours();
+    vMinutes=pStartDateTime.getMinutes();
+    vTotalMinutes=Number(vDuration)+vMinutes;
+    vTotalHours=Math.floor(vTotalMinutes/60)+vHours;
+    vFinalMinutes=vTotalMinutes%60;
+    vFinalHours=vTotalHours%24;
+    vDaysToAdd=Math.floor(vTotalHours/24);
+    vNextDate=new Date();
+    vNextDate=addDays(pStartDateTime,vDaysToAdd);
+    var vOffset = new Date().getTimezoneOffset(); // this is giving -330 for India; since it is negative value hence we have to do minus
+    vOffsetHours=Math.ceil(vOffset/60);
+    vOffsetMinutes=vOffset%60;
+    vNextDate.setHours(vFinalHours-vOffsetHours);    
+    vNextDate.setMinutes(vFinalMinutes-vOffsetMinutes);
+    return vNextDate.toISOString().slice(0,16);
+    
+  }
+  //this fucntion adds days in to the date
+  function addDays(date, days) {
+    const copy = new Date(Number(date));
+    copy.setDate(date.getDate() + days);
+    return copy
+  }
+
+
+  //---this function returns TRUE if the given string is present in TABLE 
+  function isStringInGrid(pTableId,pString){
+    var filter, found, table, tr, td, i, j,m,n;    
+    filter = pString.toUpperCase();
+    table = document.getElementById(pTableId);
+    tr = table.getElementsByTagName("tr");
+    m=tr.length
+    found=false;
+    
+    for (i = 0; i < m; i++) {
+        td = tr[i].getElementsByTagName("td");
+        n=td.length
+        for (j = 0; j < n; j++) {            
+            vSearchResult=td[j].innerHTML.toUpperCase().indexOf(filter);
+            if (vSearchResult > -1) {
+                found = true;
+            }
+        }
+        //====this code will display only found row of the table===
+        // if (found) {
+        //     tr[i].style.display = "";
+        //     found = false;
+        // } else {
+        //     tr[i].style.display = "none";
+        // }
+    }
+    return found;
+
+  }
+
+
+  //---this fucntion validates the given html table;
+  //some times TD is not defined correctly; first row of table is treated as header hence ignored in checking.
+  function validateHtmlTableColumns(pTableId){
+    var vCols=getHtmlTableCols(pTableId);
+    var vRows=getHtmlTableRows(pTableId);
+    var vTable = document.getElementById(pTableId);
+    var vTR = vTable.getElementsByTagName("tr");
+    var vCurCols=0;
+    var vFlag=true;
+    for (var i = 1; i <vRows; i++) {
+      var vTD = vTR[i].getElementsByTagName("td");
+
+      vCurCols=vTD.length;
+      
+      if(vCurCols!=vCols){
+        vFlag=false;
+        break;
+      }
+      
+    }
+    return vFlag;
+    
+  }
+
+
+  //---get table rows----
+  //first row is ignored becasue it is a header row
+  function getHtmlTableRows(pTableId){
+    var table = document.getElementById(pTableId);
+    var tr = table.getElementsByTagName("tr");
+    return tr.length;
+  }
+
+  //----get no of columns in a HTML TABLE; (this will return the highest no of TD present in table)
+  function getHtmlTableCols(pTableId){
+    var  found, table, tr, td, i, j; 
+    var vCur=0,vPrev=0,vFinal=0;  
+    table = document.getElementById(pTableId);
+    tr = table.getElementsByTagName("tr");
+    j=tr.length;
+    found=false;    
+    for (i = 0; i < j; i++) {
+      td = tr[i].getElementsByTagName("td");
+      vCur=td.length
+      if(vCur>vFinal){
+        vFinal=vCur;
+      }
+      
+    }
+    return vFinal;
+  }
+
+  //----this function gets the ARRAY of given html Table
+  function getHtmlTableArray(pTableId){
+    //find number of rows in table 
+    var n1 = document.getElementById(pTableId).rows.length;
+    
+    //find number of maximum columns in table 
+    var  found, table, tr, td, i, j; 
+    var vCur=0,vPrev=0,vFinal=0;  
+    table = document.getElementById(pTableId);
+    tr = table.getElementsByTagName("tr");
+    j=tr.length;
+    found=false;    
+    for (i = 0; i < j; i++) {
+      td = tr[i].getElementsByTagName("td");
+      vCur=td.length
+      if(vCur>vFinal){
+        vFinal=vCur;
+      }      
+    }
+    //---------Finally Rows And Cols are----
+    let vRows=n1;
+    let vCols=vFinal;
+    //---------Create 2DARRAY-------
+    let arr = [];
+		// creating two dimensional array
+		for (let i = 0; i< vRows; i++) {
+			for(let j = 0; j< vCols; j++) {
+				arr[i] = [];
+			}
+		}
+		// initializing elements to array
+		for (let i = 0; i< vRows; i++) {
+			for(let j = 0; j< vCols; j++) {
+				arr[i][j] = j;
+			}
+		}
+    //------hence Array of vRows and vCols will be 
+    let vArray=arr;
+    ///----Initialize the array 
+    for(var i=0;i<vArray.length;i++){
+      for (var j=0;j<vArray[i].length;j++){
+        vArray[i][j]="N/A";
+      }
+    }
+    //-----Now Populate HTML TABLE values in array 
+    for(i=0; i<n1;i++){  
+        var n2 = document.getElementById(pTableId).rows[i].cells.length;      
+        for(j=0; j<n2;j++){      
+          var x=document.getElementById(pTableId).rows[i].cells.item(j).innerHTML;       
+          vArray[i][j]=x;            
+        }        
+    }
+    //---Return HTML TABLE in Array
+    return vArray;
+  }
+
+  //===this function currently not in use
+  function emptyGridData(pGridId) {
+    var myTab = document.getElementById(pGridId); 
+    alert(myTab.rows.length);   
+    for (i = 1; i < myTab.rows.length; i++) {
+      $("#"+pGridId+ " tr").remove(); 
+    }      
+
+}
+
+///-------Validate EMAIL----
+function validate_email(aEmail){
+    var regx=/^([a-z A-Z 0-9\.-]+)@([a-z A-Z 0-9-]+).([a-z]{1,10})(.[a-z]{1,10})$/;
+    return(regx.test(aEmail));
+}
+
+</script>
+
+
+
+

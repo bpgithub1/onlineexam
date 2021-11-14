@@ -1,0 +1,69 @@
+<form action="" method="POST" id="frm_exam_release">
+    {% csrf_token %}
+    <div id="div_student_exam_list_wrapper">   
+        <h4>Available Exams</h4>       
+        <table id="tbl_student_exam_list_available">
+            <tr>
+              <th>#SLNO</th>
+              <th>Institute</th>
+              <th>Exam Code</th>
+              <th>Subject</th>
+              <th>Total Marks</th>
+              <th>Total Questions</th>              
+              <th>Level</th>
+              <th>Section</th>
+              <th>Exam Last Date</th>
+              <th>Status</th>
+              <th>Action</th>
+              
+            </tr>
+            
+          </table>
+          <h4>Completed Exams</h4>       
+          <table id="tbl_student_exam_list_acompleted">
+            <tr>
+              <th>Institute</th>
+              <th>Exam Code</th>
+              <th>Subject</th>
+              <th>Full Marks</th>
+              <th>Scored Marks</th>
+              <th>Level</th>
+              <th>Section</th>
+              <th>Exam Completion Date</th>              
+              <th>Status</th>
+            </tr>
+            
+          </table>
+    
+    </div>
+</form>
+
+{% include "student/notice_board_ajax.html" %}
+
+<style>
+
+#div_teacher_exam_release_wrapper{
+    background-color: white;
+    height: 500px;
+    overflow: scroll;
+    
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 2px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+</style>
+

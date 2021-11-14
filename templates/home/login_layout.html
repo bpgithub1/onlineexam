@@ -1,0 +1,62 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    
+    <title>{% block title %} {% endblock title %}| Online Examination System</title>
+    <script src="{% static 'js/jquery.js' %}" ></script>
+    
+    
+    <script src="{% static 'js/common.js' %}" ></script> 
+
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/custome_style.css' %}" rel="stylesheet"/>
+    
+  </head>
+   <!-- Bootstrap CSS -->
+  
+   
+  <body onload="displayItems()">
+    
+   <div id="wrapper" >
+    <div id="header" >
+      <div id="header-left" >Logo</div>    
+      <div id="header-center" ><span>{{djInstitute}} | {{djProfile}} | {{djUser}} </span>
+        
+      </div> 
+      <div id="header-right" > 
+        <input type="button" value="Change Password" id="btn_change_password">
+        <input type="button" value="Edit Profile" id="btn_edit_profile">
+        <a href="/logout_user">Logout</a> 
+      </div>  
+      
+    </div>  
+    
+    <div id="div_change_password" style="display:none">
+      {% include "home/change_password.html" %}        
+    </div>
+    <div id="div_edit_profile" style="display:none">
+      {% include "home/edit_profile.html" %}        
+    </div>
+    <div id=div_after_login_menu>
+      {% block body %}
+
+      {% endblock body %}
+    </div>
+
+    <div id="footer"><span  >Online Examination Portal Developed By WhizAce Technology</span></div>      
+   </div>
+
+   
+ 
+
+
+  
+
+</body>
+
+{% include "home/login_layout_script.html" %}
+
+</html>

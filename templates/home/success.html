@@ -1,0 +1,26 @@
+{% extends 'home/base.html' %}
+{% block body %} 
+    <span class="impact">{{djMessageTag}}</span>  
+    <div id="div_success_message">
+            {% csrf_token %}
+            <table>
+                {% for field in djForm %}
+                  <tr>
+                        <td>&nbsp;</td> 
+                        <td style="text-align:right">{{field.label_tag}}</td>
+                        <td>&nbsp;</td>                
+                        <td>{{field}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+           
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+             <span class="success" {% if message.tags %} class="{{message.tags}}" {% endif %}>{{message}}</span>
+        {% endfor %}
+    {% endif %}
+
+   <a  href="/"> <h3>OK</h3></a>
+
+{% endblock body %}

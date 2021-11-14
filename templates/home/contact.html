@@ -1,0 +1,21 @@
+{% extends 'home/base.html' %}
+
+{% block title %} Contact {% endblock title %}
+
+{% block body %} 
+
+<br>{{variable1}}
+<br>{{variable2}}
+<span class="impact">Contact Details</span>   
+<div class="container">
+  <form method="POST"  action="/contact">
+    {% csrf_token %}    
+    <label for="subject">Subject</label>
+    <textarea id="subject" name="desc" placeholder="Write something.." style="height:200px"></textarea>
+    <br>
+    <input type="submit" value="Submit">
+  </form>
+</div>
+SDG Technology Contact - +91-8800-52-52-32 | whizacetechnology@gmial.com
+{% endblock body %}
+

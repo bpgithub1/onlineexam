@@ -1,0 +1,853 @@
+<script>
+  //------global variable (for option Tag) 
+  let vOptTag='A';
+  let vOptTagArray=[];//this is empty array at starting; this will be filled one by one when delete option button is hit
+  let vOptIndex=0;
+  let vImagePath="";
+  vSLNO=0;
+
+$(document).ready(function () {
+
+  //---------------delete question (START)
+  $("#btn_exam_Q_delete").click(function(){ 
+    //---------Implement below =====
+    //check if question ID is 20211231Q9999; then disable delete button
+    //if source is COPY then only remove the reference  
+    var r = confirm("Are Your Sure To Delete?");
+    if (r == true) {
+      event.preventDefault();
+      let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+      let vQUID=$("#txt_bx_Q_UID").val();  
+      let vEUID=$("#hdn_exam_code").val();  
+      let vExamSourceCode=$("#hdn_exam_source_code").val();  
+      let vIsExamReleased=$("#hdn_exam_is_released").val();
+      
+      DataSendToServer={ 
+        csrfmiddlewaretoken:vCsrfToken,
+        hQUID:vQUID,  
+        hEUID:vEUID, 
+        hExamSourceCode:vExamSourceCode, 
+        hIsExamReleased:vIsExamReleased,
+      };
+      if(vIsExamReleased=="NO"){
+        
+        $.ajax({url:"{% url 'delete_question' %}",
+          method:"POST",
+          data:DataSendToServer,
+          dataType:"json",
+          success:function(response){
+              vSuccess=response['status'];
+              vQUID= response['djQUID']; 
+              if(vSuccess==1){
+                
+                $("#txt_bx_exam_search_id").val(vQUID);
+                deleteListItem('txt_bx_Q_search_id','ul_content_question');
+                $("#txt_bx_Q_search_id").val("");
+                
+                $("#msg_teacher_exam_Q").show();                
+                $("#msg_teacher_exam_Q").text("Question ("+vQUID+") Data Deleted Successfully !!!");  
+                
+                setTimeout(function(){								
+								  $("#msg_teacher_exam_crud").hide();
+							  }, 5000);              
+
+              } else if(vSuccess==2){                
+                $("#txt_bx_exam_search_id").val(vQUID);
+                deleteListItem('txt_bx_Q_search_id','ul_content_question');
+                $("#txt_bx_Q_search_id").val("");
+                
+                $("#msg_teacher_exam_Q").show();                
+                $("#msg_teacher_exam_Q").text("Question ("+vQUID+") Deleted Successfully !!!");  
+                
+                setTimeout(function(){								
+								  $("#msg_teacher_exam_crud").hide();
+							  }, 5000);              
+
+              }else if(vSuccess==0){
+                
+                $("#msg_teacher_exam_Q").show();                
+                $("#msg_teacher_exam_Q").text("Question ("+vQUID+") Can't Be Deleted, Contact Software Help Center !!!");  
+                
+                setTimeout(function(){								
+								  $("#msg_teacher_exam_crud").hide();
+							  }, 5000);              
+
+              }else{
+                console.log("Ajax Call Failed !!!");
+              }
+                  
+            },
+          
+      });
+      } else{
+        $("#msg_teacher_exam_Q").show();                
+        $("#msg_teacher_exam_Q").text("Question ("+vQUID+") Can't Be Deleted, Since Associated Exam is Released !!!");  
+                
+      }      
+
+    } else {
+       //Do nothing in case of cancel
+    }
+    
+
+  });  
+
+  //-------------delete question (END)
+
+    
+    
+    $('.mandatory').change(function() {    
+      let vQUID=$("#txt_bx_Q_UID").val();  
+      let vEUID=$("#hdn_exam_code").val();  
+      let vExamSourceCode=$("#hdn_exam_source_code").val();  
+      let vIsExamReleased=$("#hdn_exam_is_released").val();  
+      let vQuestionCount=$("#hdn_Q_count").val();        
+      $("#btn_exam_Q_save").prop('disabled', false);        
+      if(vIsExamReleased=="NO" && vExamSourceCode =="FRS" && vQUID!="20991231Q9999"){
+        //do nothing
+      }else if(vIsExamReleased=="NO" && vExamSourceCode =="CPY" && vQUID!="20991231Q9999" && vQuestionCount>1){
+        $("#txt_bx_Q_UID").val("20991231Q9999");           
+      }else{
+        //do nothing
+      }
+      
+
+      
+    });
+    
+    //--------When NEW button is hit
+    $("#btn_exam_Q_create").click(function(){ 
+      let vIsExamReleased=$("#hdn_exam_is_released").val();      
+      if(vIsExamReleased=="NO"){
+        document.getElementById("div_teacher_exam_Q_content_box_content_col1").style.display="block";
+        document.getElementById("div_teacher_exam_Q_content_box_content_col2").style.display="block";            
+        enableQuestionInputElements();
+                
+        vOptTag='A';
+        $("#txt_bx_Q_UID").val("20991231Q9999");
+        $("#btn_exam_Q_delete").prop('disabled', true); 
+        $("#btn_exam_Q_save").prop('disabled', false); 
+        $("input[name='chkbx_delete_image']").prop("disabled", true);
+
+        $("#txtarea_Q_text").val("");
+        $("#txt_bx_Q_marks").val("");
+        //$('input:radio[name="radio_Q_type"]').filter('[value="1"]').attr('checked', true);
+        document.getElementById("radio_Q_manual").checked = true;
+        defaultDisplay();
+        vOptTagArray=[];
+        vOptIndex=0;
+        //deleteGridData();
+        $("#tbl_question_options > tbody").empty();  // this will empty the option grid
+        
+      }else{
+        disableQuestionAllButtons();
+        disableQuestionInputElements();
+      }
+
+
+    });
+
+
+
+    //-----Radio Button Chnage confirmation-------------
+    $('.cl_radio_Q_type').click(function(){
+      var vTableQ = document.getElementById("tbl_question_options");
+      var i=vTableQ.rows.length;
+      if(i>1){
+        var cnfrm = confirm('Changing Question Type Will Delete All Options.\nAre You Sure?');
+        if(cnfrm != true){
+          return false;
+        }else{
+          vOptTagArray=[];
+          vOptIndex=0;
+          $("#btn_exam_Q_save").prop('disabled', false);
+          //$("#btn_exam_Q_save").prop('disabled', true);
+        }
+      }
+      
+      $("#msg_teacher_exam_Q").hide();
+    });
+
+
+    $('input[type=radio][name=radio_Q_type]').change(function() {      
+      $("#btn_exam_Q_save").prop('disabled', false);
+      //$("#btn_exam_Q_save").prop('disabled', true);
+      vOptTag='A';
+      var vTableQ = document.getElementById("tbl_question_options");
+      var i=vTableQ.rows.length;
+      if(i>1){
+        $("#tbl_question_options > tbody").empty();
+      }
+      
+      if (this.value == '1' || this.value == '4') {
+        defaultDisplay();
+            
+        }else {
+          display_SCA_MCA_OPTIONS();
+          if (this.value == '2') {
+              //no operation as of now                
+          }else if (this.value == '3') {
+              // no operation as of now                               
+          }
+        }
+        
+        
+    });  
+
+    //-----By default display
+    $('input:radio[name="radio_Q_type"]').filter('[value="1"]').attr('checked', true);
+    defaultDisplay();
+
+    //---------When Save Button is hit-------
+    //-----------------------------------------
+    $("#btn_exam_Q_save").click(function(){ 
+      let vValidationFlag=0;
+      let vIsOptProvided=0;
+      vIsOptProvided=document.getElementById("tbl_question_options").rows.length;
+      $("#msg_teacher_exam_Q").show();
+      vQType=$("input[type='radio'][name='radio_Q_type']:checked").val(); 
+      vQText=$('textarea#txtarea_Q_text').val();
+      vQMarks=$("#txt_bx_Q_marks").val();
+      vQArray= create2DArray(1,5); 
+      vQAns=$('textarea#txtarea_Q_ans').val();
+      vDeleteImageFlag=$('#chkbx_delete_image').val();
+      
+      if(vQText==""||vQText==null ){               
+        $("#msg_teacher_exam_Q").text("Enter Question Text !!!");  
+      }else if (vQMarks=="0" || vQMarks==0||vQMarks==null){        
+        $("#msg_teacher_exam_Q").text("Enter Question Marks !!!"); 
+      }else if(vQAns==""||vQAns==null ){
+        $("#msg_teacher_exam_Q").text("Provide Answer Reference !!!"); 
+      }else if (vQType=="4" && isWhiteSpaceInsideString(vQAns)){
+        $("#msg_teacher_exam_Q").text("Answer Must Be One Word Only !!!"); 
+      }else if(vQType=="2" ||vQType=="3" ){ //---if SCQ or MCQ option is choosen
+          //----SCQ & MCQ Based  
+          if(vIsOptProvided<2){
+            $("#msg_teacher_exam_Q").text("Provide Options !!!"); 
+          }else{
+            vQArray=getGridData("tbl_question_options");   
+            
+            var vIsCorrectAnsChoosen=0;
+            for (var i=0;i<vQArray.length;i++){
+              if(vQArray[i][2]=="1"){
+                vIsCorrectAnsChoosen=1;
+                break;
+              }              
+            }
+            if(vIsCorrectAnsChoosen==0){
+              $("#msg_teacher_exam_Q").text("Choose Correct Answer !!!"); 
+            } else{
+              vValidationFlag=1;
+            }
+          }        
+                    
+       }else{        
+       vValidationFlag=1;                
+      }
+      if(vValidationFlag==1){
+
+        //---proceed database saving, when all validation done
+        $("#msg_teacher_exam_Q").hide();
+        //-----read all inputs from Question Screen---- 
+        vExamCode=$("#hdn_exam_code").val();
+        vExamLevelCode=$("#hdn_exam_level_code").val();
+        vExamSubjectCode=$("#hdn_exam_subject_code").val();
+        vQUID=$("#txt_bx_Q_UID").val();
+        vQUIDCopy=$("#txt_bx_Q_UID").val();
+        //------Save Data in DB
+        let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+        
+        // console.log("Option Array Before Rectify==> "+vQArray);
+        vQArray=rectifyOptTag(vQArray);
+        // console.log("Option Array after Rectify==> "+vQArray);
+        var jsonOptArray = JSON.stringify(vQArray);
+        
+        //let vProfilePicPath=$("#img_question").val();
+        vDataSendToServer={ 
+                csrfmiddlewaretoken:vCsrfToken,
+                hEUID:vExamCode,
+                hQUID:vQUID,
+                hQType:vQType,
+                hQText:vQText,
+                hQMarks:vQMarks,
+                hLevelCode:vExamLevelCode,
+                hSubjectCode:vExamSubjectCode,
+                hOptArray:jsonOptArray,
+                hQAns:vQAns,
+                hDeleteImageFlag:vDeleteImageFlag,                               
+        };
+        
+        
+
+        
+        //-----AJAX call to save data (START)----------
+        $.ajax({
+        url:"{% url 'save_exam_question' %}",
+				method:"POST",
+				data:vDataSendToServer,				                      
+        dataType:"json",
+				success:function(response){
+            vStatus=response['status'];  
+            vQUID=response['djQUID'];
+						// var vSuccess=JSON.parse(response);//parse data from view then send here 
+            // var vStatus=vSuccess.status;  		
+            	
+						if(vStatus=="1"){
+							$("#msg_teacher_exam_Q").text("Question Data Saved !!!");
+        			$("#msg_teacher_exam_Q").show();  
+              $("#txt_bx_Q_UID").val(vQUID);  
+              if(vQUIDCopy=="20991231Q9999"){
+                vSLNO=vSLNO+1;
+                addItemInUL("ul_content_question","getQuestionDetails",vQUID,vSLNO);
+              }
+              
+              //-----Image file
+              let vImageFile=$("#img_question").val();                                         
+              //----
+              if(vImageFile!="" || vDeleteImageFlag=="1"){
+                ////// AJAX to save picture (START) on Success Status==1
+                let vFormData = new FormData($("#frm_exam_Q_image").get(0));              		          
+                vFormData.append('hQUID',vQUID)
+                vFormData.append('hDeleteImageFlag',vDeleteImageFlag)
+                
+                $.ajax({
+                  url:"{% url 'save_exam_question_image' %}",
+                  method:"POST",
+                  data:vFormData,
+                  processData: false,
+                  contentType: false,                
+                  mimeType:"multipart/form-data",
+                  success:function(response){
+                      var vSuccess=JSON.parse(response);
+                      var vStatus=vSuccess.status				
+                      if(vStatus=="1"){
+                        if(vDeleteImageFlag=="1"){
+                          $("#msg_teacher_exam_Q").text("Question Data Saved & Image Deleted !!!");
+                          $("#msg_teacher_exam_Q").show();  
+                        }else{
+                          $("#msg_teacher_exam_Q").text("Question Data Saved With Image !!!");
+                          $("#msg_teacher_exam_Q").show();  
+                        }
+                          
+                        //$("#btn_exam_Q_save").prop('disabled', false);
+                        $("#btn_exam_Q_save").prop('disabled', true);
+                        $("#img_question").val("");
+
+                        setTimeout(function(){}, 10000);
+                      }else if (vStatus=="2"){
+                        $("#btn_exam_Q_save").prop('disabled', false);
+                        //$("#btn_exam_Q_save").prop('disabled', true);
+                      }else{
+                        ///---image saved failed 
+                        $("#msg_teacher_exam_Q").text("User Registration Failed !!!");
+                        $("#msg_teacher_exam_Q").show();
+                        $("#btn_exam_Q_save").prop('disabled', false);
+                        //$("#btn_exam_Q_save").prop('disabled', true);
+                      }
+                          
+                    },
+                
+
+                });
+                /////// AJAX to save picture (END)
+              }else{
+                //No Image File Selected
+                //$("#btn_exam_Q_save").prop('disabled', false);
+                $("#btn_exam_Q_save").prop('disabled', true);  
+              }
+							setTimeout(function(){								
+								
+							}, 10000);
+						}else if (vStatus=="2"){
+							//
+						}else{
+              //when db called failed ----
+							$("#msg_teacher_exam_Q").text("Failed !!!");
+        			$("#msg_teacher_exam_Q").show();
+              $("#btn_exam_Q_save").prop('disabled', false);
+              //$("#btn_exam_Q_save").prop('disabled', true);
+						}
+								
+					},
+				
+        });
+        //------AJAX (END)
+      }else{
+        //---When Not Validated 
+        $("#btn_exam_Q_save").prop('disabled', false);
+        //$("#btn_exam_Q_save").prop('disabled', true);
+      }
+      
+
+    });    
+
+    //-----when option add button is hit
+    $("#btn_exam_Q_option_add").click(function(){   
+            $("#btn_exam_Q_save").prop('disabled', false);
+            //$("#btn_exam_Q_save").prop('disabled', true);
+                
+            vRadioValue=$("input[type='radio'][name='radio_Q_type']:checked").val();
+            vOptionText=$("#txtarea_Q_options").val();
+            vOptionText=vOptionText.replace(/\n/g, "<br>")            
+            $("#txtarea_Q_options").val("");
+            vTableId="tbl_question_options";
+            $("#msg_teacher_exam_Q").show();
+            if(vOptionText=="" || vOptionText==null){              
+              $("#msg_teacher_exam_Q").text("Enter Question Option !!!");               
+            }else{
+                $("#msg_teacher_exam_Q").hide(); 
+                vTempTag="";
+                ///Check if array has already deleted option tag
+                
+                vCount=getArrayElementsCount(vOptTagArray);//vOptTagArray is global variable
+                //console.log("Add Button Hit=store array element count ==>"+vCount);
+                //console.log("Add Button Hit=store array elements ==>"+vOptTagArray[vOptIndex]);
+                if(vCount>0){
+                  vOptIndex--;
+                  vTempTag=vOptTagArray[vOptIndex];
+                  vOptTagArray[vOptIndex]="";
+                  
+                }else{
+                  vOptTagArray=[];
+                  vOptIndex=0;
+                  vTempTag=vOptTag;
+                  vOptTag=nextChar(vOptTag);
+                }
+                if (vRadioValue=="2"){                  
+                  addRow(vTableId,vOptionText,"radio",vTempTag);                  
+                }else if (vRadioValue=="3"){
+                  addRow(vTableId,vOptionText,"checkbox",vTempTag);                 
+                } else{
+                  //do not call add
+                }
+                                 
+                  
+            }
+            
+
+    }); 
+    
+  $("#btn_exam_Q_close").click(function(){    
+    closeQScreen();
+    
+  });
+  $("#btn_exam_Q_close_copy").click(function(){    
+    closeQScreen();m
+
+  });
+
+});
+
+
+$("input[type='checkbox'][name='chkbx_delete_image']").change(function() {
+  var vCheckBoxStatus = $("#chkbx_delete_image").is(":checked");
+  if(vCheckBoxStatus){
+    $('#chkbx_delete_image').val("1");
+    $("#img_Q_preview").attr("src", "");
+    $("#img_question").val("");
+    
+  }else{
+    $('#chkbx_delete_image').val("0");
+    $("#img_Q_preview").attr("src", vImagePath);
+  }
+  //vDeleteImage=$('#chkbx_delete_image').val();  
+
+});
+
+
+$("#btn_exam_Q_prev").click(function(){
+  alert("write code to make prev btn operational ");
+
+});    
+
+$("#btn_exam_Q_next").click(function(){
+  alert("write code to make next btn operational ");
+
+});   
+
+
+//////////////////////////////////////////////////////
+///-------------Functions
+///////////////////////////////////////////////////
+
+
+function closeQScreen(){
+    $("#div_teacher_exam_check").hide();
+    $("#div_teacher_exam_crud").show();
+    $("#div_teacher_exam_released").hide();
+    $("#div_teacher_dashboard").hide();
+    $("#div_teacher_exam_question").hide();
+    //enable all buttons
+    $("#btn_dashboard").prop('disabled', false);
+    $("#btn_exam_release").prop('disabled', false);
+    $("#btn_exam_crud").prop('disabled', false);
+    $("#btn_exam_check").prop('disabled', false);
+    $("#teacher_msg").text("Examination");
+    // $("#msg_teacher_exam_Q_welcome").text("");  
+    // $("#msg_teacher_exam_Q_welcome").hide(); 
+    removeItemsFromUnOrderedList("ul_content_question");
+} 
+
+function defaultDisplay(){    
+    $("#msg_teacher_exam_Q").hide();
+    $("#txtarea_Q_options").val("");
+    $("#lbl_question_option").hide();
+    $("#txtarea_Q_options").hide();
+    $("#btn_exam_Q_option_add").hide();
+    $("#div_auto_check_options").hide();
+    $('textarea#txtarea_Q_ans').val("");
+    
+}
+
+//------add options in GRID (table)----
+function addRow(pTableId,pText,pOptionType,pOptTag){
+    var vTableEl = document.getElementById(pTableId);
+    var vQuestionText=pText.trim();
+    vTableEl.innerHTML +=`
+     <tr style="border: 1px solid rgba(141, 137, 137, 0.692);">
+         <td>
+            <input type="${pOptionType}"  name="options"  onclick="chooseCorrectAnswer(this)" value="${vQuestionText}" >  
+         </td>
+         <td class="slno">${pOptTag}</td>
+         <td style="word-wrap: break-word">${vQuestionText} </td>
+         <td></td>
+         <td><button class="deleteBtn">Delete</button></td>
+     </tr>  
+   `;
+   
+   vTableEl.addEventListener("click", deleteRow);  
+}
+//------delete options from GRID (table)----
+function deleteRow(e) {  
+    if (!e.target.classList.contains("deleteBtn")) {        
+        return;
+    }
+    const btn = e.target;
+    $("#btn_exam_Q_save").prop('disabled', false);
+    //$("#btn_exam_Q_save").prop('disabled', true);      
+    vOptTableRowCount = document.getElementById("tbl_question_options").rows.length;
+    //since we have to delete the row, which is pointed by this function 
+    //hence we have to check for one less row 
+    vOptTableRowCount--;
+    if (vOptTableRowCount<2){
+      //console.log("All elements deleted");
+      vOptTagArray=[];
+      vOptIndex=0;
+      vOptTag='A';
+    }else{
+      var currentRow=btn.closest("tr");       
+      var TempText=currentRow.cells[1].innerHTML;
+      vOptTagArray[vOptIndex]=TempText;   
+      // console.log("Delete Button Hit==>"+vOptTagArray[vOptIndex]);
+      // console.log("Delete Button Hit=store array element length==>"+getArrayElementsCount(vOptTagArray));
+      vOptIndex++;
+    }         
+    btn.closest("tr").remove();    
+    //chooseCorrectAnswer(e);
+}
+//------choose correct options----
+function chooseCorrectAnswer(e){
+  $("#btn_exam_Q_save").prop('disabled', false);
+  //$("#btn_exam_Q_save").prop('disabled', true);      
+  var ele = document.getElementsByName('options');    
+  var vCheckedOptionPosition=0; 
+  var vChecked=[]; 
+  var vPos=0;   
+  for(i = 0; i < ele.length; i++) {
+      if(ele[i].checked){
+        vCheckedOptionPosition=i+1;
+        vChecked[vPos++]=1;
+      }else {
+        vChecked[vPos++]=0;
+      }     
+  }
+  var myTab = document.getElementById("tbl_question_options");
+  for (i = 1; i < myTab.rows.length; i++) {
+    var objCells = myTab.rows.item(i).cells;
+      for (var j = 0; j < objCells.length; j++) {
+          if(vChecked[i-1]=="1"){
+            objCells.item(3).innerHTML="Yes";
+          }else{
+            objCells.item(3).innerHTML="";
+          }          
+      }
+      
+  }
+  
+}
+
+function getGridData(pTableId) {
+    var myTab = document.getElementById(pTableId);
+    var vRows=myTab.rows.length-1;
+    var vCols=myTab.rows.item(1).cells.length-2;
+    const vArray = create2DArray(vRows,vCols);
+    var p=0,q=0;    
+    for (i = 1; i < myTab.rows.length; i++) {
+        var objCells = myTab.rows.item(i).cells;
+        //var no_of_columns =objCells.length;
+        vArray[p][0]=objCells.item(1).innerHTML;
+        vArray[p][1]=objCells.item(2).innerHTML;
+        if(objCells.item(3).innerHTML=="Yes"){            
+            vArray[p][2]="1";
+          }else{
+            vArray[p][2]="0";
+          }
+             
+      p++;    
+    }
+    return vArray;
+  }
+
+//----this funtion is currently not in use
+function deleteGridData() {
+    var myTab = document.getElementById("tbl_question_options");    
+    for (i = 1; i < myTab.rows.length; i++) {
+      $("#tbl_question_options tr").remove(); 
+    }      
+
+}    
+
+function rectifyOptTag(pArray){
+  vOptTag='A';
+  for(var i = 0; i < pArray.length; ++i){
+		pArray[i][0]=vOptTag;         
+    vOptTag=nextChar(vOptTag);	
+	}
+  return pArray;
+}
+
+//--------------------image preview
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        
+        var reader = new FileReader();        
+        reader.onload = function (e) {
+            $('#img_Q_preview').attr('src', e.target.result);
+            vImagePath="";
+            $('#chkbx_delete_image').prop('checked', false); // Unchecks it
+            $("#chkbx_delete_image").attr('disabled', true);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }else{
+      
+      $('#img_Q_preview').attr('src', null);
+    }
+    $("#btn_exam_Q_save").prop('disabled', false);
+    //$("#btn_exam_Q_save").prop('disabled', true);
+    
+}
+
+//==============populate question id in search box=======START//
+function populateQuestionId(pExamId){
+    let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+    vDataSendToServer={ 
+      csrfmiddlewaretoken:vCsrfToken,
+      hEUID:pExamId,
+    };
+    
+    removeItemsFromUnOrderedList("ul_content_question");
+    $.ajax({url:"{% url 'populate_question' %}",
+				method:"POST",
+				data:vDataSendToServer,
+				dataType:"json",
+				success:function(response){
+						vSuccess=response['status'];							
+						if(vSuccess==1){							                            
+              vData=response.djQuestionList              
+              for (i=0;i<vData.length;i++){                  
+                  // var a = document.createElement("a");
+                  // var ulist = document.getElementById("ul_content_question");
+                  // var newItem = document.createElement("li");
+                  // a.textContent = vData[i].quid;
+                  // a.setAttribute('href', 'javascript:getQuestionDetails("'+vData[i].quid+'")');
+                  // newItem.appendChild(a);
+                  // ulist.appendChild(newItem);     
+                  vSLNO=i+1;           
+                  addItemInUL("ul_content_question","getQuestionDetails",vData[i].quid,vSLNO);
+                  //console.log(vData[i].quid);
+                      
+              }
+            } else{
+							console.log("Ajax Call Failed !!!");
+						}
+								
+					},
+				
+
+    });	
+    
+  }
+//==============populate question id in search box=======END//
+
+//------Get Question Details---- 
+function getQuestionDetails(pQUID){  
+  $("#tbl_question_options > tbody").empty();  // this will empty the option grid
+  $("#txt_bx_Q_UID").val(pQUID);
+  disableQuestionAllButtons();    
+  disableQuestionInputElements(); 
+  $("#msg_teacher_exam_Q").text();
+  $("#msg_teacher_exam_Q").hide();
+  
+  vExamCode=$("#hdn_exam_code").val();
+  vExamSourceCode=$("#hdn_exam_source_code").val();  
+  vExamIsReleased=$("#hdn_exam_is_released").val(); 
+  if((vExamIsReleased=="NO" && vExamSourceCode=="FRS")||(vExamIsReleased=="NO" && vExamSourceCode=="CPY")){
+      $("#btn_exam_Q_create").prop('disabled', false); 
+      $("#btn_exam_Q_delete").prop('disabled', false); 
+      enableQuestionInputElements();     
+  }   
+  document.getElementById("div_teacher_exam_Q_content_box_content_col1").style.display="block";
+  document.getElementById("div_teacher_exam_Q_content_box_content_col2").style.display="block";        
+    
+  let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+  let vEUID=$("#hdn_exam_code").val();
+  DataSendToServer={ 
+    csrfmiddlewaretoken:vCsrfToken,
+    hEUID:vEUID,
+    hQUID:pQUID,  
+
+  };
+  $.ajax({url:"{% url 'get_question_data' %}",
+      method:"POST",
+      data:DataSendToServer,
+      dataType:"json",
+      success:function(response){
+          vSuccess=response['status'];            
+          if(vSuccess==1){     
+              let vCorrectAnswer=[];
+              let j=0;
+              //----Question Count
+              vQuestionCount=response['djQuestionCount'];  
+              $("#hdn_Q_count").val(vQuestionCount); 
+              
+              //----Question Data
+              vDataQuestion=response.djQuestionData
+              vQuestionLevelCode=vDataQuestion[0].level_code;
+              vQuestionSubjectCode=vDataQuestion[0].subject_code;
+              vQuestionType=vDataQuestion[0].type;
+              vQuestionParticulars=vDataQuestion[0].particulars;
+              vQuestionStatus=vDataQuestion[0].status;
+              vQuestionAnswer=vDataQuestion[0].answer;
+              vQuestionImagePath=vDataQuestion[0].image_path;
+              
+              //alert("Image path "+vQuestionImagePath+" iamage URL "+vQuestionImagePath.url);
+              //----Question Marks 
+              vDataQuestionMarks=response.djQuestionMarksData
+              vQuestionMarks=vDataQuestionMarks[0].marks;
+              
+              //----Question Options 
+              vDataQuestionOptions=response.djQuestionOptionData
+
+              //-----Display on Screen
+              setOptionButtonChecked("radio_Q_type",vQuestionType);
+              vTableId="tbl_question_options";
+              if(vQuestionType=="2"||vQuestionType=="3"){
+                
+                display_SCA_MCA_OPTIONS();
+                if (vQuestionType=="2"){  
+                  j=0;
+                  for(var i=0;i<vDataQuestionOptions.length;i++){
+                    vOptionText=vDataQuestionOptions[i].particulars;
+                    vTempTag=vDataQuestionOptions[i].tag;
+                    vCorrectOption=vDataQuestionOptions[i].is_correct;
+                    addRow(vTableId,vOptionText,"radio",vTempTag);
+                    
+                    if(vCorrectOption==1){
+                      vCorrectAnswer[j++]=vOptionText;
+                    }
+                    
+                  }                
+                                    
+                }else{ //when question type is 3
+                  j=0;
+                  for(var i=0;i<vDataQuestionOptions.length;i++){
+                    vOptionText=vDataQuestionOptions[i].particulars;
+                    vTempTag=vDataQuestionOptions[i].tag;
+                    vCorrectOption=vDataQuestionOptions[i].is_correct;
+                    vOptionText=String(vOptionText).trim();
+                    addRow(vTableId,vOptionText,"checkbox",vTempTag);
+                    if(vCorrectOption==1){
+                      vCorrectAnswer[j++]=vOptionText;
+                    }
+                    
+                  } 
+                } 
+                                    
+                for(var i=0;i<vCorrectAnswer.length;i++){
+                  setOptionButtonChecked("options", vCorrectAnswer[i]);
+                }
+                chooseCorrectAnswer();
+              }else{
+                defaultDisplay();
+              }
+                                  
+              $("#txtarea_Q_text").val(vQuestionParticulars);
+              $("#txtarea_Q_ans").val(vQuestionAnswer);
+              $("#txt_bx_Q_marks").val(vQuestionMarks);
+              if(vQuestionImagePath!=""||vQuestionImagePath!=null){
+                vQuestionImagePath="/media/"+vQuestionImagePath;                
+                $("#img_Q_preview").attr("src", vQuestionImagePath);
+                $('#chkbx_delete_image').prop('checked', false); // Unchecks it
+                $("#chkbx_delete_image").attr('disabled', false);
+                vImagePath=vQuestionImagePath;
+
+              }
+
+          } else{
+              console.log("Ajax Call Failed !!!");
+          }
+              
+          },
+          
+  });
+        
+
+}
+//---------------
+function display_SCA_MCA_OPTIONS(){
+  $('textarea#txtarea_Q_ans').val("Refer Options");
+  $('textarea#txtarea_Q_ans').attr('disabled',true);
+  $("#lbl_question_option").show();
+  $("#txtarea_Q_options").show();
+  $("#btn_exam_Q_option_add").show();
+  $("#div_auto_check_options").show();
+}
+//--------------Disable Question 
+function disableQuestionInputElements(){    
+  $("#radio_Q_manual").prop('disabled', true);
+  $("#radio_Q_auto_single").prop('disabled', true);
+  $("#radio_Q_auto_oneword").prop('disabled', true);
+  $("#radio_Q_auto_multiple").prop('disabled', true);
+  $("#img_question").prop('disabled', true);
+  $("#txt_bx_Q_marks").prop('disabled', true);
+  $("#txtarea_Q_options").prop('disabled', true);
+  $("#btn_exam_Q_option_add").prop('disabled', true);       
+  $("#txtarea_Q_text").prop('disabled', true);
+  $("#txtarea_Q_ans").prop('disabled', true);
+  $("input[name='chkbx_delete_image']").prop("disabled", true);
+  $('textarea[name="txtarea_Q_text"]').prop('disabled', true); // can be used also
+  $('textarea[name="txtarea_Q_ans"]').prop('disabled', true); // can be used also
+  
+}
+//--------------Enable Question 
+function enableQuestionInputElements(){
+  $("#radio_Q_manual").prop('disabled', false);
+  $("#radio_Q_auto_single").prop('disabled', false);
+  $("#radio_Q_auto_oneword").prop('disabled', false);
+  $("#radio_Q_auto_multiple").prop('disabled', false);
+  $("#img_question").prop('disabled', false);
+  $("#txt_bx_Q_marks").prop('disabled', false);
+  $("#txtarea_Q_options").prop('disabled', false);
+  $("#btn_exam_Q_option_add").prop('disabled', false);       
+  $("input[name='chkbx_delete_image']").prop("disabled", false);
+  $('textarea[name="txtarea_Q_text"]').prop('disabled', false); // can be used also
+  $('textarea[name="txtarea_Q_ans"]').prop('disabled', false); // can be used also  
+}
+
+function disableQuestionAllButtons(){
+  $("#btn_exam_Q_create").prop('disabled', true); 
+  $("#btn_exam_Q_delete").prop('disabled', true); 
+  $("#btn_exam_Q_save").prop('disabled', true); 
+  
+}
+</script>

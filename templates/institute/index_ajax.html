@@ -1,0 +1,227 @@
+<script>
+    //WHEN SCREEN LOADS
+    $(document).ready(function () {
+        document.getElementById("div_admin_dashboard").style.display="block";
+        document.getElementById("div_admin_manage_student").style.display="none";
+        document.getElementById("div_admin_manage_teacher").style.display="none";
+        document.getElementById("div_admin_manage_institute").style.display="none";
+        document.getElementById("tbl_student_data").style.display="none";
+        document.getElementById("tbl_student_grid_data").style.display="none";
+        
+        populateStudentUserId();
+    
+    
+    });
+    
+    
+    //WHEN DASHBOARD BUTTON IS HIT
+    $("#btn_dashboard").click(function(){
+        document.getElementById("div_admin_dashboard").style.display="block";
+        document.getElementById("div_admin_manage_student").style.display="none";
+        document.getElementById("div_admin_manage_teacher").style.display="none";
+        document.getElementById("div_admin_manage_institute").style.display="none";
+    });
+    
+    //WHEN MANAGE STUDENT BUTTON IS HIT
+    $("#btn_manage_student").click(function(){
+        document.getElementById("div_admin_dashboard").style.display="none";
+        document.getElementById("div_admin_manage_student").style.display="block";
+        document.getElementById("div_admin_manage_teacher").style.display="none";
+        document.getElementById("div_admin_manage_institute").style.display="none";
+        document.getElementById("tbl_student_data").style.display="none";
+        document.getElementById("tbl_student_grid_data").style.display="none";    
+        //----Populate Level and Section Drop Down
+        populateStudentDropDown();
+        //Populate Student User Id which are already registered
+        populateStudentUserId();
+        $("#admin_msg").text("Manage Student");
+        
+        
+    
+    
+    });
+    
+    
+    //WHEN MANAGE TEACHER BUTTON IS HIT
+    $("#btn_manage_teacher").click(function(){
+        document.getElementById("div_admin_dashboard").style.display="none";
+        document.getElementById("div_admin_manage_student").style.display="none";
+        document.getElementById("div_admin_manage_teacher").style.display="block";
+        document.getElementById("div_admin_manage_institute").style.display="none";
+        document.getElementById("tbl_teacher_data").style.display="none";
+        document.getElementById("tbl_teacher_grid_data").style.display="none"; 
+        populateTeacherDropDown(); //populate subject drop down
+        populateTeacherUserId(); //populate list of existing teacher id
+        $("#admin_msg").text("Manage Teacher");
+    });
+    
+    //WHEN MANAGE INSTITUTE BUTTON IS HIT
+    $("#btn_manage_institute").click(function(){
+        document.getElementById("div_admin_dashboard").style.display="none";
+        document.getElementById("div_admin_manage_student").style.display="none";
+        document.getElementById("div_admin_manage_teacher").style.display="none";
+        document.getElementById("div_admin_manage_institute").style.display="block";
+        $("#admin_msg").text("Manage Institute");
+        populateInstituteDetails();// this function is defined in manage_institute_ajax.html file
+
+    });
+    
+
+   
+
+    //populate Student Ids in List Box
+    function populateStudentUserId(){
+        $("#btn_manage_student_save").prop('disabled',true);
+        let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+        vDataSendToServer={ csrfmiddlewaretoken:vCsrfToken,
+                hUID:"",// initially when form is loading then we do not have Exam ID; but when user search from search box then we will have exam id  
+        };
+        let vSerial=0; 
+        removeItemsFromUnOrderedList("ul_content_student_user_id");
+        $.ajax({url:"{% url 'populate_student_user_ids' %}",
+            method:"POST",
+            data:vDataSendToServer,
+            dataType:"json",
+            success:function(response){
+                    vSuccess=response['djStatus'];							
+                    if(vSuccess==1){							              
+            vData=response.djStudentList;
+            for (i=0;i<vData.length;i++){  
+                vSerial=i+1;
+                addItemInUL2("ul_content_student_user_id","getStudentDetails",vData[i].username,vSerial,vData[i].id);//this is defined in common_function.html
+                //----getStudentDetails==> function which will be called when click the link
+                //console.log(vData[i].quid);
+                //=====WORK ON == Integrate DB_ID in list and retrieve details from that DBId
+                    
+            }
+    
+                    } else{
+                        console.log("Ajax Call Failed !!!");
+                    }
+                            
+                },
+                    
+    
+        });	
+    }
+    
+    function populateStudentDropDown(){
+        document.getElementById("select_student_level").innerHTML =null; // remove all the options from the drop down
+        $('#select_student_level').append(new Option("Select Level", "none"));
+        
+        document.getElementById("select_student_section").innerHTML =null; // remove all the options from the drop down
+        $('#select_student_section').append(new Option("Select Section", "none"));
+
+        $("#btn_manage_student_save").prop('disabled',true);
+        let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+        vDataSendToServer={ csrfmiddlewaretoken:vCsrfToken,};
+        $.ajax({url:"{% url 'populate_student_drop_down' %}",
+            method:"POST",
+            data:vDataSendToServer,
+            dataType:"json",
+            success:function(response){
+                    vSuccess=response['djStatus'];
+                    if(vSuccess==1){
+                        //---populate Level
+                        vData=response.djLevelList
+                        for (i=0;i<vData.length;i++){
+                            $('#select_student_level').append(
+                                `
+                                <option value=${vData[i].code}>${vData[i].level}</option>
+                                `
+                            )
+                                
+                        }                    
+                        //---populate Section 
+                        vData=response.djSectionList
+                        for (i=0;i<vData.length;i++){
+                            $('#select_student_section').append(
+                                `
+                                <option value=${vData[i].code}>${vData[i].section}</option>
+                                `
+                            )
+                                
+                        }
+    
+                    } else{
+                        console.log("Ajax Call Failed !!!");
+                    }
+                            
+                },
+                
+    
+        });	
+    }
+    
+    //----Populate (SUBJECTs,)
+    function populateTeacherDropDown(){
+        $("#btn_manage_teacher_save").prop('disabled',true);
+        let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+        vDataSendToServer={ csrfmiddlewaretoken:vCsrfToken,};
+        $.ajax({url:"{% url 'populate_teacher_drop_down' %}",
+            method:"POST",
+            data:vDataSendToServer,
+            dataType:"json",
+            success:function(response){
+                    vSuccess=response['djStatus'];
+                    if(vSuccess==1){
+                        //---populate Subject
+                        vData=response.djSubjectList
+                        for (i=0;i<vData.length;i++){
+                            $('#select_teacher_subject').append(
+                                `
+                                <option value=${vData[i].code}>${vData[i].subject}</option>
+                                `
+                            )
+                                
+                        }                    
+                       
+    
+                    } else{
+                        console.log("Ajax Call Failed !!!");
+                    }
+                            
+                },
+                
+    
+        });	
+    }
+    
+    //populate Teacher Ids in List Box
+    function populateTeacherUserId(){
+        $("#btn_manage_teacher_save").prop('disabled',true);
+        let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+        vDataSendToServer={ csrfmiddlewaretoken:vCsrfToken,
+                hUID:"",// initially when form is loading then we do not have Exam ID; but when user search from search box then we will have exam id  
+        };
+        let vSerial=0; 
+        removeItemsFromUnOrderedList("ul_content_teacher_user_id");
+        $.ajax({url:"{% url 'populate_teacher_user_ids' %}",
+            method:"POST",
+            data:vDataSendToServer,
+            dataType:"json",
+            success:function(response){
+                    vSuccess=response['djStatus'];							
+                    if(vSuccess==1){							              
+            vData=response.djTeacherList;
+            for (i=0;i<vData.length;i++){  
+                vSerial=i+1;
+                addItemInUL2("ul_content_teacher_user_id","getTeacherDetails",vData[i].username,vSerial,vData[i].id);//this is defined in common_function.html
+                //----getStudentDetails==> function which will be called when click the link
+                //console.log(vData[i].quid);
+                //=====WORK ON == Integrate DB_ID in list and retrieve details from that DBId
+                    
+            }
+    
+                    } else{
+                        console.log("Ajax Call Failed !!!");
+                    }
+                            
+                },
+                    
+    
+        });	
+    }
+    
+
+    </script>

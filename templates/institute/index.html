@@ -1,0 +1,83 @@
+{% extends 'home/login_layout.html' %}
+
+{% block title %} WhizAce Technology | Online Examination System {% endblock title %}
+
+{% block body %} 
+<form action="" method="POST" id="frm_admin_index"> 
+    {% csrf_token %}
+    <div id="div_admin_main">
+        <div id="div_admin_header">
+            <div id="div_admin_header_col1">
+                <span id="admin_msg"></span>
+            </div>
+            <div id="div_admin_header_col2">                                            
+                    <input type="button" value="Dashboard" id="btn_dashboard">
+                    <input type="button" value="Manage Student" id="btn_manage_student">
+                    <input type="button" value="Manage Teacher" id="btn_manage_teacher">
+                    <input type="button" value="Manage Institute" id="btn_manage_institute">
+                                                            
+            </div>
+            
+        </div>
+        <div id="div_admin_content">
+            <div id="div_admin_dashboard">
+                {% include "institute/dashboard.html" %} 
+            </div>
+            <div id="div_admin_manage_student">
+                {% include "institute/manage_student.html" %} 
+            </div>
+            <div id="div_admin_manage_teacher">
+                {% include "institute/manage_teacher.html" %} 
+            </div>
+            <div id="div_admin_manage_institute">
+                {% include "institute/manage_institute.html" %} 
+            </div>
+        </div>
+
+    </div>
+</form>
+    {% include "institute/index_ajax.html" %}
+
+<style>
+#div_admin_main{
+  background-color:  white;
+}
+
+#div_admin_header{
+  background-color:  yellow;
+  height: 35px;
+}
+
+#div_admin_content{
+    background-color:  white;
+  height: 500px;
+  
+}
+
+#div_admin_header_col1{
+    height: 35px;
+    width: 50%;
+    background-color: #3f3a3a;
+    float: left;
+    text-align: center;
+}
+
+
+#div_admin_header_col2{
+    height: 35px;
+    width: 50%;
+    background-color: #3f3a3a;
+    float: left;
+    
+}
+
+#admin_msg{
+    font-size:x-large;
+    font-weight: bold;
+    color: honeydew;
+}
+
+</style>
+     
+
+{% endblock body %}

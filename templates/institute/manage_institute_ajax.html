@@ -1,0 +1,270 @@
+<script>
+    $(document).ready(function () {
+        
+        
+    
+    });
+
+
+    $("#btn_manage_institute_save").click(function(){
+        event.preventDefault();
+        let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+        vId=$("#txtbx_manage_institute_id").val();
+        vStatus=$("#txtbx_manage_institute_status").val();					
+        vName=$("#txtbx_manage_institute_name").val();					
+        vOwner=$("#txtbx_manage_institute_owner").val();					
+        vEmail=$("#txtbx_manage_institute_email").val();					
+        vContact1=$("#txtbx_manage_institute_contact1").val();					
+        vContact2=$("#txtbx_manage_institute_contact2").val();					
+        vCountry=$("#txtbx_manage_institute_country").val();					
+        vState=$("#txtbx_manage_institute_state").val();					
+        vCity=$("#txtbx_manage_institute_city").val();					
+        vAddress=$("#txtbx_manage_institute_address").val();					
+        vPinCode=$("#txtbx_manage_institute_pincode").val();	
+        let vLogoPath=$("#img_profile_pic_preview");        
+        ///-------------validation----------------------- 
+        $("#msg_institute").show();
+        if(vName==""){
+            $("#msg_institute").text("Enter Institute Name !!!");
+            
+        }else if(vOwner==""){
+            $("#msg_institute").text("Enter Owner Name !!!");
+            
+        }else if(validate_email(vEmail)==false){
+            $("#msg_institute").text("Invalid Email Id !!!");
+            
+        }else if(vContact1==""){
+            $("#msg_institute").text("Enter Contact Number 1 !!!");
+            
+        }else if(vContact2==""){
+            $("#msg_institute").text("Enter Contact Number 2 !!!");
+            
+        }else if(vContact1=="" && vContact2==""){            
+            $("#msg_institute").text("Enter Contact Number !!!");
+            
+        }else if(vCountry==""){
+            $("#msg_institute").text("Enter Country !!!");
+            
+        }else if(vState==""){
+            $("#msg_institute").text("Enter State !!!");
+            
+        }else if(vCity==""){
+            $("#msg_institute").text("Enter City !!!");
+            
+        }else if(vAddress==""){
+            $("#msg_institute").text("Enter Address !!!");
+            
+        }else if(vPinCode==""){
+            $("#msg_institute").text("Enter Pin Code !!!");
+            
+        }else if(vLogoPath==null){
+            $("#msg_institute").text("Select Your Logos !!!");
+            
+        }else{            
+            $("#msg_institute").hide()
+        }	
+        //prepare data
+        vDataSendToServer={ 
+            csrfmiddlewaretoken:vCsrfToken,
+            hId:vId,
+            hName	:	vName	,
+            hOwner	:	vOwner	,
+            hEmail	:	vEmail	,
+            hContact1	:	vContact1	,
+            hContact2	:	vContact2	,
+            hCountry	:	vCountry	,
+            hState	:	vState	,
+            hCity	:	vCity	,
+            hAddress	:	vAddress	,
+            hPinCode	:	vPinCode	,
+                                                
+        };
+	
+        //----Save in Database 
+        $.ajax({url:"{% url 'save_institute_details' %}",
+            method:"POST",
+            data:vDataSendToServer,
+            dataType:"json",
+            success:function(response){
+                vSuccess=response['djStatus'];
+                    if(vSuccess=="1"){
+                        $("#msg_institute").show();
+                        $("#msg_institute").text("Institute Profile Edited Successfully !!!");
+                        //-----SAVE IMAGE---------
+                        let vFormData = new FormData($("#frm_manage_institute").get(0));              		          
+                        vFormData.append('hId',vId)
+                        
+                        $.ajax({
+                            url:"{% url 'save_institute_details_image' %}",
+                            method:"POST",
+                            data:vFormData,
+                            processData: false,
+                            contentType: false,                
+                            mimeType:"multipart/form-data",
+                            success:function(response){
+                                var vSuccess=JSON.parse(response);
+                                var vStatus=vSuccess.djStatus;																				
+                                if(vStatus=="1"){
+                                    ///	
+                                    $("#msg_edit_profile").text("Data & Image saved successfully !!!");
+                                    $("#msg_edit_profile").show();
+
+                                    
+                                }else{
+                                    $("#msg_edit_profile").text("Image Saving Failed !!!");
+                                    $("#msg_edit_profile").show();
+                                }
+                                    
+                            },
+                        
+
+                        });
+
+
+                    }else{
+                        $("#msg_institute").show();
+                        $("#msg_institute").text("Institute Profile Editeding Failed !!!");
+                    }  
+                },
+        });                          
+	// 						////// AJAX to save picture (START) on Success Status==1
+	// 						let vFormData = new FormData($("#frm_edit_profile").get(0));              		          
+	// 						vFormData.append('hDbId',vDbId)
+	// 						vFormData.append('hContact1',vContact1)
+	// 						vFormData.append('hContact2',vContact2)
+	// 						vFormData.append('hAddress',vAddress)
+	// 						vFormData.append('hVerificationIdType',vVerificationIdType)
+	// 						vFormData.append('hVerificationId',vVerificationId)
+							
+	// 						$.ajax({
+	// 							url:"{% url 'profile_extra_details_save' %}",
+	// 							method:"POST",
+	// 							data:vFormData,
+	// 							processData: false,
+	// 							contentType: false,                
+	// 							mimeType:"multipart/form-data",
+	// 							success:function(response){
+	// 								var vSuccess=JSON.parse(response);
+    //                   				var vStatus=vSuccess.djStatus;																				
+	// 								if(vStatus=="1"){
+	// 									///	
+	// 									$("#msg_edit_profile").text("Data & Image saved successfully !!!");
+    //     								$("#msg_edit_profile").show();
+
+										
+	// 								}else{
+	// 									$("#msg_edit_profile").text("Image Saving Failed !!!");
+    //     								$("#msg_edit_profile").show();
+	// 								}
+										
+	// 							},
+							
+
+	// 						});
+                            
+	// 					}else{
+    //                         $("#msg_edit_profile").text("Profile Editing Failed !!!");
+    //     					$("#msg_edit_profile").show();
+	// 					}
+								
+	// 				},
+				
+
+    //         });
+        setTimeout(function(){								
+            $("#msg_institute").hide()
+        }, 10000);
+	
+    });
+
+
+
+    //WHEN MANAGE INSTITUTE BUTTON IS HIT
+    $("#btn_manage_institute_close").click(function(){
+        document.getElementById("div_admin_dashboard").style.display="block";
+        document.getElementById("div_admin_manage_student").style.display="none";
+        document.getElementById("div_admin_manage_teacher").style.display="none";
+        document.getElementById("div_admin_manage_institute").style.display="none";
+        $("#admin_msg").text("Dashboard");
+        
+    });
+
+    function populateInstituteDetails(){
+        let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+        vDataSendToServer={ 
+            csrfmiddlewaretoken:vCsrfToken,
+        };
+	    $.ajax({url:"{% url 'get_institute_data' %}",
+            method:"POST",
+            data:vDataSendToServer,
+            dataType:"json",
+            success:function(response){
+				vSuccess=response['djStatus'];					
+				if(vSuccess==1){
+					$("#msg_institute").hide();
+					////
+					vInstituteDataList= response['djInstituteDetails']; 
+					vId=vInstituteDataList[0]['id']  
+                    vStatus=vInstituteDataList[0]['institute_status']  
+                    vName=vInstituteDataList[0]['institute_name']  
+                    vOwner=vInstituteDataList[0]['institute_owner']  
+                    vEmail=vInstituteDataList[0]['institute_email']  
+                    vContact1=vInstituteDataList[0]['institute_contact1']  
+                    vContact2=vInstituteDataList[0]['institute_contact2']  
+                    vCountry=vInstituteDataList[0]['institute_country']  
+                    vState=vInstituteDataList[0]['institute_state']  
+                    vCity=vInstituteDataList[0]['institute_city']  
+                    vAddress=vInstituteDataList[0]['institute_address']  
+                    vPinCode=vInstituteDataList[0]['institute_pin_code']                        
+                    vLogoPath=vInstituteDataList[0]['institute_logo_path']  
+                    
+					/////
+					$("#txtbx_manage_institute_id").val(vId);
+					$("#txtbx_manage_institute_status").val(vStatus);					
+					$("#txtbx_manage_institute_name").val(vName);					
+					$("#txtbx_manage_institute_owner").val(vOwner);					
+					$("#txtbx_manage_institute_email").val(vEmail);					
+					$("#txtbx_manage_institute_contact1").val(vContact1);					
+					$("#txtbx_manage_institute_contact2").val(vContact2);					
+					$("#txtbx_manage_institute_country").val(vCountry);					
+					$("#txtbx_manage_institute_state").val(vState);					
+					$("#txtbx_manage_institute_city").val(vCity);					
+					$("#txtbx_manage_institute_address").val(vAddress);					
+					$("#txtbx_manage_institute_pincode").val(vPinCode);					
+					$("#img_logo_preview").attr("src", "/media/"+vLogoPath); 
+					
+					////
+					
+				} else{
+					$("#msg_institute").text("Profile Retrieve Failed !!!");
+					$("#msg_institute").show();
+				}
+						
+			},
+				
+
+     });	
+	setTimeout(function(){								
+		document.getElementById("msg_institute").style.display="none";
+	}, 5000); 
+}
+
+
+
+
+
+function readLogoUrl(input) {
+    if (input.files && input.files[0]) {        
+        var reader = new FileReader();        
+        reader.onload = function (e) {
+            $('#img_logo_preview').attr('src', e.target.result);
+            vImagePath="";            
+        };
+        reader.readAsDataURL(input.files[0]);
+    }else{
+      
+      $('#img_logo_preview').attr('src', null);
+    }
+    
+}
+</script>

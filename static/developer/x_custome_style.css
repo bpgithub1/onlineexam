@@ -1,0 +1,139 @@
+
+/* ----Font & Color (All & Default)----- */
+*{
+	font-size: 16px; 
+	font-family:Georgia,;	
+	margin: 0px;
+    padding: 0px;	
+}
+/* -----------for success message-------------- */
+.success{
+	color:green;
+}
+
+/* -----------for information message-------------- */
+.info {
+	color: blue;
+}
+
+/* ---------display errors in red color--------------- */
+.error {
+	color: red;
+}
+
+/* ---------After Login Common Layout Design--------------- */
+#wrapper{
+    border: solid;
+    padding: 2px;
+  }
+  #header{
+    height: 35px;
+    background-color: #ffffff;
+    padding: 2px;
+    border-radius: 2px;
+    color: #17202A;
+    border: solid;
+  }
+  #header-left{
+    width: 5%;
+    height: 30px;
+    background-color:#ffffff;
+    float: left;
+    border-color: #17202A;
+    
+  }
+  #header-center{
+    width: 60%;
+    height: 30px;
+    background-color: #ffffff;
+    float:left;
+    text-align: center;
+    border-radius: 20px;
+    border-color: #17202A;
+    
+  }
+  #header-right{
+    width: 25%;
+    height: 30px;
+    background-color:#ffffff;
+    float: right;
+    text-align: center;
+    border-radius: 5px;
+    border-color: #17202A;
+    
+    
+  }
+  #footer{
+    height: 20px;
+    background-color: #ffffff;
+    margin: top 2px;
+    border-radius: 1px;
+    border-color: #17202A;
+    border: solid;
+    text-align: right;
+  }
+
+/* unvisited link */
+a:link {
+    color: #17202A;
+  }
+  
+  /* visited link */
+  a:visited {
+    color: #17202A;
+  }
+  
+  /* mouse over link */
+  a:hover {
+    color: red;
+  }
+  
+  /* selected link */
+  a:active {
+    color: #17202A;
+  }
+/* --------- */
+#div_after_login_menu{
+    text-align: right;
+}
+
+
+
+/* --------- */
+
+/* --------- */
+
+/* --------- */
+
+/* ---Only for R & D Purpose------ */
+
+
+#RnD{
+  height: 100px;
+  background-color: red;
+  border: 10px solid black;
+  width: 900px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:rgba(10,10,255,.5);
+  float:left;
+  /*transform: rotate(45deg);*/
+
+} 
+
+/* #7B7D7D = background color*/
+/* --------- */
+
+
+
+
+
+
+
+
+
+
+
+
+

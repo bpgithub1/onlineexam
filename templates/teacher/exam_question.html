@@ -1,0 +1,265 @@
+
+ 
+<div id="div_teacher_exam_Q_wrapper">
+  
+  <div id="div_teacher_exam_Q_exam_data">
+    
+    <!-- exam related data -->
+    <label id="lbl_exam_head"><h6>Examination Details</h6></label> >> 
+    <label id="lbl_exam_code"></label>|
+    <label id="lbl_exam_start_date"></label>|
+    <label id="lbl_exam_end_date"></label>|
+    <label id="lbl_exam_total_questions"></label>| 
+    <label id="lbl_exam_full_marks"></label>| 
+    <label id="lbl_exam_duration"></label>|
+    <label id="lbl_exam_level"></label>|
+    <label id="lbl_exam_subject"></label>|
+    <label id="lbl_exam_is_released"></label>|
+    <label id="lbl_exam_source_desc"></label>|
+    <input type="hidden" id="hdn_exam_code">    
+    <input type="hidden" id="hdn_exam_source_code">
+    <input type="hidden" id="hdn_exam_level_code">
+    <input type="hidden" id="hdn_exam_is_released">
+    <input type="hidden" id="hdn_exam_subject_code">
+    <input type="button" value="Back/Close" id="btn_exam_Q_close" name="btn_exam_Q_close">
+  
+  </div>
+  <div id="div_teacher_exam_Q_wrapper">
+
+    <div id="div_teacher_exam_Q_search_box">
+      <div id="div_teacher_exam_Q_search_box_row1">
+        <input type="text" id="txt_bx_Q_search_id" style="height: 40px; width: 100%;"  placeholder="Search Box" placeholder="Search Box" onkeyup="searchListItem('txt_bx_Q_search_id','ul_content_question')">           
+        
+      </div>
+      <div id="div_teacher_exam_Q_search_box_row2"> 
+          <ul id="ul_content_question">
+           
+          </ul>
+          <!-- <select id="lst_bx_Q_id" name="lst_bx_exam_id" size="17" >
+            
+          </select> -->
+      </div>
+    </div>
+
+    <div id="div_teacher_exam_Q_content_box">
+      <div id="div_teacher_exam_Q_content_box_content">  
+        <div id="div_teacher_exam_Q_content_box_content_col1">
+            <!-- question unique Id -->
+            <label id="lbl_Q_UID">QUID</label>  
+            <input type="text" id="txt_bx_Q_UID" disabled value="20991231Q9999">
+            <input type="hidden" id="hdn_Q_count">
+            <!-- question type  -->
+            <br>
+            <label for="">Question Type</label>
+            <br>
+            <table>
+              <tr>
+                <td><input type="radio" id="radio_Q_manual" name="radio_Q_type" class="cl_radio_Q_type" value="1"></td>
+                <td><label for="manual_check">Subjective Answer</label></td>
+                <td><input type="radio" id="radio_Q_auto_single" name="radio_Q_type" class="cl_radio_Q_type" value="2"></td>
+                <td><label for="auto_check_sinlge">Single Correct Answer </label></td>
+              </tr>
+              <tr>
+                <td><input type="radio" id="radio_Q_auto_oneword" name="radio_Q_type" class="cl_radio_Q_type" value="4"></td>
+                <td><label for="auto_check_multiple">One Word Answer</label></td>
+                <td><input type="radio" id="radio_Q_auto_multiple" name="radio_Q_type" class="cl_radio_Q_type" value="3"></td>
+                <td><label for="auto_check_multiple">Multiple Correct Answers</label></td>
+                
+              </tr>
+            </table>
+            
+            <!-- question text -->
+            <br>            
+            <textarea id="txtarea_Q_text" name="txtarea_Q_text" rows="3" cols="40" placeholder="Enter Question Particulars" class="mandatory"></textarea>
+            <!-- question image -->
+            <form action="" method="POST" enctype="multipart/form-data" id="frm_exam_Q_image">
+              {% csrf_token %}
+
+              Delete Saved Image: <input type="checkbox" name="chkbx_delete_image" value="0">
+              <label for="img">Question Image:</label>
+              <br>
+              <input type='file' id="img_question" name="img_question"  onchange="readURL(this);" accept="image/*"/>
+              <br>
+              <img id="img_Q_preview" src="" alt="" />
+              
+            </form>
+            <textarea id="txtarea_Q_ans" name="txtarea_Q_ans" rows="3" cols="40" placeholder="Provide Answer Reference To Checkers" class="mandatory"></textarea>
+            
+        </div>
+          
+        <div id="div_teacher_exam_Q_content_box_content_col2" style="align-items: right;">
+             <!-- question options + answer -->
+             <div id="msg_teacher_exam_Q" class="alert alert-danger" style="display:none"></div>
+             <label id="lbl_question_marks" >Marks</label>            
+             <input type="number" id="txt_bx_Q_marks"  value="0" min="1" max="100" class="mandatory">
+             <br>
+            <label id="lbl_question_option" >Enter Question Option & Click Add Button</label>
+            <br>
+            <table>
+              <tr>
+                <td><textarea id="txtarea_Q_options"  name="txtarea_Q_options" rows="3" cols="40" wrap="hard"></textarea>      </td>
+                <td><input type="button" value="Add" id="btn_exam_Q_option_add" style="height:72px;width:50px"></td>
+                </tr>
+            </table>
+            <div id="div_auto_check_options" style="align-items: right;">
+                <h3>SCQ / MCQ Options </h3>
+                <table id="tbl_question_options" style="align-items: right;" >
+                  <thead >
+                    <tr >
+                      <th>Type</th>
+                      <th>SL</th>
+                      <th>Question Options</th>  
+                      <th>Ans(?)</th>  
+                      <th>Action</th>
+                      
+                    </tr>
+                    
+                  </thead>
+                  <tbody >
+              
+                  </tbody>
+                
+              </table>
+            </div>
+        </div>
+        
+      </div>
+      <div id="div_teacher_exam_Q_content_box_btn" >
+        <input type="button" value="Back/Close" id="btn_exam_Q_close_copy" name="btn_exam_Q_close"> &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
+        <input type="button" value="Previous" id="btn_exam_Q_prev">&nbsp; &nbsp; &nbsp;
+        <input type="button" value="Next" id="btn_exam_Q_next">&nbsp; &nbsp; &nbsp;
+        <input type="button" value="Create" id="btn_exam_Q_create">&nbsp; &nbsp; &nbsp;
+        <input type="button" value="Delete" id="btn_exam_Q_delete">&nbsp; &nbsp; &nbsp;
+        <input type="button" value="Save" id="btn_exam_Q_save">
+        
+      </div>
+    </div>
+
+    
+    
+
+    {% include "teacher/exam_question_ajax.html" %}
+  </div>
+ 
+</div>
+
+<style>
+
+textarea { 
+  word-break: break-all; 
+  white-space: pre-wrap;
+}
+
+table, th, td,tr {
+  border: 1px solid rgb(151, 144, 144);
+  text-align:left;
+  align-items: right;
+  padding: 1px;
+  
+}
+
+#div_teacher_exam_Q_wrapper{
+  height:440px;
+  width: 100%;
+  background-color: white;
+  
+}
+#div_teacher_exam_Q_exam_data{
+  height: 60px;
+  width: 100%;
+  background-color: #3f3a3a; 
+  color: whitesmoke;
+}
+
+
+#div_teacher_exam_Q_search_box{
+  height: 440px;
+  width: 20%;
+  background-color: #3f3a3a; 
+  float: left;
+}
+#div_teacher_exam_Q_content_box{
+  height: 440px;
+  width: 80%;
+  background-color: white;
+  float: left;
+  
+}
+
+#div_teacher_exam_Q_search_box_row1{      
+  background-color: white;
+  height: 40px;
+      
+}
+
+#div_teacher_exam_Q_search_box_row2{
+ 
+  height: 400px;
+  overflow:scroll;
+}
+
+#div_teacher_exam_Q_content_box_content{
+  background-color: white;
+  height: 405px;
+  width: 100%;
+  overflow:scroll;
+  align-items: right;
+  
+}
+#div_teacher_exam_Q_content_box_content_col1{
+  background-color: white;
+  height: 405px;
+  width: 40%;
+  float: left;
+  
+}
+#div_teacher_exam_Q_content_box_content_col2{
+  background-color: white;
+  height: 405px;
+  width: 60%;
+  float: left;
+  
+  
+}
+
+#div_teacher_exam_Q_content_box_btn{
+  background-color: #3f3a3a;
+  height: 35px;
+  width: 100%;
+  
+}
+
+
+/* image  */
+img{
+  max-width:180px;
+}
+input[type=file]{
+padding:10px;
+background:#b3a7a7;}
+
+/*------question search box-----*/
+#ul_content_question{
+  /* Remove default list styling */
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#ul_content_question li a {
+  border: 1px solid #ddd; /* Add a border to all links */
+  margin-top: -1px; /* Prevent double borders */
+  background-color: #3f3a3a;  /* Grey background color */
+  padding: 12px; /* Add some padding */
+  text-decoration: none; /* Remove default text underline */
+  font-size: 18px; /* Increase the font-size */
+  color: whitesmoke; /* Add a black text color */
+  display: block; /* Make it into a block element to fill the whole list */
+}
+
+#ul_content_question li a:hover:not(.header) {
+  background-color: rgb(108, 108, 108); /* Add a hover effect to all links, except for headers */
+}
+
+
+</style>

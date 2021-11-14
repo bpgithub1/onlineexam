@@ -1,0 +1,82 @@
+<script>
+     $(document).ready(function () {
+        document.getElementById("div_student_dashboard").style.display="block";
+        document.getElementById("div_student_notice_board").style.display="none";
+        $("#student_msg").text("Dashboard");
+
+    });
+
+    document.getElementById("btn_dashboard").addEventListener("click",function(){
+        document.getElementById("div_student_dashboard").style.display="block";
+        document.getElementById("div_student_notice_board").style.display="none";
+        $("#student_msg").text("Dashboard");	      
+    
+    });
+
+    document.getElementById("btn_notice_board").addEventListener("click",function(){
+        document.getElementById("div_student_notice_board").style.display="block";
+        document.getElementById("div_student_dashboard").style.display="none";
+        $("#student_msg").text("Notice Board");	 
+        //----
+        let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+            vDataSendToServer={ 
+            csrfmiddlewaretoken:vCsrfToken,
+            
+        };
+        $.ajax({url:"{% url 'get_available_exams' %}",
+                    method:"POST",
+                    data:vDataSendToServer,
+                    dataType:"json",
+                    success:function(response){
+                            vSuccess=response['djStatus'];							
+                    if(vSuccess==1){
+                        vData=response.djExamList;               
+                        //var vTableEl = document.getElementById("tbl_exam_release_info_question");                       
+                        //$("#tbl_exam_release_info_question > tbody").empty();
+                        for (i=0;i<vData.length;i++){ 
+                            addAvailableExamsInTable("tbl_student_exam_list_available",i+1,vData[i][0],vData[i][1],vData[i][2],vData[i][3],vData[i][4],vData[i][5],vData[i][6],vData[i][7],vData[i][8]);
+                            
+                        }
+                        
+                        
+                    } else{
+                        console.log("Ajax Call Failed !!!");
+                    }
+                                            
+                },				
+        });
+    
+    });
+    
+
+    //----Add Exams in Table ----
+    function addAvailableExamsInTable(pTableId,pSlNo,pInstitute,pExamCode,pSubject,pTotalMarks,pTotalQs,pLevel,pSection,pExamLastDate,pStatus){
+        var vTableEl = document.getElementById(pTableId);    
+        vTableEl.innerHTML +=`
+        <tr style="border: 1px solid rgba(141, 137, 137, 0.692);">
+            <td>${pSlNo}</td>
+            <td>${pInstitute} </td>
+            <td>${pExamCode} </td>
+            <td>${pSubject} </td>
+            <td>${pTotalMarks} </td>
+            <td>${pTotalQs} </td>
+            <td>${pLevel} </td>
+            <td>${pSection} </td>
+            <td>${pExamLastDate} </td>
+            <td>${pStatus} </td>            
+            <td> <a href="javascript:openExamAttendPortal('${pExamCode}')">Attend</a> </td>
+        </tr>  
+        `;
+             
+    }
+
+    function openExamAttendPortal(pExamCode){
+        var r = confirm("Are Your Sure To Attend The Exam?");        
+        if (r == true) {
+            alert("Open Exam Portal for "+pExamCode);
+        }else{
+            //Do Nothing
+        }
+        
+    }
+</script>

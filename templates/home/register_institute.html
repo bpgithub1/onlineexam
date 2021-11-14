@@ -1,0 +1,92 @@
+{% extends 'home/base.html' %}
+{% block body %} 
+<span class="impact">Register Your Institute</span>    
+<div id="div_reg_institute_msg">
+    {% if messages %}
+        {% for message in messages %}
+            <span class="error" {% if message.tags %} class="{{message.tags}}" {% endif %}>{{message}}</span>
+        {% endfor %}
+    {% endif %}
+</div> 
+<div id="div_reg_institute">
+    <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table>
+                {% for field in djForm %}
+                  <tr>
+                        <td>&nbsp;</td> 
+                        <td style="text-align:right">{{field.label_tag}}</td>
+                        <td>&nbsp;</td>                
+                        <td>{{field}}</td>
+                </tr>
+                {% endfor %}                
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <!-- <input type="button" value="View Logo" onclick="readInstituteLogoURL('id_institute_logo_path');"> -->
+                    </td>
+                    <td>
+                        <!-- <img id="img_institute_logo_preview" src="" alt="" /> -->
+                    </td>
+                    <td>
+                        <input type="submit" value="Submit" >
+                    </td>
+                </tr>
+            </table>
+            
+            
+        </form>
+    
+</div>
+
+<script>
+//=====Display Image Preview=====
+//------I have tried to display but not coming; we can ignore this feature for time being
+$(document).ready(function () {
+    
+    //var vFile = document.getElementById("id_institute_logo_path");
+    
+    //vFile.addEventListener("onchange", readInstituteLogoURL(this));       
+    //onchange="readURL(this);"
+});
+
+//onchange="readImageURL(this);"
+    //--------------------image preview
+// function readInstituteLogoURL(input) {
+//     alert(input.files);
+//     if (input.files && input.files[0]) {        
+//         var reader = new FileReader();        
+//         reader.onload = function (e) {
+//             $('#img_institute_logo_preview').attr('src', e.target.result);
+//             vImagePath="";            
+//         };
+//         reader.readAsDataURL(input.files[0]);
+//     }else{
+      
+//       $('#img_institute_logo_preview').attr('src', null);
+//     }
+    
+// }
+
+// function readInstituteLogoURL(pId) {
+//     // vText=$("#"+pId).val();
+//     // alert(vText);
+//     // $('#img_institute_logo_preview').attr('src', vText);
+
+//     var file = $("input[type=file]").get(0).files[0];
+//     alert(file);
+//     if(file){
+//         var reader = new FileReader();
+//         $("#img_institute_logo_preview").attr("src", reader.result);
+       
+
+//         reader.readAsDataURL(file);
+//     }
+// }
+
+
+
+</script>
+
+{% endblock body %}

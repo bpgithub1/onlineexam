@@ -1,0 +1,132 @@
+<script>
+    $("#btn_register_individual").click(function(){        
+        event.preventDefault();
+	    console.log("Register Individual Button Clicked !!!");
+	    let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+        let vInstituteDbId=$("#id_institute").val();
+        let vProfileType=$("#id_type").val();
+        let vNameFirst=$("#id_first_name").val();
+        let vNameLast=$("#id_last_name").val();
+        let vVerificationIdType=$("#id_verification_id_type").val();
+        let vVerificationId=$("#id_verification_id").val();
+        let vEmailId=$("#id_email").val();        
+        let vPassword=$("#id_password").val();
+        let vPasswordConfirm=$("#id_confirm_password").val();
+        let vContact1=$("#id_contact1").val();
+        let vContact2=$("#id_contact2").val();
+        let vAddress=$("#id_address").val();
+        let vProfilePicPath=$("#id_profile_pic_path").val();
+        $("#msg").show();
+        if(vProfileType==null){
+            $("#msg").text("Select Your Profile !!!");            
+        }else if(vInstituteDbId==null && vProfileType!="Student"){
+            $("#msg").text("Select Your Institute !!!");
+            
+	    }else if(validate_email(vEmailId)==false){
+            $("#msg").text("Invalid EmailId !!!");
+            
+        }else if( vPassword!=vPasswordConfirm ||vPassword=="" ||vPasswordConfirm=="" ){
+            $("#msg").text("New Password & Confirm Password Not Matched !!!");
+            
+	    }else if(vNameFirst==""){
+            $("#msg").text("Enter First Name !!!");
+            
+        }else if(vNameLast==""){
+            $("#msg").text("Enter Last Name !!!");
+            
+        }else if(vVerificationIdType==null){
+            $("#msg").text("Select Your Verification Id !!!");
+            
+	    }else if(vVerificationId==""){
+            $("#msg").text("Enter Verification Id !!!");
+            
+        }else if(vContact1=="" && vContact2==""){            
+            $("#msg").text("Enter Contact Number !!!");
+            
+        }else if(vProfilePicPath=="" ){
+            $("#msg").text("Select Your Profile Photo !!!");
+            
+        }else{            
+            $("#msg").hide()
+            // this how to make data dictionary could be used in other places
+            vNotInUse={ 
+                csrfmiddlewaretoken:vCsrfToken,
+                id_institute:vInstituteDbId,
+                id_type:vProfileType,
+                id_email:vEmailId,
+                id_password:vPassword,
+                id_first_name:vNameFirst,
+                id_last_name:vNameLast,
+                id_verification_id_type:vVerificationIdType,
+                id_verification_id:vVerificationId,
+                id_contact1:vContact1,
+                id_contact2:vContact2,
+                id_address:vAddress,
+                id_profile_pic_path:vProfilePicPath,                                
+            };
+               
+            let vFormData = new FormData($("#frm_register_individual").get(0));
+
+		    console.log(vFormData);
+               
+            
+		    
+            $.ajax({url:"{% url 'register_individual' %}",
+				method:"POST",
+				data:vFormData,
+				processData: false,
+                contentType: false,                
+                mimeType:"multipart/form-data",
+				success:function(response){
+						var vSuccess=JSON.parse(response);
+                        var vStatus=vSuccess.status				
+						if(vStatus=="1"){
+                            $("#msg").show();
+                            if(vProfileType=="Student" ||vProfileType=="Teacher"){
+                                $("#msg").text("User Registered Successfully (But Account is Inactive) - Contact Institute Administrator !!!");        					    
+                            }else{
+                                $("#msg").text("User Registered Successfully (But Account is Inactive) - Contact Software Center !!!");
+                            }							
+                            document.getElementById("btn_register_individual").disabled=true;
+                            document.getElementById("id_profile_pic_path").disabled=true;
+							setTimeout(function(){								
+								document.getElementById("div_reg_individual").style.display="none";
+							}, 10000);
+						}else if (vStatus=="2"){
+							$("#msg").text("User Already Exists !!!");
+        					$("#msg").show();
+						}else{
+                            alert("Ajax Called !!! and Returned Response:",vSuccess);
+							$("#msg").text("User Registration Failed !!!");
+        					$("#msg").show();
+						}
+								
+					},
+				
+
+            });
+        }
+
+    });
+
+// function validate_email(aEmail){
+//     var regx=/^([a-z A-Z 0-9\.-]+)@([a-z A-Z 0-9-]+).([a-z]{1,10})(.[a-z]{1,10})$/;
+//     return(regx.test(aEmail));
+// }
+
+$(document).ready(function () {
+    $("#id_type").change(function() {
+        let vLoginType=$('option:selected', this).text();
+        if(vLoginType=='Student'){
+            $('#id_institute').append(new Option("Select Institute", null));
+            $("#id_institute").prop('disabled', true); 
+            $("#id_institute").val(null);            
+            $("#id_institute option[value=null]").attr('selected','selected'); 
+        }else{
+            $("#id_institute").prop('disabled', false); 
+        }
+         
+    });
+});
+
+</script>

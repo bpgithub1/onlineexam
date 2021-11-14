@@ -1,0 +1,33 @@
+<script>
+  $(document).ready(function () {                      	  
+     
+  });
+
+  document.getElementById("div_swm_sript_assign_exam").addEventListener("click",function(){
+    $("#manager_msg").text("Database Updation - Started"); 
+    $("#manager_msg").show();
+    let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+    DataSendToServer={ 
+      csrfmiddlewaretoken:vCsrfToken,
+      
+    };     
+    $.ajax({url:"{% url 'auto_db_updates' %}",
+      method:"POST",
+      data:DataSendToServer,
+      dataType:"json",
+      success:function(response){
+          vSuccess=response['djStatus'];          
+          if(vSuccess==1){
+            $("#manager_msg").text("Database Updation - Completed")             
+                  
+          } else{
+              console.log("Ajax Call Failed !!!");
+          }
+              
+      },
+    
+    }); 
+
+    setTimeout(function(){$("#manager_msg").hide();}, 5000); 
+  });
+</script>

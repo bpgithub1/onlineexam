@@ -1,0 +1,88 @@
+<script>
+    
+$(document).ready(function () {
+   //$("#btn_exam_release_proceed").prop('disabled',true);
+   //$('form input[type=checkbox]').change(function() { console.log('hello');
+   //$("input[type='radio'][name='rdo_name_exam_type']:checked").val();
+//    $('#exam_release_disclaimer').click(function() {
+//       alert("Hello");
+//    }); 
+    
+   
+
+   
+
+});
+
+//-----this function is called on the click event of check box 
+//check box is made from exam_crud_ajax.html
+function proceedExamRelease(){ 
+    let vFlag=$("#exam_release_disclaimer").is(":checked");    
+    if (vFlag) {        
+        //document.getElementById("btn_exam_release_proceed").disabled = false;
+        $("#btn_exam_release_proceed").attr('disabled',false); //checked
+    }
+    else {
+        //document.getElementById("btn_exam_release_proceed").disabled = true;
+        $("#btn_exam_release_proceed").attr('disabled',true); //not checked
+    }
+}
+
+
+
+document.getElementById("btn_exam_release_cancel").addEventListener("click",function(){
+    document.getElementById("div_teacher_exam_released").style.display="none";
+    document.getElementById("div_teacher_dashboard").style.display="none";	  
+    document.getElementById("div_teacher_exam_crud").style.display="block";
+    document.getElementById("div_teacher_exam_check").style.display="none";
+
+});    
+
+document.getElementById("btn_exam_release_proceed").addEventListener("click",function(){
+    var vExamCode= $("#release_info_exam_code").text();
+    var vFullMarks=$("#release_info_exam_marks").text();
+    var vTotalQuestion=$("#release_info_exam_questions").text();
+    
+
+    var r = confirm("Are Your Sure To Release The Exam Code: " +vExamCode);
+    if (r == true) {
+        //AJAX code to update records in DB
+        let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+        vDataSendToServer={ 
+        csrfmiddlewaretoken:vCsrfToken,
+        hEUID:vExamCode,
+        hFullMarks:vFullMarks,
+        hTotalQuestion:vTotalQuestion,
+        };
+        $.ajax({url:"{% url 'release_exam' %}",
+            method:"POST",
+            data:vDataSendToServer,
+            dataType:"json",
+            success:function(response){
+                    vSuccess=response['status'];							
+                    if(vSuccess==1){							                            
+                        vData=response.djExamUID              
+                        //Exam Released Successfully, now return to main dashboard.
+                        document.getElementById("div_teacher_dashboard").style.display="block";
+                        document.getElementById("div_teacher_exam_released").style.display="none";
+                        document.getElementById("div_teacher_exam_crud").style.display="none";
+                        document.getElementById("div_teacher_exam_check").style.display="none";
+                        $("#teacher_msg").text("Dashboard");
+                        ////
+                        alert("Examination Code ("+vExamCode+") Is Released Successfully\n Now It Is Available To Students As Per The Schedule!!!");
+                    } else{
+                        console.log("Ajax Call Failed !!!");
+                    }
+                            
+                },				
+        });	
+
+    }else{
+        alert("Do nothing");
+    }    
+
+});  
+
+
+
+</script>

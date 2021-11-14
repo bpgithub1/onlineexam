@@ -1,0 +1,135 @@
+<script>
+
+    $(document).ready(function () {
+        document.getElementById("div_teacher_dashboard").style.display="block";
+        document.getElementById("div_teacher_exam_released").style.display="none";
+        document.getElementById("div_teacher_exam_crud").style.display="none";
+        document.getElementById("div_teacher_exam_check").style.display="none";
+        document.getElementById("div_teacher_exam_question").style.display="none";
+
+    });
+
+   
+    //this fucntion will populate all the drop downs of EXAM-CRUD Screen;
+    // we will write all the ajax call and populate all the drop downs that are related with teacher.
+    $("#btn_exam_crud").click(function(){
+      ///
+      document.getElementById("div_teacher_exam_crud").style.display="block";
+        document.getElementById("div_teacher_exam_released").style.display="none";
+        document.getElementById("div_teacher_dashboard").style.display="none";	      
+        document.getElementById("div_teacher_exam_check").style.display="none";
+        $("#teacher_msg").text("Examination");
+
+      ///
+        
+
+      event.preventDefault();
+      document.getElementById("select_exam_level").innerHTML =null; // remove all the options from the drop down
+      $('#select_exam_level').append(new Option("Select Level", "none"));
+      document.getElementById("select_exam_section").innerHTML =null; // remove all the options from the drop down
+      $('#select_exam_section').append(new Option("Select Section", "none"));
+      
+
+      document.getElementById("select_exam_subject").innerHTML =null;
+      $('#select_exam_subject').append(new Option("Select Subject", "none"));
+      //$('#select_exam_level option').remove(); // try this code as well and see if working
+      //$('#select_exam_subject option').remove(); // try this code as well and see if working
+      refreshExamEntryForm(); // this function is defined in exam_crud_ajax.html
+      populateExamId(); // populate exam ids in search box// this function is defined in exam_crud_ajax
+      let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+      mydata={ csrfmiddlewaretoken:vCsrfToken,
+               hUID:"",// initially when form is loading then we do not have Exam ID; 
+            };
+		$.ajax({url:"{% url 'populate_exam_drop_down' %}",
+				method:"POST",
+				data:mydata,
+				dataType:"json",
+				success:function(response){
+						vSuccess=response['status'];
+
+						if(vSuccess==1){
+                            //---populate Level
+							vData=response.djLevel
+                            for (i=0;i<vData.length;i++){
+                                $('#select_exam_level').append(
+                                    `
+                                    <option value=${vData[i].code}>${vData[i].level}</option>
+                                    `
+                                    )
+                                    
+                            }
+                            
+                            //---populate Section 
+                            vData=response.djSection
+                            for (i=0;i<vData.length;i++){
+                                $('#select_exam_section').append(
+                                    `
+                                    <option value=${vData[i].code}>${vData[i].section}</option>
+                                    `
+                                    )
+                                    
+                            }
+                            //---populate subject 
+                            vData=response.djSubject
+                            for (i=0;i<vData.length;i++){
+                                $('#select_exam_subject').append(
+                                    `
+                                    <option value=${vData[i].code}>${vData[i].subject}</option>
+                                    `
+                                    )
+                                    
+                            }
+                            
+
+						} else{
+							console.log("Ajax Call Failed !!!");
+						}
+								
+					},
+				
+
+            });	
+            
+        var vUID=$("#txt_bx_exam_id").val();    
+        vUIDDatePart=vUID.substring(0,8);
+        if (vUIDDatePart=="20991231"){
+            $("#btn_exam_questions").prop('disabled', true);   
+        }else {
+            $("#btn_exam_questions").prop('disabled', false);   
+        }
+        
+        $("#msg_teacher_exam_crud").show();
+        $("#msg_teacher_exam_crud").text("Create / Update / Delete / Copy / Release & Re-Release  Examinations !!!");                    
+        document.getElementById("tbl_exam_crud_input").style.display="none";
+        disableExamAllButtons();//defined in exam_crud_ajax.html
+        $("#btn_exam_create").prop('disabled', false); 
+        $('input:radio[name="rdo_name_exam_type"]').filter('[value="1"]').attr('checked', true);
+    });
+    
+  document.getElementById("btn_dashboard").addEventListener("click",function(){
+    document.getElementById("div_teacher_dashboard").style.display="block";
+	document.getElementById("div_teacher_exam_released").style.display="none";
+    document.getElementById("div_teacher_exam_crud").style.display="none";
+    document.getElementById("div_teacher_exam_check").style.display="none";
+    $("#teacher_msg").text("Dashboard");
+  });
+
+  
+//   document.getElementById("btn_exam_crud").addEventListener("click",function(){
+//     document.getElementById("div_teacher_exam_crud").style.display="block";
+//     document.getElementById("div_teacher_exam_released").style.display="none";
+//     document.getElementById("div_teacher_dashboard").style.display="none";	      
+//     document.getElementById("div_teacher_exam_check").style.display="none";
+//     $("#teacher_msg").text("Examination");
+//   });
+
+  document.getElementById("btn_exam_check").addEventListener("click",function(){
+    document.getElementById("div_teacher_exam_check").style.display="block";
+    document.getElementById("div_teacher_exam_crud").style.display="none";
+    document.getElementById("div_teacher_exam_released").style.display="none";
+    document.getElementById("div_teacher_dashboard").style.display="none";
+    $("#teacher_msg").text("Check Answer");	      
+    
+  });
+    
+</script>

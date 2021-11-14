@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+   
+<head>
+    <meta charset="UTF-8">
+    <title>RnD</title>
+    <script src="{% static 'js/jquery.js' %}" ></script>
+    <script src="{% static 'js/popper.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>  
+    <script src="{% static 'js/common.js' %}" ></script> 
+
+    <link href="{% static 'css/bootstrap.css' %}"     rel="stylesheet"/>
+    <link href="{% static 'css/custome_style.css' %}" rel="stylesheet"/>
+    
+</head>
+
+<body>
+  
+  <div id="wrapper" >
+    <div id="header" >
+      <div id="header-left" >Logo</div>    
+      <div id="header-center" ><span>{{djInstitute}} | {{djProfile}} | {{djUser}} </span></div> 
+      <div id="header-right" > 
+       
+        <a href="/logout_user">Logout</a> 
+      </div>  
+      
+    </div>  
+    
+   
+    <div id=div_after_login_menu>
+      <h3>Password Change</h3>
+      <div id="div_teacher_exam_Q_wrapper">
+         <div id="div_teacher_exam_Q_exam_data">
+          <h1>Menu</h1>
+          
+         </div>
+         <div id="div_teacher_exam_Q_wrapper">
+          <h3>R&D</h3>
+          <label for="lbl_exam_type">Exam Type-----></label>
+          
+          <input type="radio" id="rdo_id_exam_type_long" name="rdo_name_exam_type" class="rdo_class_exam_type" value="1" selected>
+          <label for="lbl_exam_type">Long Schedule</label>          
+          
+          <input type="radio" id="rdo_id_exam_type_short" name="rdo_name_exam_type" class="rdo_class_exam_type" value="2">
+          <label for="lbl_exam_type">Short Schedule</label>          
+          <br>
+          start date 
+          <input type="datetime-local" id="date_exam_start_date"   min="2021-01-01" max="2030-12-31">
+          <br>
+          <label for="lbl_start_time">Start Time : </label>
+          <input type="time" id="txt_bx_exam_start_time">
+          <br>
+          <input type="number" name="" id="txt_bx_exam_duration" value="duraiton" min="1" max="600">
+          <br>
+          end date
+          <input type="datetime-local" id="date_exam_end_date"  value="2022-12-31" min="2021-01-01" max="2030-12-31">
+          <br>
+          <input type="time" id="txt_bx_exam_end_time" disabled value="">
+
+        </div>
+      </div>
+    </div>
+    
+    <div id="footer"><span  >SDG SW INDIA PVT. LTD.</span></div>      
+   </div>
+</body>
+
+<script>
+  $('input[type=radio][name=rdo_name_exam_type]').change(function() {  
+    vExamType=$("input[type='radio'][name='rdo_name_exam_type']:checked").val();
+    blankEndDateTime();
+    if(vExamType=="1"){
+      $("#txt_bx_exam_start_time").prop('disabled', true);
+      //$('input:radio[name="rdo_name_exam_type"]').filter('[value="1"]').attr('checked', true); // default   
+      $("#date_exam_start_date").prop('disabled', false);
+      $("#date_exam_end_date").prop('disabled', false);
+      $("#txt_bx_exam_start_time").prop('disabled', true);
+      $("#txt_bx_exam_start_time").val("00:00");
+      $("#txt_bx_exam_end_time").prop('disabled', true);
+      $("#txt_bx_exam_end_time").val("23:59");
+      //in case of long schedule teacher will suppy end date 
+      //no calculaiton of end date and time based on duration 
+
+    }else{
+      
+      $("#date_exam_start_date").prop('disabled', false);
+      $("#date_exam_end_date").prop('disabled', true);
+      $("#txt_bx_exam_start_time").prop('disabled', true);
+      $("#txt_bx_exam_start_time").val("");
+      $("#txt_bx_exam_end_time").prop('disabled', true);
+      $("#txt_bx_exam_end_time").val("");
+    }
+    
+
+  });
+
+
+  $("#txt_bx_exam_duration").change(function(){    
+    vStartDateTime=new Date($("#date_exam_start_date").val());
+    vDuration=$("#txt_bx_exam_duration").val();//duration cannot be more than 600 -- validate in in exam screen
+    vStartTime=('0' + vStartDateTime.getHours()).slice(-2)+":"+('0' + vStartDateTime.getMinutes()).slice(-2);
+    $("#txt_bx_exam_start_time").val(vStartTime);  
+    vEndDateTime=getEndDate(vStartDateTime,vDuration);
+    $("#date_exam_end_date").val(vEndDateTime);    
+    vEndDateTime=new Date(vEndDateTime);
+    vEndTime=('0' + vEndDateTime.getHours()).slice(-2)+":"+('0' + vEndDateTime.getMinutes()).slice(-2);
+    $("#txt_bx_exam_end_time").val(vEndTime);  
+    vExamType=$("input[type='radio'][name='rdo_name_exam_type']:checked").val();
+    if (vExamType=="2"){
+      alert(vExamType);
+
+    }
+
+  }); 
+  
+
+  $("#date_exam_start_date").change(function(){ 
+    blankEndDateTime();
+    
+  });
+
+  function blankEndDateTime(){
+    $("#txt_bx_exam_duration").val("");
+    $("#date_exam_end_date").val("");
+    $("#txt_bx_exam_end_time").val("");
+  }
+
+
+  function getEndDate(pStartDateTime,pDuration,){
+    vDuration=pDuration;
+    vYear=pStartDateTime.getFullYear();
+    vMonth=pStartDateTime.getMonth()+1; // 1 is added becasue it is zero index i.e. // Be careful! January is 0, not 1
+    vDay=pStartDateTime.getDate();
+    vHours=pStartDateTime.getHours();
+    vMinutes=pStartDateTime.getMinutes();
+    vTotalMinutes=Number(vDuration)+vMinutes;
+    vTotalHours=Math.floor(vTotalMinutes/60)+vHours;
+    vFinalMinutes=vTotalMinutes%60;
+    vFinalHours=vTotalHours%24;
+    vDaysToAdd=Math.floor(vTotalHours/24);
+    vNextDate=new Date();
+    vNextDate=addDays(pStartDateTime,vDaysToAdd);
+    var vOffset = new Date().getTimezoneOffset(); // this is giving -330 for India; since it is negative value hence we have to do minus
+    vOffsetHours=Math.ceil(vOffset/60);
+    vOffsetMinutes=vOffset%60;
+    vNextDate.setHours(vFinalHours-vOffsetHours);    
+    vNextDate.setMinutes(vFinalMinutes-vOffsetMinutes);
+    return vNextDate.toISOString().slice(0,16);
+    
+  }
+
+  function addDays(date, days) {
+    const copy = new Date(Number(date));
+    copy.setDate(date.getDate() + days);
+    return copy
+  }
+
+</script>
+
+
+<style>
+
+
+
+
+
+/*-----------------*/
+
+
+#div_teacher_exam_Q_exam_data{
+  height: 50px;
+  width: 100%;
+  background-color: rgb(201, 201, 209);
+}
+#div_teacher_exam_Q_wrapper{
+  height: 400px;
+  width: 100%;
+  background-color: rgb(182, 97, 41);
+  overflow:scroll;
+}
+
+
+
+    #wrap{
+      
+      width: 200px;
+      height: 400px;
+    }
+    
+
+   #content{
+    width: 200px;
+    height: 400px;
+    background-color: rgb(142, 158, 104);
+    
+   }
+
+
+
+</style>

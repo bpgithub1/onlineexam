@@ -1,0 +1,16 @@
+<script>
+    $(document).ready(function () {
+    $("#id_login_type").change(function() {        
+        let vLoginType=$('option:selected', this).val();
+        if(vLoginType=='Student'||vLoginType=='Manager'){
+            $('#id_institute').append(new Option("Select Institute", null));
+            $("#id_institute").prop('disabled', true); 
+            $("#id_institute").val(null);            
+            $("#id_institute option[value=null]").attr('selected','selected'); 
+        }else{
+            $("#id_institute").prop('disabled', false); 
+        }         
+    });
+});
+
+</script>

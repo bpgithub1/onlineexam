@@ -1,0 +1,70 @@
+<form action="" method="POST" id="frm_swm_run_scripts">
+    {% csrf_token %}
+<div id="div_swm_sript_wrapper">      
+    <div id="div_swm_sript_content_box">
+      <div id="div_swm_sript_content_box_content">
+        <div id="msg_institute" class="alert alert-danger" style="display:none"></div>          
+        <div id="div_swm_sript_content_box_content_data1">
+            <input type="button" id="div_swm_sript_close" value="Back/Close"> 
+            <br>
+            <input type="button" id="div_swm_sript_assign_exam" value="Update Database"> 
+            <br>
+            
+            
+        </div>
+        <div id="div_swm_sript_content_box_content_data2">
+          <h3>data2</h3>
+        </div>
+        
+
+      </div>
+      <div id="div_manage_institute_content_box_btn" >
+            <h3>button</h3>    
+        
+      </div>
+    </div>
+  </div>
+  </form>
+  {% include "manager/run_scripts_ajax.html" %}
+  <style>
+    #div_swm_sript_wrapper{
+      height: 500px;
+      width: 100%;
+      background-color:  white;
+      /* opacity: 0.5; */
+    }
+    
+    
+    #div_swm_sript_content_box{
+      height: 500px;
+      width: 100%;
+      background-color:  white;
+      float: left;
+    }
+    
+    
+    
+    #div_swm_sript_content_box_content{
+      background-color: white;
+      height: 465px;
+      width: 100%;
+      overflow: scroll;
+    }
+    #div_swm_sript_content_box_content_data1{
+      float: left;
+      width: 10%;
+    } 
+    #div_swm_sript_content_box_content_data2{
+      float: left;
+      width: 90%;
+    } 
+    
+    
+    #div_swm_sript_content_box_btn{
+      background-color: #3f3a3a;
+      height: 35px;
+      width: 100%;
+      vertical-align: middle;
+      
+    }
+    </style>

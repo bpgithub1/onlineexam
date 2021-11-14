@@ -1,0 +1,203 @@
+
+/* all table data is right aligned */
+table, th, td {
+  border: 1px solid black;
+  text-align:left;
+}
+
+
+/* ----Font & Color (All & Default)----- */
+*{
+	font-size: 16px; 
+	font-family:Georgia,;	
+	margin: 0px;
+  padding: 0px;	
+}
+/* -----------for success message-------------- */
+.success{
+	color:green;
+}
+
+/* -----------for information message-------------- */
+.info {
+	color: blue;
+}
+
+/* ---------display errors in red color--------------- */
+.error {
+	color: red;
+}
+
+.impact {
+	color: #3f3a3a;
+  font-size: 20px; 
+}
+
+/* --------- display any heading (e.g. Change Password)--------------- */
+.heading {
+	color: #ffffff;
+  background-color: #3f3a3a;
+  height: 35px;
+  font-size: 20px; 
+}
+#div_home_page_header{
+  background-color:  #3f3a3a;
+  color: #ffffff;
+  height: 30px;
+}
+#div_home_page_header_left{
+  color: #ffffff;
+  float: left;
+  width: 70%;
+  
+}
+#div_home_page_header_right{
+  color: #d9dfe6;
+  float: right;
+  width: 30%;
+  text-align: right;
+}
+#div_home_page_container{
+  color: #413e3e;
+  
+  border: solid;
+  
+}
+#div_home_page_footer{
+  
+  text-align: right;
+  border: solid;
+  background-color:  #3f3a3a;
+  color: #ffffff;
+}
+
+
+#reg_institute_msg{
+  background-color: salmon;
+}
+#div_reg_institute{
+  border: solid;
+}
+
+/* ---------After Login Common Layout Design--------------- */
+#wrapper{
+    border: solid;
+    padding: 2px;
+  }
+  #header{
+    height: 35px;
+    background-color: #0f0707;
+    padding: 0px;
+    border-radius: 2px;
+    color: #17202A;
+    border: solid;
+  }
+  #header-left{
+    width: 10%;
+    height: 30px;
+    background-color:  #3f3a3a;
+    float: left;
+    border-color: #17202A;
+    color: #ffffff;
+  }
+  #header-center{
+    width: 60%;
+    height: 30px;
+    background-color:  #3f3a3a;
+    float:left;
+    text-align: center;
+    border-radius: 20px;
+    border-color: #17202A;
+    color: #ffffff;
+    
+  }
+  #header-right{
+    width: 30%;
+    height: 30px;
+    background-color:  #3f3a3a;
+    float: right;
+    text-align: center;
+    border-radius: 5px;
+    border-color: #17202A;
+    
+    
+  }
+  #footer{
+    height: 30px;
+    background-color: #3f3a3a;
+    margin: top 0px;
+    border-radius: 0px;
+    border-color: #17202A;
+    border: solid;
+    text-align: right;
+    color: white;
+  }
+
+/* unvisited link */
+a:link {
+    color: #d9dfe6;
+  }
+  
+  /* visited link */
+  a:visited {
+    color: #d9dfe6;
+  }
+  
+  /* mouse over link */
+  a:hover {
+    color: rgba(224, 134, 60, 0.979);
+  }
+  
+  /* selected link */
+  a:active {
+    color: #d9dfe6;
+  }
+/* --------- */
+#div_after_login_menu{
+    text-align: right;
+}
+
+/* ---Only for R & D Purpose------ */
+
+
+#RnD{
+  height: 100px;
+  background-color: red;
+  border: 10px solid black;
+  width: 900px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:rgba(10,10,255,.5);
+  float:left;
+  /*transform: rotate(45deg);*/
+
+} 
+
+/* #7B7D7D = background color*/
+/* --------- */
+
+
+
+input:disabled {
+  background-color: rgb(222, 222, 222); 
+}
+
+option:disabled {
+  background-color: rgb(222, 222, 222); 
+}
+
+:disabled {
+  background-color: rgb(222, 222, 222); 
+}
+
+
+
+
+
+
+
+
+
+
+

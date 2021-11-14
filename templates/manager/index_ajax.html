@@ -1,0 +1,34 @@
+<script>
+    $(document).ready(function () {                      	  
+        document.getElementById("div_manager_run_scripts").style.display="none";
+        document.getElementById("div_manager_dashboard").style.display="block";
+        document.getElementById("div_manager_drop_down").style.display="none";
+        $("#manager_msg").text("DASHBOARD");
+    });
+
+    document.getElementById("btn_dashboard").addEventListener("click",function(){
+        $("#manager_msg").text("DASHBOARD");	  
+        document.getElementById("div_manager_run_scripts").style.display="none";
+        document.getElementById("div_manager_dashboard").style.display="block";
+        document.getElementById("div_manager_drop_down").style.display="none";    
+    
+    });
+
+    document.getElementById("btn_drop_down").addEventListener("click",function(){
+        $("#manager_msg").text("DROP - DOWN");	   
+        document.getElementById("div_manager_run_scripts").style.display="none";
+        document.getElementById("div_manager_dashboard").style.display="none";
+        document.getElementById("div_manager_drop_down").style.display="block";
+    
+    });
+
+    document.getElementById("btn_run_scripts").addEventListener("click",function(){
+        document.getElementById("div_manager_run_scripts").style.display="block";
+        document.getElementById("div_manager_dashboard").style.display="none";
+        document.getElementById("div_manager_drop_down").style.display="none";
+        $("#manager_msg").text("Run Script");	
+           
+    
+    });
+
+</script>

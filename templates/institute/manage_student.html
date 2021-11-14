@@ -1,0 +1,237 @@
+<form action="" method="POST" id="frm_manage_student">
+    {% csrf_token %}
+  <div id="div_manage_student_wrapper">
+      <div id="div_manage_student_search_box">
+        <div id="div_manage_student_search_box_row1">
+          <div id="div_manage_student_search_box_row1_col1">
+                <input type="text" value="" id="txt_bx_student_search" style="height: 40px; width: 100%;"  placeholder="Search Box" onkeyup="searchListItem('txt_bx_student_search','ul_content_student_user_id')">
+          </div>
+          <div id="div_manage_student_search_box_row1_col2">
+                <input type="button" name="" id="btn_student_search" value="GO"  style="height:40px;width:40px">
+          </div>
+            
+          
+        </div>
+        <div id="div_manage_student_search_box_row2">          
+          <ul id="ul_content_student_user_id">
+             
+          </ul>
+  
+        </div>
+      </div>
+      <div id="div_manage_student_content_box">
+        <div id="div_manage_student_content_box_content">
+          <div id="msg_student" class="alert alert-danger" style="display:none"></div>          
+          <div id="div_manage_student_content_box_content_data1">
+            <table id ="tbl_student_data">
+              <tr>
+                <td>Id : </td>
+                <td><span id="span_student_id"></span></td>   
+                <td></td>                 
+                <td></td>
+              </tr>
+              <tr>
+                  <td>Login Id : </td>
+                  <td><span id="span_student_user_id"></span></td>   
+                  <td><img id="img_student_photo" src="" alt="" style="max-width:180px"/></td>                 
+                  <td></td>
+              </tr>
+              <tr>
+                  <td>Name : </td>
+                  <td><span id="span_student_name"></span></td>   
+                  <td></td>  
+                  <td></td>           
+              </tr>
+              <tr>
+                  <td>Contact : </td>
+                  <td><span id="span_student_contact1"></span></td>      
+                  <td><span id="span_student_contact2"></span></td>  
+                  <td></td>           
+              </tr>
+              <tr>
+                  <td>Email : </td>
+                  <td><span id="span_student_email"></span></td>    
+                  <td></td>  
+                  <td></td>             
+              </tr>   
+              <tr>
+                <td>Status : </td>
+                <td><span id="span_student_status"></span></td>                
+                <td></td>  
+                <td></td> 
+            </tr>
+            <tr>
+                <td>Required Action : </td>
+                <td>
+                    &nbsp;<input type="radio" name="radio_action_student" value="1" checked>No Action Required
+                    <br>
+                    &nbsp;<input type="radio"  name="radio_action_student" value="2">Admit In Institute
+                    <br>
+                    &nbsp;<input type="radio"  name="radio_action_student" value="3">Remove From Institute
+                    <br>
+                    &nbsp;<input type="radio"  name="radio_action_student" value="4">Modify Level & Section
+                    
+
+                </td>    
+                <td><span id="span_student_status_desc"></span></td>  
+                <td></td>             
+            </tr>  
+              <tr>
+                  <th> Level & Section : </th>
+                  <th>                   
+                    <select id="select_student_level" name="select_student_level">
+                      <option value="none" selected disabled hidden>Select Level</option>                
+                      
+                    </select>
+                  
+                  </th>
+                  <th > 
+                                  
+                    <select id="select_student_section" name="select_student_section">
+                      <option value="none" selected disabled hidden>Select Section</option>                
+                      
+                    </select>
+                  </th>
+                  <th>
+                    &nbsp;<input type="button" id="btn_add_level_section" value="Add">&nbsp;
+                  </th>
+
+              </tr>    
+             
+              
+            </table>
+            <table id="tbl_student_grid_data">    
+              <thead>
+                <tr>
+                  <th>Student's</th>
+                  <th>Associated Level</th>
+                  <th>Associated Section</th>
+                  <th>Action</th>
+                </tr>
+              </thead>          
+              <tbody>                
+              </tbody> 
+            </table>
+          </div>
+          
+          
+  
+        </div>
+        <div id="div_manage_student_content_box_btn" >
+          <input type="button" id="btn_manage_student_close" value="Back/Close"> 
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="button" id="btn_manage_student_save" value="Save" disabled>         
+          
+        </div>
+      </div>
+    </div>
+  </form>
+    {% include "institute/manage_student_ajax.html" %}
+    {% include "home/common_functions.html" %}
+    <style>
+  #div_manage_student_wrapper{
+    height: 500px;
+    width: 100%;
+    background-color:  white;
+    /* opacity: 0.5; */
+  }
+  
+  #div_manage_student_search_box{
+    height: 500px;
+    width: 30%;
+    background-color: #3f3a3a;
+    float: left;
+  }
+  #div_manage_student_content_box{
+    height: 500px;
+    width: 70%;
+    background-color:  white;
+    float: left;
+  }
+  
+  #div_manage_student_search_box_row1{      
+    
+    height: 40px;
+    width: 100%;
+        
+  }
+  
+  #div_manage_student_search_box_row1_col1{
+    width: 88%;
+    height: 40px;
+    float: left;
+  }
+
+  #div_manage_student_search_box_row1_col2{
+    width: 12%;
+    height: 40px;
+    float: left;
+  }
+
+  #div_manage_student_search_box_row2{
+    
+    height: 460px;
+    width: 100%;
+    overflow:scroll;
+  }
+  
+  #div_manage_student_content_box_content{
+    background-color: white;
+    height: 465px;
+    width: 100%;
+    overflow: scroll;
+  }
+  #div_manage_student_content_box_content_data1{
+    float: left;
+  } 
+  
+  
+  
+  #div_manage_student_content_box_btn{
+    background-color: #3f3a3a;
+    height: 35px;
+    width: 100%;
+    vertical-align: middle;
+    
+  }
+  
+  /*vertical-center ==> this is currenlty not in use*/
+  .vertical-center {
+    margin: 0;
+    position: relative;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+  
+  
+  /*------question search box-----*/
+  #ul_content_student_user_id {
+    /* Remove default list styling */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  #ul_content_student_user_id  li a {
+    border: 1px solid #ddd; /* Add a border to all links */
+    margin-top: -1px; /* Prevent double borders */
+    background-color: #3f3a3a; /* Grey background color */
+    padding: 12px; /* Add some padding */
+    text-decoration: none; /* Remove default text underline */
+    font-size: 18px; /* Increase the font-size */
+    color: whitesmoke; /* Add a black text color */
+    display: block; /* Make it into a block element to fill the whole list */
+  }
+  
+  #ul_content_student_user_id li a:hover:not(.header) {
+    background-color: rgb(108, 108, 108); /* Add a hover effect to all links, except for headers */
+  }
+  
+  
+  
+  
+  
+  
+    </style>

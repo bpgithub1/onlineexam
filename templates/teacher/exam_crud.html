@@ -1,0 +1,225 @@
+<form action="" method="POST" id="frm_exam_crud">
+  {% csrf_token %}
+<div id="div_teacher_exam_crud_wrapper">
+    <div id="div_teacher_exam_crud_search_box">
+      <div id="div_teacher_exam_crud_search_box_row1">
+        <input type="text" id="txt_bx_exam_search_id" style="height: 40px; width: 100%;"  placeholder="Search Box" onkeyup="searchListItem('txt_bx_exam_search_id','ul_content_exam')">
+        
+      </div>
+      <div id="div_teacher_exam_crud_search_box_row2">          
+        <ul id="ul_content_exam">
+           
+        </ul>
+
+      </div>
+    </div>
+    <div id="div_teacher_exam_crud_content_box">
+      <div id="div_teacher_exam_crud_content_box_content">
+        <div id="msg_teacher_exam_crud" class="alert alert-danger" style="display:none"></div>
+        <table id="tbl_exam_crud_input">
+          <tr>
+            <td> <label for="lbl_exam_id">EUID : </label> </td>
+            <td> <input type="text" id="txt_bx_exam_id" disabled value="20991231E9999"> </td>
+          </tr>
+          <tr>
+            <td> <label for="lbl_exam_source">Exam Source : </label> </td>
+            <td> <input type="text" id="txt_bx_exam_source" disabled value=""> 
+                 <input type="hidden" name="hdn_exam_source_code" id="hdn_exam_source_code">
+            </td>
+          </tr>
+          <tr>
+            <td> <label for="lbl_exam_is_released">Is Exam Released? : </label> </td>
+            <td> <input type="text" id="txt_bx_exam_is_released" disabled value="NO"> </td>
+          </tr>
+          <tr>
+            <td> <label for="lbl_exam_type">Exam Type : </label> </td>
+            <td> 
+              <input type="radio" id="rdo_id_exam_type_long" name="rdo_name_exam_type" class="rdo_class_exam_type" value="1" selected>
+              <label for="lbl_exam_type">Long Schedule</label>                        
+              <input type="radio" id="rdo_id_exam_type_short" name="rdo_name_exam_type" class="rdo_class_exam_type" value="2">
+              <label for="lbl_exam_type">Short Schedule</label> 
+            </td>
+          </tr>
+          
+          <tr>
+            <td> <label for="lbl_exam_dt_strt">Start Date : </label> </td>
+            <td  style="text-align:left"> <input type="datetime-local" id="date_exam_start_date"   min="2021-01-01" max="2030-12-31"> </td>              
+          </tr>
+          <tr>
+            <td><label for="lbl_start_time">Start Time : </label> </td>
+            <td><input type="time" id="txt_bx_exam_start_time" disabled value=""> </td>
+          </tr>
+          
+          <tr>
+            <td> <label for="lbl_exam_duration">Duration (Minuts): </label> </td>
+            <td> <input type="number" id="txt_bx_exam_duration" value="0"> </td>
+          </tr>
+          <tr>
+            <td> <label for="lbl_exam_dt_end">End Date : </label> </td>
+            <td  style="text-align:left"> <input type="datetime-local" id="date_exam_end_date"  value="2022-12-31" min="2021-01-01" max="2030-12-31"> </td>              
+          </tr>
+          <tr>
+            <td><label for="lbl_end_time">End Time : </label> </td>
+            <td><input type="time" id="txt_bx_exam_end_time" disabled value=""></td>
+          </tr>
+          
+          <tr>
+            <td> <label for="lbl_exam_no_of_questions">Questions# : </label> </td>
+            <td> <input type="text" id="txt_bx_exam_no_of_questions" disabled value="0000"> </td>
+          </tr>
+          <tr>
+            <td> <label for="lbl_exam_full_marks">Full Marks : </label> </td>
+            <td> <input type="text" id="txt_bx_exam_full_marks" disabled value="0000"> </td>
+          </tr>
+          
+
+          <tr>
+            <td> <label for="lbl_exam_level">Level: </label> </td>
+            <td style="text-align:left"> 
+              
+              <select id="select_exam_level" name="select_exam_level">
+                <option value="none" selected disabled hidden>Select Level</option>                
+                
+              </select>
+            
+            </td>
+          </tr>
+          <tr>
+            <td> <label for="lbl_exam_section">Section: </label> </td>
+            <td style="text-align:left"> 
+                            
+              <select id="select_exam_section" name="select_exam_section">
+                <option value="none" selected disabled hidden>Select Section</option>                
+                
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td> <label for="lbl_exam_subject">Subject: </label> </td>
+            <td style="text-align:left"> 
+              
+              <select id="select_exam_subject" name="select_exam_subject">
+                <option value="none" selected disabled hidden>Select Subject</option>                
+                
+            </select>
+            
+            </td>
+          </tr>
+        </table>
+        
+
+      </div>
+      <div id="div_teacher_exam_crud_content_box_btn" >
+        <input type="button" id="btn_exam_close" value="Back/Close"> 
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="button" id="btn_exam_create_copy" value="Create Exam Copy" disabled>         
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="button" id="btn_exam_re_release" value="Re-Release" disabled>         
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="button" value="Release" id="btn_exam_release" >
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="button" id="btn_exam_questions" value="Goto Questions"> 
+          
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;            
+          <input type="button" id="btn_exam_create" value="Create">            
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="button" id="btn_exam_delete" value="Delete">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="button" id="btn_exam_save" value="Save">
+      </div>
+    </div>
+  </div>
+</form>
+  {% include "teacher/exam_crud_ajax.html" %}
+  {% include "home/common_functions.html" %}
+  <style>
+#div_teacher_exam_crud_wrapper{
+  height: 500px;
+  width: 100%;
+  background-color:  white;
+  /* opacity: 0.5; */
+}
+
+#div_teacher_exam_crud_search_box{
+  height: 500px;
+  width: 20%;
+  background-color: #3f3a3a;
+  float: left;
+}
+#div_teacher_exam_crud_content_box{
+  height: 500px;
+  width: 80%;
+  background-color:  white;
+  float: left;
+}
+
+#div_teacher_exam_crud_search_box_row1{      
+  
+  height: 40px;
+  width: 100%;
+      
+}
+
+#div_teacher_exam_crud_search_box_row2{
+  
+  height: 460px;
+  width: 100%;
+  overflow:scroll;
+}
+
+#div_teacher_exam_crud_content_box_content{
+  background-color: white;
+  height: 465px;
+  width: 100%;
+  overflow: scroll;
+}
+
+#div_teacher_exam_crud_content_box_btn{
+  background-color: #3f3a3a;
+  height: 35px;
+  width: 100%;
+  vertical-align: middle;
+  
+}
+
+/*vertical-center ==> this is currenlty not in use*/
+.vertical-center {
+  margin: 0;
+  position: relative;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+
+/*------question search box-----*/
+#ul_content_exam {
+  /* Remove default list styling */
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#ul_content_exam  li a {
+  border: 1px solid #ddd; /* Add a border to all links */
+  margin-top: -1px; /* Prevent double borders */
+  background-color: #3f3a3a; /* Grey background color */
+  padding: 12px; /* Add some padding */
+  text-decoration: none; /* Remove default text underline */
+  font-size: 18px; /* Increase the font-size */
+  color: whitesmoke; /* Add a black text color */
+  display: block; /* Make it into a block element to fill the whole list */
+}
+
+#ul_content_exam li a:hover:not(.header) {
+  background-color: rgb(108, 108, 108); /* Add a hover effect to all links, except for headers */
+}
+
+
+
+
+
+
+  </style>

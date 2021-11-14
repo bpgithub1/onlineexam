@@ -1,0 +1,127 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    
+    <title>{% block title %} {% endblock title %}| Online Examination System</title>
+    <script src="{% static 'js/jquery.js' %}" ></script>
+    
+    
+    <script src="{% static 'js/common.js' %}" ></script> 
+
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/custome_style.css' %}" rel="stylesheet"/>
+    
+  </head>
+   <!-- Bootstrap CSS -->
+  
+   
+  <body onload="displayItems()">
+    
+   <div id="wrapper" >
+    <div id="header" >
+      <div id="header-left" >Logo</div>    
+      <div id="header-center" ><span>{{djInstitute}} | {{djProfile}} | {{djUser}} </span>
+        
+      </div> 
+      <div id="header-right" > 
+        <input type="button" value="Change Password" id="btn_change_password">
+        <input type="button" value="Edit Profile" id="btn_edit_profile">
+        <a href="/logout_user">Logout</a> 
+      </div>  
+      
+    </div>  
+    
+    <div id="div_change_password" style="display:none">
+      {% include "home/change_password.html" %}  
+      
+    </div>
+    <div id=div_after_login_menu>
+     <input type="button" name="" id="btn1" value="GO" style="height:40px;width:40px">
+     <input type="button" name="" id="btn2" value="Button2">
+     <input type="button" name="" id="btn3" value="Button3">
+     
+    </div>
+    <div id="container">
+      <!-- {% include "institute/manage_student.html" %}  
+       -->
+       <table id="tbl_grid_data">    
+        <thead>
+          <tr>
+            <th>Student's</th>
+            <th>Associated Level</th>
+            <th>Associated Section</th>
+            <th>Action</th>
+          </tr>
+        </thead>          
+        <tbody>   
+          
+          <tr>
+            <td>Class01</td>
+            <td>ALL</td>
+            <td style="display:none;">A01|A01</td>
+            <td>delete</td>
+          </tr>
+          <tr>
+            <td>Class12</td>
+            <td>ALL</td>
+            <td style="display:none;">A12|A04</td>
+            <td>delete</td>
+          </tr>
+          <tr>
+            <td>Class12</td>
+            <td>ALL</td>
+            <td style="display:none;">A12|A04</td>
+            <td>delete</td>
+            
+          </tr>
+          <tr>
+            <td>Class09</td>
+            <td>ALL</td>
+            <td style="display:none;">A09|A03</td>
+            <td>delete</td>
+            
+          </tr>
+
+        </tbody> 
+      </table>
+    </div>
+    <div id="footer"><span  >Online Examination Portal Developed By WhizAce Technology</span>
+    </div>      
+   
+
+   
+ 
+
+    {% include "home/common_functions.html" %}
+  
+
+</body>
+
+<script>
+  $("#container *").attr('disabled',true);
+  
+  $("#btn2").click(function(){
+    // vStringFound=isStringInGrid("tbl_grid_data","A01|A01");
+    // alert(vStringFound);
+    let vRows=getHtmlTableRows("tbl_grid_data");
+    let vCols=getHtmlTableCols("tbl_grid_data");
+    // vRows=5;
+    // vCols=6;
+    let vHtmlTableArray=create2DArray(vRows,vCols);
+    vHtmlTableArray=initialize2DArray(vHtmlTableArray);
+    vHtmlTableArray=getHtmlTableArray("tbl_grid_data",vHtmlTableArray)
+    alert(vHtmlTableArray);
+
+    
+  });
+
+
+  
+
+</script>
+
+</html>
+

@@ -1,0 +1,52 @@
+<!doctype html>
+{% load static %}
+  
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    
+
+   
+    <script src="{% static 'js/jquery.js' %}" ></script>
+   
+    <script src="{% static 'js/common.js' %}" ></script> 
+
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/custome_style.css' %}" rel="stylesheet"/>
+    
+
+    
+  <title>{% block title %} {% endblock title %}| Online System</title>
+  </head>
+  
+  <body>
+    <div id="div_home_page_header">
+        <div id="div_home_page_header_left">
+            <a  href="/">Home</a> &nbsp;&nbsp;&nbsp;
+            <a  href="/about">About Us</a> &nbsp;&nbsp;&nbsp;
+            <a  href="/contact">Contact Us</a> &nbsp;&nbsp;&nbsp;
+            <a  href="/register_individual">Register Individual</a> &nbsp;&nbsp;&nbsp;
+            <a  href="/register_institute">Register Institute</a> &nbsp;&nbsp;&nbsp;
+            <a  href="/login_user" >Login</a> &nbsp;&nbsp;&nbsp;
+            
+        </div>
+        <div id="div_home_page_header_right">
+            SDG Softwrae India Private Limited 
+        </div>
+        
+    </div>
+    <div id="div_home_page_container">
+        {% block body %}
+
+        {% endblock body %}
+    </div>
+    <div id="div_home_page_footer">
+      <span>SDG Technology Pvt. Ltd.  Footer SDG Technology Pvt. Ltd.  Footer </span>
+       
+    </div>
+  
+
+</body>
+  
+</html>

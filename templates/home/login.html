@@ -1,0 +1,94 @@
+{% extends 'home/base.html' %}
+
+{% block title %} WhizAce Technology | Online Examination System {% endblock title %}
+
+{% block body %} 
+
+<span class="impact">Application Login </span>    
+<div id="div_login_msg">
+    {% if messages %}
+        {% for message in messages %}
+            <span class="error" {% if message.tags %} class="{{message.tags}}" {% endif %}>{{message}}</span>
+        {% endfor %}
+    {% endif %}
+</div> 
+
+<div id="div_login">
+    
+<form action="" method="POST" >
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+            <td>
+                <select id="id_login_type" name="id_login_type">
+                    <option value="none" selected disabled hidden>Select Login Profile</option>                
+                    <option value="Teacher" selected>Teacher</option>
+                    <option value="Student">Student</option>
+                    <option value="Administrator">Institute Administrator</option>
+                    <option value="Manager">S/W Manager</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+            <td>
+                
+                <select id="id_institute" name="id_institute">
+                    <option value="none" selected disabled hidden>Select Your Institute</option>
+                    {% for field in djFormInstituteList %}
+                      <option value={{field.id}}>{{field.institute_name|lower| capfirst}}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+            <td>
+                <input type="text" placeholder="User Name (Email Id)" id="id_username" name="id_username" required>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+            <td>
+                <input type="password" placeholder="Password" id="id_password" name="id_password" required>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+            <td>
+                <input type="submit" value="Submit">
+            </td>
+        </tr>
+    </table>
+    
+    
+    
+</form>
+
+</div>
+
+
+{% include "home/login_ajax.html" %}
+
+
+
+{% endblock body %}

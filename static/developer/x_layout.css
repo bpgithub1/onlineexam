@@ -1,0 +1,708 @@
+#cover {
+            display:        none;
+            position:       fixed;
+            left:           0px;
+            top:            0px;
+            width:          100%;
+            height:         100%!important;
+            z-index:99999;
+            background:     #000;
+            filter:         alpha(Opacity = 70);
+            opacity:        0.7;
+            -moz-opacity:   0.7;
+            -khtml-opacity: 0.7
+			
+}
+body {
+     margin: 0px;
+     padding: 0px;
+     background-color: #ffffff;
+     font-family: Palatino; 
+	 font-size: 13px; 
+	 
+	
+	 
+}
+
+#master {
+     position: relative;
+     width:99%;
+     height:99%;
+     margin-left: auto;
+     margin-right: auto;
+     margin-top: 0px;
+     background-color: #ffffff;
+     text-align: left; 
+ }
+#header {
+     position: absolute;
+     width:100%;
+     height:40px;
+     top: 0px;
+     left: 0px;
+     background-color: #ffffff;
+     text-align: left;
+}
+#header_sec_1 {
+     position: absolute;
+     width:10%;
+     height:40px;
+     top: 0px;
+     left: 0px;
+     background-color: #ffffff;
+     text-align: left;
+}
+#header_sec_2 {
+     position: absolute;
+     width:20%;
+     height:40px;
+     top: 0px;
+     left: 10%;
+     background-color: #ffffff;
+     text-align: center;
+}
+
+#header_sec_3 {
+     position: absolute;
+     width:70%;
+     height:40px;
+     top: 0px;
+     left: 30%;
+     background-color: #ffffff;
+     text-align: left;
+}
+#welcome {
+     position: absolute;
+     width: 99%;
+     height:25px;
+     top: 40px;
+     left: 0px;
+     text-align: right;
+     line-height: 35px;
+     border-bottom: solid #000000 2px;
+     text-align: left;
+     background-color:#4682B4;  
+     color:#FFFFFF;
+	 font-size:14.5px; 
+}
+
+#navigator{
+     position: absolute;
+     width:99%;
+     height:25px;
+     top: 65px;
+     left: 0px;
+     z-index:1;
+     background-color:#ECF2F8;   
+     background-color:#ffffff;   
+     text-align: center;
+}
+#container {
+     position: absolute;
+     width:100%;
+     height:auto;
+     top: 95px;
+     right: 0px;
+     z-index:1;
+     background-color: #ffffff;   
+     text-align: left;
+     font-size:8.5px; 
+     /* overflow:auto; */
+     /* overflow: hidden; */
+}
+#footer {
+     position: fixed;
+     bottom: 0;
+     left: auto;
+     width: 99%;
+     background-color: ECF2F8;
+     text-align: left;
+     margin-left: auto;
+     margin-right: auto;
+     
+}     
+#logo {
+      position:absolute;
+      float:left;
+      width:125px;
+      height:40px;
+}
+
+
+#BusinessWorkUnit{
+	 position: absolute;
+     width:99%;
+     height:25px;
+     top: 0px;
+     left: 0px;
+     text-align: center; 
+     font-size: 18px;
+     font-family:Times New Roman;
+     font-weight:bold;
+     background-color: #0000FF;  
+	 color: #ffffff;
+     
+}
+
+#BusinessWorkUnitLoadingDisplay{
+	 position: absolute;
+     width:3%;
+     height:25px;
+     top: 0px;
+     left: 92%;
+     font-size: 14px;
+     font-family:Times New Roman;
+     font-weight:bold;
+     background-color: #0000FF;  
+     color: #ffffff;
+     
+}
+
+#BusinessWorkUnitClose{
+	 position: absolute;
+     width:10px;
+     height:20px;
+     top: 5px;
+     left:96%;
+     text-align: center; 
+     color: #ffffff;
+     
+}
+
+#BusinessWorkUnitBack{ /* it is use only in grid.jsp */
+	 position: absolute;
+     width:10px;
+     height:20px;
+     top: 5px;
+     left:5px;
+     text-align: center; 
+     color: #ffffff;
+     
+}
+#BusinessWorkUnitSave{ /* it is use only in grid.jsp */
+	 position: absolute;
+     width:10px;
+     height:20px;
+     top: 2px;
+     left:70%;
+     text-align: center; 
+     color: #ffffff;
+     
+}
+
+#BusinessWorkUnitPrinter{
+	 position: absolute;
+     width:2%;
+     height:20px;
+     top: 2px;
+     left: 88%;
+     text-align: center; 
+     background-color: #0000FF;  
+     color: #ffffff;
+     
+}
+
+#SearchFilter{
+     position: absolute;
+     width:175px;
+     height:455px;
+     top: 25px;
+     left: 0px;
+     background-color: #ADD8E6;
+         
+	        
+}
+
+
+#SearchCommand{
+     position: absolute;
+     width:175px;
+     height:70px;
+     top: 475px;
+     left: 0px;
+     text-align: center; 
+     background-color: #ADD8E6;
+     
+     
+       	          
+}
+#SearchResultMargin{
+	 position: absolute;
+     width:10px;
+     height:520px;
+     top: 25px;
+     left:175px;
+     text-align: center; 
+     font-size: 20px;
+     font-family:Times New Roman;
+     font-weight:bold;
+     background-color: #ADD8E6;  
+	 color: #000000;
+     
+}
+#SearchResultHeader{
+     position: absolute;
+     width:84%;
+     height:25px;
+     top: 25px;
+     left: 185px;
+     text-align: center; 
+     background-color: white;  
+	 color: #000000;   
+}
+#SearchResultData{
+     position: absolute;
+     width:84%;
+     height:100px;
+     top: 50px;
+     left: 185px;
+     background-color: white;  
+	 color: #000000;  
+     overflow:auto;   
+}
+#BusinessWorkUnitHeader{
+	 position: absolute;
+     width:84%;
+     height:25px;
+     top: 150px;
+     left: 185px;
+     background-color: #ADD8E6;  
+      
+     
+}
+
+#BusinessWorkUnitContainer{
+	 position: absolute;
+     width:84%;
+     height:375px;
+     top: 175px;
+     left: 185px;
+     background-color: white;  
+	 overflow:auto;
+}
+
+#CenterScreenContainer{
+	 position: absolute;
+     width:70%;
+     height:75%;
+     top: 15%;
+     left: 22%;
+     background-color: white;  
+	 overflow:auto;
+}
+
+
+#LoginLoaderDisplay{
+    position: fixed;
+    width:10%;
+    height:20%;
+    top: 20%;
+    left: 15%;
+    background-color: #000000; 
+}
+
+/* Home Page for login [start] */
+#RegInfo{
+	position: absolute;
+    width:100%;
+    height:150px;
+    top: 0px;
+    left: 0%;
+    background-color: white;
+    
+}
+#AppLogin{
+	position: absolute;
+    width:40%;
+    height:325px;
+    top: 150px;
+    left: 30%;
+    background-color: white;
+    /* background-image:url('../user_data/pic/RegPic0.jpg'); */
+}
+#Pic1{
+	position: absolute;
+    width:15%;
+    height:150px;
+    top: 150px;
+    left: 0;
+    background-color: white;
+    background-image:url('../user_data/pic/RegPic1.jpg');
+}
+
+#Pic2{
+	position: absolute;
+    width:15%;
+    height:175px;
+    top: 300px;
+    left: 0;
+    background-color: white;	
+    background-image:url('../user_data/pic/RegPic2.jpg');
+}
+#Pic3{
+	position: absolute;
+    width:15%;
+    height:175px;
+    top: 150px;
+    left: 15%;
+    background-color: white;
+    background-image:url('../user_data/pic/RegPic3.jpg');
+}
+
+#Pic4{
+	position: absolute;
+    width:15%;
+    height:175px;
+    top: 300px;
+    left: 15%;
+    background-color: white;	
+    background-image:url('../user_data/pic/RegPic4.jpg');
+    
+}
+#Pic5{
+	position: absolute;
+    width:15%;
+    height:150px;
+    top: 150px;
+    left: 70%;
+    background-color: white;
+    background-image:url('../user_data/pic/RegPic5.jpg');
+}
+
+#Pic6{
+	position: absolute;
+    width:15%;
+    height:175px;
+    top: 300px;
+    left: 70%;
+    background-color: white;	
+    background-image:url('../user_data/pic/RegPic6.jpg');
+}
+#Pic7{
+	position: absolute;
+    width:15%;
+    height:175px;
+    top: 150px;
+    left: 85%;
+    background-color: white;
+    background-image:url('../user_data/pic/RegPic7.jpg');
+}
+
+#Pic8{
+	position: absolute;
+    width:15%;
+    height:175px;
+    top: 300px;
+    left: 85%;
+    background-color: white;	
+    background-image:url('../user_data/pic/RegPic8.jpg');
+}
+
+/* Home Page for login [End] */
+
+
+
+
+
+/* used by report [start] */
+#ReportMenu{
+     position: absolute;
+     width:175px;
+     height:520px;
+     top: 25px;
+     left: 0px;
+     background-color: #ADD8E6;  
+	        
+}
+#ReportContainer{
+	 position: absolute;
+     top: 25px;
+     left: 185px;
+     width:85%;
+     height:520px;
+     background-color: #ffffff;  
+     overflow:auto;
+}
+#ReportPrinter{
+     position: absolute;
+     top: 490px;
+     left: 0px;
+     width:100%;
+     height:30px;
+     background-color: #ffffff;  
+	 color: #000000;  
+     overflow:auto; 	           	
+}
+#ReportNewWindow{
+	 
+}
+/* used by report [END] */
+
+
+
+
+
+#dialog{
+ 	display			:none;
+    position		:relative;
+    z-index			:999999999;
+    border			:5px solid #d7d7d7;
+    overflow		:auto;
+    border-radius	:8px 8px 8px 8px;
+	background		:white;
+	font-size		:1em;
+    margin-left		:3% !important;
+    margin-right	:3% !important;
+    margin-top		:1% !important;
+    margin-bottom	:3% !important;
+    width:89%;
+}
+
+#dialog_purchase{
+ 	display			:none;
+    position		:relative;
+    z-index			:999999999;
+    border			:5px solid #d7d7d7;
+    overflow		:auto;
+    border-radius	:8px 8px 8px 8px;
+	background		:white;
+	font-size		:1em;
+    margin-left		:3% !important;
+    margin-right	:3% !important;
+    margin-top		:1% !important;
+    margin-bottom	:3% !important;
+    width			:90%;
+	height			:auto;
+   
+}
+
+#dialog_sale{
+ 	display			:none;
+    position		:relative;
+    z-index			:999999999;
+    border			:5px solid #d7d7d7;
+    overflow		:auto;
+    border-radius	:8px 8px 8px 8px;
+	background		:white;
+	font-size		:1em;
+    margin-left		:3% !important;
+    margin-right	:3% !important;
+    margin-top		:1% !important;
+    margin-bottom	:3% !important;
+    width			:90%;
+	height			:auto;
+   
+}
+#dialog_stock{
+ 	display			:none;
+    position		:relative;
+    z-index			:999999999;
+    border			:5px solid #d7d7d7;
+    overflow		:auto;
+    border-radius	:8px 8px 8px 8px;
+	background		:white;
+	font-size		:1em;
+    margin-left		:3% !important;
+    margin-right	:3% !important;
+    margin-top		:1% !important;
+    margin-bottom	:3% !important;
+    width			:90%;
+	height			:auto;
+   
+}
+#dialog_shipment{
+ 	display			:none;
+    position		:relative;
+    z-index			:999999999;
+    border			:5px solid #d7d7d7;
+    overflow		:auto;
+    border-radius	:8px 8px 8px 8px;
+	background		:white;
+	font-size		:1em;
+    margin-left		:3% !important;
+    margin-right	:3% !important;
+    margin-top		:1% !important;
+    margin-bottom	:3% !important;
+    width			:90%;
+	height			:auto;
+   
+}
+
+#dialog_available{
+ 	display			:none;
+    position		:relative;
+    z-index			:999999999;
+    border			:5px solid #d7d7d7;
+    overflow		:auto;
+    border-radius	:8px 8px 8px 8px;
+	background		:white;
+	font-size		:1em;
+    margin-left		:3% !important;
+    margin-right	:3% !important;
+    margin-top		:1% !important;
+    margin-bottom	:3% !important;
+    width			:90%;
+	height			:auto;
+   
+}
+#dialog_remaining{
+ 	display			:none;
+    position		:relative;
+    z-index			:999999999;
+    border			:5px solid #d7d7d7;
+    overflow		:auto;
+    border-radius	:8px 8px 8px 8px;
+	background		:white;
+	font-size		:1em;
+    margin-left		:3% !important;
+    margin-right	:3% !important;
+    margin-top		:1% !important;
+    margin-bottom	:3% !important;
+    width			:90%;
+	height			:auto;
+   
+}
+
+#grid{
+	 position	: absolute;
+     top		: 25px;
+     left		: 0px;
+     width		:99%;
+     height		:525px;
+     background-color: white;  
+	 overflow:auto;
+	 
+}
+
+#AdvertiseFileUploader{
+	 position: absolute;
+     width:32%;
+     height:525px;
+     top: 25px;
+     left: 0px;
+     background-color: DeepSkyBlue    ;  
+      background-color: #ADD8E6;
+     text-align: center;
+	 overflow:auto;
+	 font-size: 16px;
+     font-family:Times New Roman;
+     font-weight:bold;
+     color: #000;
+}
+
+
+
+#AdvertiseHeader{
+	 position: absolute;
+     width:99%;
+     height:25px;
+     top: 25px;
+     left: 0px;
+     background-color: DeepSkyBlue;  
+	 overflow:auto;
+	 text-align: center;
+	 overflow:auto;
+	 font-size: 20px;
+     font-family:Times New Roman;
+     font-weight:bold;
+     color: #ffffff;
+}
+#AdvertiseContentHeader{
+	position: absolute;
+     width:99%;
+     height:465px;
+     top: 50px;
+     left: 0px;
+     background-color: Gainsboro; 
+     background-color: white;   
+	 overflow:auto;
+}
+#AdvertiseContent{
+	 position: absolute;
+     width:99%;
+     height:465px;
+     top: 80px;
+     left: 0px;
+     background-color: Gainsboro; 
+     background-color: white;   
+	 overflow:auto;
+	 
+}
+
+
+/* below are only used for view stock list */
+#AdvertiseViewCompanyDesc{
+	 position: fix;
+     width:100%;
+     height:135px;
+     top: 10px;
+     left: 0px;
+     background-color: Gainsboro; 
+     background-color: white;   
+	 overflow:auto;
+	 
+}
+
+
+#AdvertiseViewDownloadExcel{
+	 position: absolute;
+     width:150px;
+     height:20px;
+     top: 15px;
+     left:85%;
+     text-align: center; 
+     color: #ffffff;
+     background-color: #FFD700;
+     background-color: white;
+     border-radius:10px;   
+}
+
+#AdvertiseViewHeader{
+	 position: fix;
+     width:100%;
+     top: 135px;
+     left: 0px;
+     background-color: Gainsboro; 
+     background-color: white;   
+	 overflow:auto;
+	 
+}
+
+#AdvertiseViewContent{
+	 position: fix;
+     width:100%;
+     height:485px;
+     top: 160px;
+     left: 0px;
+     background-color: Gainsboro; 
+     background-color: white;   
+	 overflow:auto;
+	 
+}
+/* ----------- */
+
+#dialog_ledger_balance_prompt{
+ 	display			:none;
+    position		:relative;
+    z-index			:999999999;
+    border			:5px solid #d7d7d7;
+    overflow		:auto;
+    border-radius	:8px 8px 8px 8px;
+	background		:white;
+	font-size		:1em;
+    margin-left		:3% !important;
+    margin-right	:3% !important;
+    margin-top		:1% !important;
+    margin-bottom	:3% !important;
+    width:89%;
+}
+
+#AdminProductReg{
+	 position: absolute;
+     width:75%;
+     height:450px;
+     top: 25px;
+     left: 15%;
+     background-color: white;  
+	 overflow:auto;
+}

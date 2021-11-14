@@ -1,0 +1,294 @@
+<script>
+
+    $('input[type=radio][name=radio_action_student]').change(function() { 
+        let vAction=getCheckedRadioValue("radio_action_student");
+        if (vAction==2||vAction==3||vAction==4){
+            $("#btn_manage_student_save").prop('disabled',false); 
+            $("#btn_add_level_section").prop('disabled',false);
+        }else{
+            $("#btn_manage_student_save").prop('disabled',true); 
+            $("#btn_add_level_section").prop('disabled',true); 
+        }
+        
+    });    
+    
+    //WHEN SAVE BUTTON IS HIT
+    $("#btn_manage_student_save").click(function(){
+        $("#msg_student").show();
+        let vStudentUserId=$("#span_student_user_id").text();
+        let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+        let vAction=getCheckedRadioValue("radio_action_student");
+        let vStatus=$("#span_student_status").text();
+        let vIsLevelSectionDefined=getHtmlTableRows("tbl_student_grid_data");       
+        if ((vStatus=="InActive"||vStatus=="N/A")&&(vAction=="1")){
+            $("#msg_student").text("Admit Student In Institute (SELECT 'Admit In Institute' RADIO BUTTON) !!!");  
+        }else if((vIsLevelSectionDefined==1) && (vAction=="2")){         
+            $("#msg_student").text("Student Level & Section Not Defined !!!");  
+        }else{
+            let vFlag=false;
+            if(vAction==2){
+                var r = confirm("Are Your Sure To Admit Student?");
+                if (r == true) {
+                    vFlag=true;
+                }else {
+                    vFlag=false;
+                }    
+            }else if(vAction==3){
+                var r = confirm("Are Your Sure To Remove Student?");
+                if (r == true) {
+                    vFlag=true;
+                }else {
+                    vFlag=false;
+                }    
+            }else if (vAction==4){
+                vFlag=true;
+            }else{
+                vFlag=false;
+            }
+            if (vFlag == true){
+                let vArray;
+                var vLevelSection;
+                if(vIsLevelSectionDefined==1){
+                    vLevelSection=null;
+                }else{
+                    vArray=getHtmlTableArray("tbl_student_grid_data");     
+                    vLevelSection = JSON.stringify(vArray);       
+                }   
+                                        
+                DataSendToServer={ 
+                    csrfmiddlewaretoken:vCsrfToken,
+                    hStudentUserId:vStudentUserId,          
+                    hAction:vAction,
+                    hLevelSection:vLevelSection,
+                    hIsLevelSectionDefined:vIsLevelSectionDefined,
+                };
+                $.ajax({url:"{% url 'save_student_data' %}",
+                method:"POST",
+                data:DataSendToServer,
+                dataType:"json",
+                success:function(response){
+                    vSuccess=response['djStatus'];
+                    
+                    if(vSuccess==1){
+    
+                        $("#msg_student").text("Data Saved Successfully !!!");  
+                            
+                    } else{
+                        console.log("Ajax Call Failed !!!");
+                    }
+                        
+                },
+                
+                }); 
+            }else{
+                //Do Nothing
+            }
+            
+            
+            setTimeout(function(){$("#msg_student").hide();}, 5000); 
+        }
+        
+        
+           
+    
+    });
+    
+    
+    //WHEN GO BUTTON IS HIT
+    $("#btn_student_search").click(function(){
+        let vStr=$("#txt_bx_student_search").val();  
+        retrieveStudentDetails("N/A",vStr);
+        
+        
+    });    
+    
+    
+    
+    //WHEN ADD (LEVEL & SECTION) BUTTON IS HIT----------
+    $("#btn_add_level_section").click(function(){
+        $("#btn_manage_student_save").prop('disabled',false);
+        //setOptionButtonChecked("radio_action_student",4);
+        let vLevelCode=$("#select_student_level option:selected").val();
+        let vLevel=$("#select_student_level option:selected").text();
+        let vSectionCode=$("#select_student_section option:selected").val();
+        let vSection=$("#select_student_section option:selected").text();
+        let vStr=vLevelCode+"|"+vSectionCode;
+        $("#msg_student").show();
+        if(vLevelCode=="none"||vSectionCode=="none"){
+            $("#msg_student").text("Level & Section Cannot Be Null !!!"); 
+        }else{
+            vStringFound=isStringInGrid("tbl_student_grid_data",vStr);
+            if(!vStringFound){
+                $("#msg_student").hide();
+                addLevelSectionInGrid("tbl_student_grid_data",vLevelCode,vLevel,vSectionCode,vSection);
+            }else{
+                $("#msg_student").text("Already Present !!!"); 
+                
+            }
+            
+        } 
+        // setTimeout(function(){								
+        //     $("#msg_student").hide();
+        // }, 5000);  
+        
+    });
+    
+    
+    
+    //------add level and section in GRID (table)----
+    function addLevelSectionInGrid(pTableId,pLevelCode,pLevel,pSectionCode,pSection){
+        // alert("add function");
+        var vTableEl = document.getElementById(pTableId);
+        $("#btn_manage_student_save").prop('disabled',false);  
+        vTableEl.innerHTML +=`
+         <tr style="border: 1px solid rgba(141, 137, 137, 0.692);">
+             
+             <td></td>
+             <td style="display:none;">${pLevelCode}</td>
+             <td style="word-wrap: break-word">${pLevel}</td>
+             <td style="display:none;">${pSectionCode}</td>
+             <td style="word-wrap: break-word">${pSection}</td>
+             <td style="display:none;">${pLevelCode}|${pSectionCode}</td>
+             <td><button class="deleteBtn">Delete</button></td>
+         </tr>  
+       `;
+       
+       vTableEl.addEventListener("click", deleteLevelSectionFromGrid);  
+       
+        
+      
+    }
+    
+    //------delete level and section from GRID (table)----
+    function deleteLevelSectionFromGrid(e){
+        if (!e.target.classList.contains("deleteBtn")) {        
+            return;
+        }
+        const btn = e.target;
+        
+        btn.closest("tr").remove();  
+    
+        $("#btn_manage_student_save").prop('disabled',false);
+        $("#btn_add_level_section").prop('disabled',false);//fasle
+        setOptionButtonChecked("radio_action_student",4);
+    
+    }
+    
+    function getStudentDetails(pId,pString){
+        retrieveStudentDetails(pId,pString);
+        
+    }
+    
+    function retrieveStudentDetails(pId,pSearchString){
+        $("#btn_manage_student_save").prop('disabled',true); // later enable this button when change occurs only 
+        $("#btn_add_level_section").prop('disabled',true); 
+        $("#tbl_student_grid_data > tbody").empty();
+                            
+        document.getElementById("tbl_student_data").style.display="none";
+        document.getElementById("tbl_student_grid_data").style.display="none";
+        
+        
+        let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+        vStr=pSearchString;
+        $("#span_student_user_id").text("");
+        $("#span_student_name").text("");
+        $("#span_student_contact1").text("");
+        $("#span_student_contact2").text("");
+        $("#span_student_email").text("");    
+        $("#img_student_photo").attr("src", "");     
+        DataSendToServer={ 
+            csrfmiddlewaretoken:vCsrfToken,
+            hSearchString:vStr,  
+        };
+        $.ajax({url:"{% url 'search_student' %}",
+                method:"POST",
+                data:DataSendToServer,
+                dataType:"json",
+                success:function(response){
+                    vSuccess=response['djStatus'];
+                    
+                    if(vSuccess==1){  
+                        $("#msg_student").show(); 
+                        vUserCount=response['djUserCount'];  
+                        
+                        if(vUserCount>1){                        
+                            $("#msg_student").text("Please Enter Exact User Ids (More Ids Exists With This Entered String) !!!"); 
+                        }else if (vUserCount==0){                        
+                            $("#msg_student").text("User Id Not Exists !!!"); 
+                        }else if(vUserCount==1){
+                            $("#msg_student").hide(); 
+                            vUserDataList= response['djUserDataList']; 
+                            vId=vUserDataList[0]['id']  
+                            vUserId=vUserDataList[0]['username']  
+                            vUserFistName=vUserDataList[0]['first_name']  
+                            vUserLastName=vUserDataList[0]['last_name']  
+                            vUserName=vUserFistName+" "+ vUserLastName
+                            vUserContact1=vUserDataList[0]['user_extra_info__contact1']  
+                            vUserContact2=vUserDataList[0]['user_extra_info__contact2']  
+                            vUserEmail=vUserDataList[0]['email']  
+                            vUserProfilePicPath=vUserDataList[0]['user_extra_info__profile_pic_path']  
+                            vUserStatus=vUserDataList[0]['user_extra_info__status']  
+                            
+                            /////
+                            $("#span_student_id").text(vId);
+                            $("#span_student_user_id").text(vUserId);
+                            $("#span_student_name").text(vUserName);
+                            $("#span_student_contact1").text(vUserContact1);
+                            $("#span_student_contact2").text(vUserContact2);
+                            $("#span_student_email").text(vUserEmail);
+                            $("#span_student_status").text(vUserStatus);
+                            $("#img_student_photo").attr("src", "/media/"+vUserProfilePicPath); 
+                            setOptionButtonChecked("radio_action_student",1);
+                            setOptionButtonEnable("radio_action_student",1);
+                            setOptionButtonEnable("radio_action_student",2);
+                            setOptionButtonEnable("radio_action_student",3);   
+                            setOptionButtonEnable("radio_action_student",4);                     
+                            if(vUserStatus=="Active"){
+                                setOptionButtonDisable("radio_action_student",2);
+                                $("#span_student_status_desc").text("Student is Present/Admitted");
+                            }else if(vUserStatus=="InActive" || vUserStatus=="N/A"){                            
+                                setOptionButtonDisable("radio_action_student",3);
+                                setOptionButtonDisable("radio_action_student",4);
+                                $("#span_student_status_desc").text("Student IS NOT Present/Admitted");
+                            }else{
+                                //No Action Needed
+                            }
+                            vData=response.djStudentLevelAndSectionList              
+                            for (i=0;i<vData.length;i++){
+                                addLevelSectionInGrid("tbl_student_grid_data",vData[i][0],vData[i][1],vData[i][2],vData[i][3]);    
+                            }    
+                            document.getElementById("tbl_student_data").style.display="block";
+                            document.getElementById("tbl_student_grid_data").style.display="block";
+                        }else{
+                            //Nothing  to execute; this condition will never be reached
+                        }                         
+                         
+                       
+                     
+                        setTimeout(function(){								
+                            $("#msg_student").hide();
+                        }, 5000);              
+    
+                    }else if(vSuccess==0){
+                      
+                      $("#msg_student").show();
+                      $("#msg_student").text("Failed = 0"); 
+                      //delete data from lst_bx_exam_id  
+                      
+                      setTimeout(function(){								
+                        $("#msg_student").hide();
+                      }, 5000);              
+    
+                    }  else{
+                      console.log("Ajax Call Failed !!!");
+                    }
+                        
+                  },
+                
+            });
+    
+    }
+    
+    
+    
+    </script>

@@ -1,0 +1,188 @@
+{% extends 'home/base.html' %}
+{% block body %} 
+
+      
+    <div id="msg" class="alert alert-danger" style="display:none"></div>
+    <div id="div_reg_individual">
+        
+        <form action="" method="POST" enctype="multipart/form-data" id="frm_register_individual">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <span class="impact">Register Individual</span>  
+                </tr>
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td style="text-align:right">Profile</td>
+                    <td>&nbsp;</td>  
+                    <td>
+                        <select id="id_type" name="id_type">
+                            <option value="none" selected disabled hidden>Select Profile</option>                
+                            <option value="Teacher">Teacher</option>
+                            <option value="Student">Student</option>
+                            <option value="Administrator">Institute Administrator</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td style="text-align:right">Institute</td>
+                    <td>&nbsp;</td>  
+                    <td>
+                        <select id="id_institute" name="id_institute">
+                            <option value="none" selected disabled hidden>Select Institute</option>
+                            {% for field in djFormInstList %}
+                              <option value={{field.id}}>{{field.institute_name|lower| capfirst}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+
+                
+
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td style="text-align:right">Email/UserName:</td>
+                    <td>&nbsp;</td>  
+                    <td>
+                        {{djFormUserInfo.email}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td style="text-align:right">{{djFormUserInfo.password.label_tag}}</td>
+                    <td>&nbsp;</td>  
+                    <td>
+                        {{djFormUserInfo.password}}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td style="text-align:right">{{djFormUserInfo.confirm_password.label_tag}}</td>
+                    <td>&nbsp;</td>  
+                    <td>
+                        {{djFormUserInfo.confirm_password}}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td style="text-align:right">{{djFormUserInfo.first_name.label_tag}}</td>
+                    <td>&nbsp;</td>  
+                    <td>
+                        {{djFormUserInfo.first_name}}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td style="text-align:right">{{djFormUserInfo.last_name.label_tag}}</td>
+                    <td>&nbsp;</td>  
+                    <td>
+                        {{djFormUserInfo.last_name}}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td style="text-align:right">Verification Id Type</td>
+                    <td>&nbsp;</td>  
+                    <td>
+                        <select id="id_verification_id_type" name="id_verification_id_type" >
+                            <option value="none" selected disabled hidden>Select Your Id</option>                
+                            <option value="Adhar Card">Adhar Card</option>
+                            <option value="PAN Card ">PAN Card </option>
+                            <option value="Passport">Passport</option>
+                            <option value="Voter Id Card">Voter Id Card</option>
+                            <option value="Government Id Card">Government Id Card</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td style="text-align:right">{{djFormUserExtraInfo.verification_id.label_tag}}</td>
+                    <td>&nbsp;</td>  
+                    <td>
+                        {{djFormUserExtraInfo.verification_id}}
+                    </td>
+                </tr>
+
+               
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td style="text-align:right"></td>
+                    <td>&nbsp;</td>  
+                    <td>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td style="text-align:right">{{djFormUserExtraInfo.contact1.label_tag}}</td>
+                    <td>&nbsp;</td>  
+                    <td>
+                        {{djFormUserExtraInfo.contact1}}
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td style="text-align:right">{{djFormUserExtraInfo.contact2.label_tag}}</td>
+                    <td>&nbsp;</td>  
+                    <td>
+                        {{djFormUserExtraInfo.contact2}}
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td style="text-align:right">{{djFormUserExtraInfo.address.label_tag}}</td>
+                    <td>&nbsp;</td>  
+                    <td>
+                        {{djFormUserExtraInfo.address}}
+                    </td>
+                </tr>    
+                
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td style="text-align:right">{{djFormUserExtraInfo.profile_pic_path.label_tag}}</td>
+                    <td>&nbsp;</td>  
+                    <td>
+                        {{djFormUserExtraInfo.profile_pic_path}}
+                        <br>
+                        
+                    </td>
+                </tr>  
+                
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td style="text-align:right"></td>
+                    <td>&nbsp;</td>  
+                    <td>
+                        
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td style="text-align:right"></td>
+                    <td>&nbsp;</td>  
+                    <td >
+                        <input type="button" value="Register"   id="btn_register_individual">
+                    </td>
+                </tr> 
+
+            </table>
+             
+            
+        </form>
+        
+    </div>
+   
+{% include "home/register_individual_ajax.html" %}
+{% include "home/common_functions.html" %}
+
+{% endblock body %}

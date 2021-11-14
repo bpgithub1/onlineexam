@@ -1,0 +1,7 @@
+1. visual code studio
+2. DB Browser for SQLite
+3. Python Installed
+4. Django framework installed 
+5. pip installed 
+6. pillow 
+

@@ -1,0 +1,83 @@
+{% extends 'home/login_layout.html' %}
+
+{% block title %} WhizAce Technology | Online Examination System {% endblock title %}
+
+{% block body %} 
+<form action="" method="POST" id="frm_manager_index"> 
+    {% csrf_token %}
+    <div id="div_manager_main">
+        <div id="div_manager_header">
+            <div id="div_manager_header_col1">
+                <span id="manager_msg"></span>
+            </div>
+            <div id="div_manager_header_col2">                                            
+                    <input type="button" value="Dashboard" id="btn_dashboard">
+                    <input type="button" value="Manage Drop Downs" id="btn_drop_down">
+                    <input type="button" value="Run Scripts" id="btn_run_scripts">
+                    
+                                                              
+            </div>
+            
+        </div>
+        <div id="div_managercontent">
+            <div id="div_manager_dashboard">
+                {% include "manager/dashboard.html" %} 
+            </div>
+            
+            <div id="div_manager_drop_down">
+                {% include "manager/drop_down.html" %} 
+            </div>
+
+            <div id="div_manager_run_scripts">
+                {% include "manager/run_scripts.html" %} 
+            </div>
+
+        </div>
+
+    </div>
+</form>
+    {% include "manager/index_ajax.html" %}
+
+<style>
+#div_manager_main{
+  background-color:  white;
+}
+
+#div_manager_header{
+  background-color:  yellow;
+  height: 35px;
+}
+
+#div_manager_content{
+    background-color:  white;
+  height: 500px;
+  
+}
+
+#div_manager_header_col1{
+    height: 35px;
+    width: 50%;
+    background-color: #3f3a3a;
+    float: left;
+    text-align: center;
+}
+
+
+#div_manager_header_col2{
+    height: 35px;
+    width: 50%;
+    background-color: #3f3a3a;
+    float: left;
+    
+}
+
+#manager_msg{
+    font-size:x-large;
+    font-weight: bold;
+    color: honeydew;
+}
+
+</style>
+     
+
+{% endblock body %}

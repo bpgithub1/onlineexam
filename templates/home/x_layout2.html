@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+   
+<head>
+    <meta charset="UTF-8">
+    <title>RnD</title>
+    <script src="{% static 'js/jquery.js' %}" ></script>
+    <script src="{% static 'js/popper.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>  
+    <script src="{% static 'js/common.js' %}" ></script> 
+
+    <link href="{% static 'css/bootstrap.css' %}"     rel="stylesheet"/>
+    <link href="{% static 'css/custome_style.css' %}" rel="stylesheet"/>
+    
+</head>
+
+<body>
+    
+
+    
+
+  <div id="wrapper" >
+    <div id="header" >
+      <div id="header-left" >Logo</div>    
+      <div id="header-center" ><span>{{djInstitute}} | {{djProfile}} | {{djUser}} </span></div> 
+      <div id="header-right" > 
+       
+        <a href="/logout_user">Logout</a> 
+      </div>  
+      
+    </div>  
+    
+   
+    <div id=div_after_login_menu>
+      <h3>Password Change</h3>
+      <div id="div_teacher_exam_Q_wrapper">
+         <div id="div_teacher_exam_Q_exam_data">
+          <h1>Menu</h1>
+          
+         </div>
+         <div id="div_teacher_exam_Q_wrapper">
+          <h3>R&D</h3>
+          Delete Image: <input type="checkbox" id="chkbx_delete_image" name="chkbx_delete_image" value="myvalue">
+          Delete Image2: <input type="checkbox" id="chkbx_delete_image2" name="chkbx_delete_image2" onclick="Test()" value="myvalue">
+          
+          <input type="text" id="myInput" onkeyup="searchQuestion()" placeholder="Search for names..">
+
+          <ul id="ul_content">
+            <li><a href="#">01|Adele</a></li>
+            <li><a href="#">Agnes</a></li>
+
+            <li><a href="#">Billy</a></li>
+            <li><a href="#">Bob</a></li>
+
+            <li><a href="#">Calvin</a></li>
+            <li><a href="#">Christina</a></li>
+            <li><a href="#">Cindy</a></li>
+            
+          </ul>
+
+
+        </div>
+      </div>
+    </div>
+    
+    <div id="footer"><span  >SDG SW INDIA PVT. LTD.</span></div>      
+   </div>
+</body>
+
+<script>
+
+function Test(){
+  //var vDeleteImage=$('#chkbx_delete_image').val();
+  let x = document.getElementById("chkbx_delete_image").value;
+  //alert (vDeleteImage);
+  alert (x);
+
+}
+//$("checkbox").prop("checked",true).trigger("change");
+//$("#chkbx_delete_image").attr('disabled', true);
+$('#chkbx_delete_image').val(this.checked);  
+$("input[type='checkbox'][name='chkbx_delete_image']:checked").val();
+   
+// $('input[type="checkbox"]').change(function() {
+//     alert ("The element with id " + this.id + " changed.");
+// });
+$("input[type='checkbox'][name='chkbx_delete_image']").change(function() {
+  //$('#chkbx_delete_image').val("hello");//$('#chkbx_delete_image').val(); //$("input[type='checkbox'][name='chkbx_delete_image']:checked").val();
+  vDeleteImage=$('#chkbx_delete_image').val();
+  alert (vDeleteImage);
+
+});
+
+function searchQuestion() {
+  // Declare variables
+  var input, filter, ul, li, a, i, txtValue;
+  input = document.getElementById('myInput');
+  filter = input.value.toUpperCase();
+  ul = document.getElementById("ul_content");
+  li = ul.getElementsByTagName('li');
+
+  // Loop through all list items, and hide those who don't match the search query
+  for (i = 0; i < li.length; i++) {
+    a = li[i].getElementsByTagName("a")[0];
+    txtValue = a.textContent || a.innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      li[i].style.display = "";
+    } else {
+      li[i].style.display = "none";
+    }
+  }
+}
+
+
+
+
+
+$(document).ready(function(){
+
+  
+  
+  
+});
+
+function myTest(){
+  
+  $('#ul_content').append(
+                      $('<li>').append(
+                          $('<a>').attr('href','/user/messages').append(
+                              $('<span>').attr('class', 'tab').append("Message center")
+                  )));
+}
+
+//=====backup
+$('input[type=radio][name=rdo_name_exam_type]').change(function() {  
+    vExamType=$("input[type='radio'][name='rdo_name_exam_type']:checked").val();
+    $("#txt_bx_exam_duration").val("");
+    if(vExamType=="1"){
+      $("#txt_bx_exam_start_time").prop('disabled', true);
+      //$('input:radio[name="rdo_name_exam_type"]').filter('[value="1"]').attr('checked', true); // default   
+      $("#date_exam_start_date").prop('disabled', false);
+      $("#date_exam_end_date").prop('disabled', false);
+      $("#txt_bx_exam_start_time").prop('disabled', true);
+      $("#txt_bx_exam_start_time").val("00:00");
+      $("#txt_bx_exam_end_time").prop('disabled', true);
+      $("#txt_bx_exam_end_time").val("23:59");
+      //in case of long schedule teacher will suppy end date 
+      //no calculaiton of end date and time based on duration 
+
+    }else{
+      
+      $("#date_exam_start_date").prop('disabled', false);
+      $("#date_exam_end_date").prop('disabled', true);
+      $("#txt_bx_exam_start_time").prop('disabled', true);
+      $("#txt_bx_exam_start_time").val("");
+      $("#txt_bx_exam_end_time").prop('disabled', true);
+      $("#txt_bx_exam_end_time").val("");
+    }
+    
+
+  });
+
+
+  $("#txt_bx_exam_duration").change(function(){
+    
+    //var vStartDateTime=new Date;
+    vStartDateTime=new Date($("#date_exam_start_date").val());
+    vYear=vStartDateTime.getFullYear();
+    vMonth=vStartDateTime.getMonth()+1; // 1 is added becasue it is zero index i.e. // Be careful! January is 0, not 1
+    vDay=vStartDateTime.getDate();
+    vHours=vStartDateTime.getHours();
+    vMinutes=vStartDateTime.getMinutes();
+    vDuration=$("#txt_bx_exam_duration").val();//duration cannot be more than 600 -- validate in in exam screen
+    vTotalMinutes=Number(vDuration)+vMinutes;
+    vTotalHours=Math.floor(vTotalMinutes/60)+vHours;
+    vFinalMinutes=vTotalMinutes%60;
+    vFinalHours=vTotalHours%24;
+    vDaysToAdd=Math.floor(vTotalHours/24);
+    //alert("calculated days to add"+vDaysToAdd);
+    
+    //alert(vHours+":"+('0' + vMinutes).slice(-2) );
+    vStartTime=('0' + vStartDateTime.getHours()).slice(-2)+":"+('0' + vStartDateTime.getMinutes()).slice(-2);
+    $("#txt_bx_exam_start_time").val(vStartTime);  
+    
+    //vNextDate=vStartDateTime+vFinalDay;
+    vNextDate=new Date();
+    
+    vNextDate=addDays(vStartDateTime,vDaysToAdd);
+    var vOffset = new Date().getTimezoneOffset(); // this is giving -330 for India; since it is negative value hence we have to do minus
+    vOffsetHours=Math.ceil(vOffset/60);
+    vOffsetMinutes=vOffset%60;
+    //alert(vOffset+"  "+vOffsetHours+"  "+vOffsetMinutes);
+    vNextDate.setHours(vFinalHours-vOffsetHours);    
+    vNextDate.setMinutes(vFinalMinutes-vOffsetMinutes);
+    //here 5hrs & 30 minutes are added to convert the GMT time to local time of India.
+    
+    
+    //alert(vNextDate+"\n"+vNextDate.toLocaleString()+"\n"+vNextDate.toISOString()+"\n"+vNextDate.toUTCString());
+    
+    $("#date_exam_end_date").val(vNextDate.toISOString().slice(0,16));
+    //$("#date_exam_end_date").val(vNextDate.toLocaleString().slice(0,16));
+    
+    //alert("Year "+vYear+"\nMonth "+vMonth+"\nDay "+vDaysToAdd+"\n next Date--->"+vNextDate);
+
+
+    //alert(vStartTime);
+    vEndTime=('0' + vFinalHours).slice(-2)+":"+('0' + vFinalMinutes).slice(-2); 
+    $("#txt_bx_exam_end_time").val(vEndTime);  
+    
+    
+    //vStartTime=nex Date($("#txt_bx_exam_start_time"));  
+    // const dd = new Date("October 13, 2014 11:13:00");
+    // alert(dd);//("October 13, 2014 11:13:00");
+    
+    // var mydate = new Date();
+    // mydate.setFullYear(2013);
+    // mydate.setMonth(02);
+    // mydate.setDate(28);
+    // mydate.setHours(7);
+    // mydate.setMinutes(00); 
+    //alert(mydate);
+    //$("#date_exam_end_date").val("2014-01-02T11:42");
+    
+
+    //vEndDateTime=new Date($("#date_exam_end_date").val());
+
+    // vEndDateTime.setHours(vFinalHours);
+    // vEndDateTime.setMinutes(vFinalMinutes);
+    // alert($("#date_exam_end_date").val());
+    // //increase date when hours extent 24
+
+    // vEndTime=vDuration+vStartTime;
+    vExamType=$("input[type='radio'][name='rdo_name_exam_type']:checked").val();
+    // var d = new Date("July 21, 1983 01:15:00");
+    // var n = d.getHours();
+    // vHours=vStartDateTime.getHours();
+    //alert(vHours);
+    if (vExamType=="2"){
+      alert(vExamType);
+
+    }
+
+   // $("#txt_bx_exam_end_time").val(vEndTime);
+
+  }); 
+  
+  function getEndDate(pStartDateTime,pDuration,){
+
+  }
+
+  function addDays(date, days) {
+    const copy = new Date(Number(date));
+    copy.setDate(date.getDate() + days);
+    return copy
+  }
+</script>
+
+
+<style>
+
+#myInput {
+  width: 100%; /* Full-width */
+  font-size: 16px; /* Increase font-size */
+  padding: 12px 20px 12px 40px; /* Add some padding */
+  border: 1px solid #ddd; /* Add a grey border */
+  margin-bottom: 12px; /* Add some space below the input */
+}
+
+#ul_content {
+  /* Remove default list styling */
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#ul_content li a {
+  border: 1px solid #ddd; /* Add a border to all links */
+  margin-top: -1px; /* Prevent double borders */
+  background-color: #be9a9a; /* Grey background color */
+  padding: 12px; /* Add some padding */
+  text-decoration: none; /* Remove default text underline */
+  font-size: 18px; /* Increase the font-size */
+  color: black; /* Add a black text color */
+  display: block; /* Make it into a block element to fill the whole list */
+}
+
+#ul_content li a:hover:not(.header) {
+  background-color: #eee; /* Add a hover effect to all links, except for headers */
+}
+
+
+
+
+
+/*-----------------*/
+
+
+#div_teacher_exam_Q_exam_data{
+  height: 50px;
+  width: 100%;
+  background-color: rgb(201, 201, 209);
+}
+#div_teacher_exam_Q_wrapper{
+  height: 400px;
+  width: 100%;
+  background-color: rgb(182, 97, 41);
+  overflow:scroll;
+}
+
+
+
+    #wrap{
+      
+      width: 200px;
+      height: 400px;
+    }
+    
+
+   #content{
+    width: 200px;
+    height: 400px;
+    background-color: rgb(142, 158, 104);
+    
+   }
+
+
+
+</style>

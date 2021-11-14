@@ -1,0 +1,125 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+
+    <script src="{% static 'js/jquery.js' %}" ></script>
+    <script src="{% static 'js/popper.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>  
+    <style>
+      *{
+        padding: 0;
+        margin: 0;
+      }
+      #wrapper{
+        border: solid;
+        padding: 2px;
+      }
+      #header{
+        height: 50px;
+        background-color: seagreen;
+        padding: 2px;
+      }
+      #header-left{
+        width: 10%;
+        height: 50px;
+        background-color:violet;
+        float: left;
+      }
+      #header-center{
+        width: 70%;
+        height: 50px;
+        background-color: chocolate;
+        float:left;
+        text-align: center;
+      }
+      #header-right{
+        width: 20%;
+        height: 50px;
+        background-color:yellowgreen;
+        float: right;
+        text-align: center;
+        
+      }
+      #navbar{
+        height: 20px;
+        background-color: forestgreen;
+        margin-top: 2px;
+      }
+      #container{
+        border: solid red;
+        margin-top: 2px;
+      }
+      #container::after{
+        content: "";
+        display: block;
+        clear: both;
+      }
+      #left-panel{
+        width: 25%;
+        height: 600px;
+        background-color: sienna;
+        float: left;
+      }
+      #right-panel{
+        width: 74%;
+        height: 600px;
+        background-color:slateblue;
+        float: right;
+      }
+      #footer{
+        height: 100px;
+        background-color: teal;
+        margin: top 2px;
+        border-radius: 20px;
+      }
+
+      #header-right-text{
+        position:relative;
+        top:30%;
+      }
+      #header-center-text{
+        position:relative;
+        top:30%;
+      }
+
+
+    .header_text{
+      color:seashell;
+      font-size: larger;
+    }
+    </style>
+
+    <title>{% block title %} {% endblock title %}| Online Examination System</title>
+  </head>
+  <body>
+   <div id="wrapper" >
+    <div id="header" >
+      <div id="header-left" ><h2>Logo</div>    
+      <div id="header-center" ><span id="header-center-text" class="header_text">Habile Academia | Administrator | Mr. Kamal Kumar </span></div> 
+      <div id="header-right" > <span id="header-right-text" class="header_text">Change Password | Logout</span> </div>   
+    </div>  
+    <div id="navbar"> <span id="header-right-text" class="header_text">Online Examination Portal</span></div>
+    <div id="container">
+      <div id="left-panel"> </div>
+      <div id="right-panel"> </div>
+    </div>
+    <div id="footer"></div>      
+   </div>
+
+   
+
+{% block body %}
+
+{% endblock body %}
+
+  
+
+</body>
+</html>

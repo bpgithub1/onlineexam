@@ -1,0 +1,76 @@
+{% extends 'home/login_layout.html' %}
+
+{% block title %} WhizAce Technology | Online Examination System {% endblock title %}
+
+{% block body %} 
+<form action="" method="POST" id="frm_student_index"> 
+    {% csrf_token %}
+    <div id="div_student_main">
+        <div id="div_student_header">
+            <div id="div_student_header_col1">
+                <span id="student_msg"></span>
+            </div>
+            <div id="div_student_header_col2">                                            
+                    <input type="button" value="Dashboard" id="btn_dashboard">
+                    <input type="button" value="Notice Board" id="btn_notice_board">
+                                                              
+            </div>
+            
+        </div>
+        <div id="div_student_content">
+            <div id="div_student_dashboard">
+                {% include "student/dashboard.html" %} 
+            </div>
+            
+            <div id="div_student_notice_board">
+                {% include "student/notice_board.html" %} 
+            </div>
+        </div>
+
+    </div>
+</form>
+    {% include "student/index_ajax.html" %}
+
+<style>
+#div_student_main{
+  background-color:  white;
+}
+
+#div_student_header{
+  background-color:  yellow;
+  height: 35px;
+}
+
+#div_student_content{
+    background-color:  white;
+  height: 500px;
+  
+}
+
+#div_student_header_col1{
+    height: 35px;
+    width: 50%;
+    background-color: #3f3a3a;
+    float: left;
+    text-align: center;
+}
+
+
+#div_student_header_col2{
+    height: 35px;
+    width: 50%;
+    background-color: #3f3a3a;
+    float: left;
+    
+}
+
+#student_msg{
+    font-size:x-large;
+    font-weight: bold;
+    color: honeydew;
+}
+
+</style>
+     
+
+{% endblock body %}

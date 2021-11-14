@@ -1,0 +1,289 @@
+<script>
+
+    $('input[type=radio][name=radio_action_teacher]').change(function() { 
+        let vAction=getCheckedRadioValue("radio_action_teacher");
+        if (vAction==2||vAction==3||vAction==4){
+            $("#btn_manage_teacher_save").prop('disabled',false); 
+            $("#btn_add_subject").prop('disabled',false);
+        }else{
+            $("#btn_manage_teacher_save").prop('disabled',true); 
+            $("#btn_add_subject").prop('disabled',true); 
+        }
+        
+    }); 
+
+// //WHEN GO BUTTON IS HIT
+// $("#btn_teacher_search").click(function(){
+//     let vStr=$("#txt_bx_teacher_search").val();  
+//     retrieveTeacherDetails("N/A",vStr);
+    
+    
+// }); 
+
+
+//WHEN SAVE BUTTON IS HIT
+$("#btn_manage_teacher_save").click(function(){
+        $("#msg_teacher").show();
+        $("#msg_teacher").text("");
+        let vTeacherUserId=$("#span_teacher_user_id").text();
+        let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+        let vAction=getCheckedRadioValue("radio_action_teacher");
+        let vStatus=$("#span_teacher_status").text();
+        let vIsSubjectDefined=getHtmlTableRows("tbl_teacher_grid_data"); 
+        //alert(vStatus+"   -   "+vAction);      
+        if ((vStatus=="InActive"||vStatus=="N/A")&&(vAction=="1")){
+            $("#msg_teacher").text("Activate Teacher (SELECT 'Activate Account' RADIO BUTTON) !!!");  
+        }else if((vIsSubjectDefined==1) && (vAction=="2")){         
+            $("#msg_teacher").text("Teacher's Subject Not Defined !!!");  
+        }else{
+            let vFlag=false;
+            if(vAction==2){
+                var r = confirm("Are Your Sure To Activate Teacher?");
+                if (r == true) {
+                    vFlag=true;
+                }else {
+                    vFlag=false;
+                }    
+            }else if(vAction==3){
+                var r = confirm("Are Your Sure To De-Activate Teacher?");
+                if (r == true) {
+                    vFlag=true;
+                }else {
+                    vFlag=false;
+                }    
+            }else if (vAction==4){
+                vFlag=true;
+            }else{
+                vFlag=false;
+            }
+            if (vFlag == true){
+                var vArray;
+                var vSubject;
+                if(vIsSubjectDefined==1){
+                    vSubject=null;
+                }else{
+                    vArray=getHtmlTableArray("tbl_teacher_grid_data");     
+                    vSubject = JSON.stringify(vArray);       
+                }   
+                                        
+                DataSendToServer={ 
+                    csrfmiddlewaretoken:vCsrfToken,
+                    hTeacherUserId:vTeacherUserId,          
+                    hAction:vAction,
+                    hSubject:vSubject,
+                    hIsSubjectDefined:vIsSubjectDefined,
+                };
+                //alert(vSubject);
+                $.ajax({url:"{% url 'save_teacher_data' %}",
+                method:"POST",
+                data:DataSendToServer,
+                dataType:"json",
+                success:function(response){
+                    vSuccess=response['djStatus'];
+                    
+                    if(vSuccess==1){
+    
+                        $("#msg_teacher").text("Data Saved Successfully !!!");  
+                        document.getElementById("tbl_teacher_data").style.display="none";
+                        document.getElementById("tbl_teacher_grid_data").style.display="none"; 
+                            
+                    } else{
+                        console.log("Ajax Call Failed !!!");
+                    }
+                        
+                },
+                
+                }); 
+            }else{
+                //Do Nothing
+            }
+            
+            
+            
+        }
+        
+        
+        setTimeout(function(){$("#msg_teacher").hide();}, 5000);    
+    
+    });
+
+//WHEN ADD (SUBJECT) BUTTON IS HIT----------
+$("#btn_add_subject").click(function(){
+        $("#btn_manage_teacher_save").prop('disabled',false);
+        //setOptionButtonChecked("radio_action_student",4);
+        let vSubjectCode=$("#select_teacher_subject option:selected").val();
+        let vSubject=$("#select_teacher_subject option:selected").text();
+        let vStr=vSubjectCode;
+        $("#msg_teacher").show();
+        if(vSubjectCode=="none"){
+            $("#msg_teacher").text("Subject Cannot Be Null !!!"); 
+        }else{
+            vStringFound=isStringInGrid("tbl_teacher_grid_data",vStr);
+            if(!vStringFound){
+                $("#msg_teacher").hide();
+                addSubjectInGrid("tbl_teacher_grid_data",vSubjectCode,vSubject);
+            }else{
+                $("#msg_teacher").text("Already Present !!!"); 
+                
+            }
+            
+        } 
+        // setTimeout(function(){								
+        //     $("#msg_admin").hide();
+        // }, 5000);  
+        
+    });
+
+    //
+    //------add SUBJECT in GRID (table)----
+    function addSubjectInGrid(pTableId,pSubjectCode,pSubject){
+        // alert("add function");
+        var vTableEl = document.getElementById(pTableId);
+        $("#btn_manage_teacher_save").prop('disabled',false);  
+        vTableEl.innerHTML +=`
+         <tr style="border: 1px solid rgba(141, 137, 137, 0.692);">
+             
+             <td></td>
+             <td style="display:none;">${pSubjectCode}</td>
+             <td style="word-wrap: break-word">${pSubject}</td>
+             <td><button class="deleteBtn">Delete</button></td>
+         </tr>  
+       `;
+       
+       vTableEl.addEventListener("click", deleteSubjectFromGrid);  
+                     
+    }
+
+    //------delete level and section from GRID (table)----
+    function deleteSubjectFromGrid(e){
+        if (!e.target.classList.contains("deleteBtn")) {        
+            return;
+        }
+        const btn = e.target;
+        
+        btn.closest("tr").remove();  
+    
+        $("#btn_manage_teacher_save").prop('disabled',false);
+        $("#btn_add_subject").prop('disabled',false);//fasle
+        setOptionButtonChecked("radio_action_teacher",4);
+    
+    }
+
+    function getTeacherDetails(pId,pString){
+        retrieveTeacherDetails(pId,pString);   
+    }
+
+
+//====WORK HERE 
+function retrieveTeacherDetails(pId,pSearchString){
+    $("#btn_manage_teacher_save").prop('disabled',true); // later enable this button when change occurs only 
+    $("#btn_add_subject").prop('disabled',true); 
+    $("#tbl_teacher_grid_data > tbody").empty();
+                        
+    document.getElementById("tbl_teacher_data").style.display="none";
+    document.getElementById("tbl_teacher_grid_data").style.display="none";
+
+    let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+    vStr=pSearchString;
+    $("#span_teacher_user_id").text("");
+    $("#span_teacher_name").text("");
+    $("#span_teacher_contact1").text("");
+    $("#span_teachercontact2").text("");
+    $("#span_teacher_email").text("");    
+    $("#img_teacher_photo").attr("src", "");     
+    DataSendToServer={ 
+        csrfmiddlewaretoken:vCsrfToken,
+        hSearchString:vStr,  
+    }; 
+    
+    $.ajax({url:"{% url 'search_teacher' %}",
+            method:"POST",
+            data:DataSendToServer,
+            dataType:"json",
+            success:function(response){
+                vSuccess=response['djStatus'];
+                
+                if(vSuccess==1){  
+                    $("#msg_teacher").show(); 
+                    vUserCount=response['djUserCount'];  
+                    
+                    if(vUserCount>1){                        
+                        $("#msg_teacher").text("Please Enter Exact User Ids (More Ids Exists With This Entered String) !!!"); 
+                    }else if (vUserCount==0){                        
+                        $("#msg_teacher").text("User Id Not Exists !!!"); 
+                    }else if(vUserCount==1){
+                        $("#msg_teacher").hide(); 
+                        vUserDataList= response['djUserDataList']; 
+                        vId=vUserDataList[0]['id']  
+                        vUserId=vUserDataList[0]['username']  
+                        vUserFistName=vUserDataList[0]['first_name']  
+                        vUserLastName=vUserDataList[0]['last_name']  
+                        vUserName=vUserFistName+" "+ vUserLastName
+                        vUserContact1=vUserDataList[0]['user_extra_info__contact1']  
+                        vUserContact2=vUserDataList[0]['user_extra_info__contact2']  
+                        vUserEmail=vUserDataList[0]['email']  
+                        vUserProfilePicPath=vUserDataList[0]['user_extra_info__profile_pic_path']  
+                        vUserStatus=vUserDataList[0]['user_extra_info__status']  
+                        
+                        /////
+                        $("#span_teacher_id").text(vId);
+                        $("#span_teacher_user_id").text(vUserId);
+                        $("#span_teacher_name").text(vUserName);
+                        $("#span_teacher_contact1").text(vUserContact1);
+                        $("#span_teacher_contact2").text(vUserContact2);
+                        $("#span_teacher_email").text(vUserEmail);
+                        $("#span_teacher_status").text(vUserStatus);
+                        $("#img_teacher_photo").attr("src", "/media/"+vUserProfilePicPath); 
+                        setOptionButtonChecked("radio_action_teacher",1);
+                        setOptionButtonEnable("radio_action_teacher",1);
+                        setOptionButtonEnable("radio_action_teacher",2);
+                        setOptionButtonEnable("radio_action_teacher",3);   
+                        setOptionButtonEnable("radio_action_teacher",4);                     
+                        if(vUserStatus=="Active"){
+                            setOptionButtonDisable("radio_action_teacher",2);
+                            $("#span_teacher_status_desc").text("Teacher is Active");
+                        }else if(vUserStatus=="InActive" || vUserStatus=="N/A"){                            
+                            setOptionButtonDisable("radio_action_teacher",3);
+                            setOptionButtonDisable("radio_action_teacher",4);
+                            $("#span_teacher_status_desc").text("Teacher IS NOT Active");
+                        }else{
+                            //No Action Needed
+                        }
+                        vData=response.djTeacherSubjectList              
+                        for (i=0;i<vData.length;i++){
+                            addSubjectInGrid("tbl_teacher_grid_data",vData[i][0],vData[i][1]);    
+                        }    
+                        document.getElementById("tbl_teacher_data").style.display="block";
+                        document.getElementById("tbl_teacher_grid_data").style.display="block";
+                    }else{
+                        //Nothing  to execute; this condition will never be reached
+                    }                         
+                     
+                   
+                 
+                    setTimeout(function(){								
+                        $("#msg_admin").hide();
+                    }, 5000);              
+
+                }else if(vSuccess==0){
+                  
+                  $("#msg_admin").show();
+                  $("#msg_admin").text("Failed = 0"); 
+                  //delete data from lst_bx_exam_id  
+                  
+                  setTimeout(function(){								
+                    $("#msg_admin").hide();
+                  }, 5000);              
+
+                }  else{
+                  console.log("Ajax Call Failed !!!");
+                }
+                    
+              },
+            
+        }); 
+
+}
+
+
+</script>

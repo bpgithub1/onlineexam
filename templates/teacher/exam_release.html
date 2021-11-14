@@ -1,0 +1,128 @@
+<form action="" method="POST" id="frm_exam_release">
+    {% csrf_token %}
+<div id="div_teacher_exam_release_wrapper">      
+    <div id="div_teacher_exam_release_wrapper_col1">
+      <div id="div_teacher_exam_release_wrapper_col1_row1">
+        <table id="tbl_exam_release_info_exam" >
+            <tr>
+                <td>Exam Code</td>
+                <td>:</td>
+                <td><span id ="release_info_exam_code" class="exam_release_exam_info"></span></td>
+            </tr>
+            <tr>
+                <td>Start Date & Time</td>
+                <td>:</td>
+                <td><span id ="release_info_exam_start" class="exam_release_exam_info"></span></td>
+            </tr>
+            <tr>
+                <td>Duration (Mins)</td>
+                <td>:</td>
+                <td><span id ="release_info_exam_duration" class="exam_release_exam_info"></span></td>
+            </tr>
+            <tr>
+                <td>Full Marks</td>
+                <td>:</td>
+                <td><span id ="release_info_exam_marks" class="exam_release_exam_info"></span></td>
+            </tr>
+            <tr>
+                <td>No Of Questions</td>
+                <td>:</td>
+                <td><span id ="release_info_exam_questions" class="exam_release_exam_info"></span></td>
+            </tr>
+            <tr>
+                <td>Level</td>
+                <td>:</td>
+                <td><span id ="release_info_exam_level" class="exam_release_exam_info"></span></td>
+            </tr>
+            <tr>
+                <td>Section</td>
+                <td>:</td>
+                <td><span id ="release_info_exam_section" class="exam_release_exam_info"></span></td>
+            </tr>
+            <tr>
+                <td>Subject</td>
+                <td>:</td>
+                <td><span id ="release_info_exam_subject" class="exam_release_exam_info"></span></td>
+            </tr>
+        </table>
+      </div>
+      <div id="div_teacher_exam_release_wrapper_col1_row2">
+        <input type="button"  id="btn_exam_release_cancel" value="Cancel">
+        &nbsp; &nbsp;
+        <input type="button"  id="btn_exam_release_proceed" value="Proceed">
+        
+    </div>
+    </div>
+    <div id="div_teacher_exam_release_wrapper_col2">
+        <table id="tbl_exam_release_info_question">
+            <thead >
+                <tr style="border: 1px solid rgba(141, 137, 137, 0.692); font-weight:bold ">
+                    <td>
+                    <span class="impact">QSNO</span>        
+                    </td>
+                    <td>
+                    <span class="impact">Question</span> 
+                    </td>
+                    <td>
+                    <span class="impact">Marks</span> 
+                    </td>
+                </tr> 
+            </thead> 
+            <tbody>
+
+            </tbody>
+        </table>
+        
+        
+    </div>
+   
+
+</div>
+</form>
+
+{% include "teacher/exam_release_ajax.html" %}
+
+<style>
+
+#div_teacher_exam_release_wrapper{
+    background-color: white;
+    height: 500px;
+    overflow: scroll;
+    
+}
+
+#div_teacher_exam_release_wrapper_col1{    
+    height: 500px;
+    width: 30%;
+    float: left;
+    background-color: #3f3a3a;
+    
+}
+#div_teacher_exam_release_wrapper_col2{
+    background: white;
+    height: 500px;
+    width: 70%;
+    float: left;
+    
+}  
+
+#div_teacher_exam_release_wrapper_col1_row1{   
+    height: 465px;
+    width: 100%;
+    color:whitesmoke
+    
+}
+
+#div_teacher_exam_release_wrapper_col1_row2{
+    background-color: #3f3a3a;
+    height: 35px;
+    
+    
+}
+.exam_release_exam_info{   
+   color:whitesmoke;
+   font-size: 20px; 
+}
+
+
+</style>

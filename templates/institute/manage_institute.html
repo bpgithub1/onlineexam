@@ -1,0 +1,166 @@
+<form action="" method="POST" id="frm_manage_institute">
+    {% csrf_token %}
+  <div id="div_manage_institute_wrapper">
+      
+      <div id="div_manage_institute_content_box">
+        <div id="div_manage_teacher_content_box_content">
+          <div id="msg_institute" class="alert alert-danger" style="display:none"></div>          
+          <div id="div_manage_teacher_content_box_content_data1">
+            <table>
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td>Identity Number: </td>
+                    <td><input type="text" id="txtbx_manage_institute_id" placeholder="Identity Number" disabled></td>           
+                </tr>
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td>Status: </td>
+                    <td><input type="text" id="txtbx_manage_institute_status" placeholder="Institute Status" disabled></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td>Name: </td>
+                    <td><input type="text" id="txtbx_manage_institute_name" placeholder="Institute Name" ></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td>Owner Name: </td>
+                    <td><input type="text" id="txtbx_manage_institute_owner" placeholder="Institute Owner Name" ></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td>Contact1: </td>
+                    <td><input type="text" id="txtbx_manage_institute_contact1" placeholder="Institute Contact1" ></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td>Contact2: </td>
+                    <td><input type="text" id="txtbx_manage_institute_contact2" placeholder="Institute Contact2" ></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td>Email: </td>
+                    <td><input type="text" id="txtbx_manage_institute_email" placeholder="Institute Email" ></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td>Country: </td>
+                    <td><input type="text" id="txtbx_manage_institute_country" placeholder="Institute Country" ></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td>State: </td>
+                    <td><input type="text" id="txtbx_manage_institute_state" placeholder="Institute State" ></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td>City: </td>
+                    <td><input type="text" id="txtbx_manage_institute_city" placeholder="Institute City" ></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td>Address: </td>
+                    <td><input type="text" id="txtbx_manage_institute_address" placeholder="Institute Address" ></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td>Pin Code: </td>
+                    <td><input type="text" id="txtbx_manage_institute_pincode" placeholder="Institute Pin Code" ></td>
+                </tr>
+                
+                
+                
+                                                                               
+            </table>
+          </div>
+          <div id="div_manage_teacher_content_box_content_data2">
+            <table>
+                <tr>
+                    <td>&nbsp;</td> 
+                    <td>Logo: </td>
+                    <td><input type='file' id="file_manage_institute_logo" name="file_manage_institute_logo"  onchange="readLogoUrl(this);" accept="image/*"/> 
+                    <br> <img id="img_logo_preview" src="" alt=""  width="250px" height="250px" style="border-radius:3px;border:5px solid rgb(121, 118, 118);"/></td>
+                </tr>
+            </table>
+          </div>
+          
+  
+        </div>
+        <div id="div_manage_institute_content_box_btn" >
+          <input type="button" id="btn_manage_institute_close" value="Back/Close"> 
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="button" id="btn_manage_institute_save" value="Save" >         
+          
+        </div>
+      </div>
+    </div>
+  </form>
+    {% include "institute/manage_institute_ajax.html" %}
+    {% include "home/common_functions.html" %}
+    
+    <style>
+  #div_manage_institute_wrapper{
+    height: 500px;
+    width: 100%;
+    background-color:  white;
+    /* opacity: 0.5; */
+  }
+  
+  
+  #div_manage_institute_content_box{
+    height: 500px;
+    width: 100%;
+    background-color:  white;
+    float: left;
+  }
+  
+  
+  
+  #div_manage_institute_content_box_content{
+    background-color: white;
+    height: 465px;
+    width: 100%;
+    overflow: scroll;
+  }
+  #div_manage_institute_content_box_content_data1{
+    float: left;
+    width: 50%;
+  } 
+  #div_manage_institute_content_box_content_data2{
+    float: left;
+    width: 50%;
+  } 
+  
+  
+  #div_manage_institute_content_box_btn{
+    background-color: #3f3a3a;
+    height: 35px;
+    width: 100%;
+    vertical-align: middle;
+    
+  }
+  
+  /*vertical-center ==> this is currenlty not in use*/
+  .vertical-center {
+    margin: 0;
+    position: relative;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+  
+  
+  
+  
+  
+  
+</style>
+
+
+
+
+
+
+
+

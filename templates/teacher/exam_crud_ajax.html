@@ -1,0 +1,842 @@
+<script>
+//---------------All Event Based JQuery -----------
+//------below event will be fired when page gets loading-----
+$(document).ready(function () {
+  // $("#msg_teacher_exam_crud").show();
+  // $("#msg_teacher_exam_crud").text("Create / Update / Delete / Copy / Release & Re-Release  Examinations !!!");                    
+  // document.getElementById("tbl_exam_crud_input").style.display="none";
+  // disableAllButtons();
+  // $("#btn_exam_create").prop('disabled', false); 
+
+});
+
+//-----below event will be fired when any input gets changed
+$("input").change(function(){
+  $("#btn_exam_save").attr('disabled', false);  
+  
+});
+
+//-----below event will be fired when select box LEVEL gets changed
+$("#select_exam_level").change(function(){
+  $("#btn_exam_save").attr('disabled', false);  
+  
+});
+
+//-----below event will be fired when select SUBJECT box gets changed
+$("#select_exam_subject").change(function(){
+  $("#btn_exam_save").attr('disabled', false);  
+  
+});
+
+//------perform activity when question question button is hit; populate data of question screen
+  $("#btn_exam_questions").click(function(){            
+    //disable other elements
+    $("#div_teacher_exam_check").hide();
+    $("#div_teacher_exam_crud").hide();
+    $("#div_teacher_exam_released").hide();
+    $("#div_teacher_dashboard").hide();
+    $("#div_teacher_exam_question").show();
+    //disable all not needed buttons 
+    $("#btn_dashboard").prop('disabled', true);
+    $("#btn_exam_release").prop('disabled', true);
+    $("#btn_exam_crud").prop('disabled', true);
+    $("#btn_exam_check").prop('disabled', true);
+    
+    ///initialize screen
+    vExamCode=$("#txt_bx_exam_id").val();
+    vExamStartDate=$("#date_exam_start_date").val();
+    vExamEndDate=$("#date_exam_end_date").val();
+    vExamDuration=$("#txt_bx_exam_duration").val();
+    vExamTotalQuestions=$("#txt_bx_exam_no_of_questions").val();
+    vExamFullMarks=$("#txt_bx_exam_full_marks").val();
+    vExamLevel=$('#select_exam_level :selected').text();
+    vExamLevelCode=$('#select_exam_level :selected').val();
+    vExamSubject=$('#select_exam_subject :selected').text();
+    vExamSubjectCode=$('#select_exam_subject :selected').val();
+    vExamIsReleased=$("#txt_bx_exam_is_released").val();  
+    vExamSourceCode=$("#hdn_exam_source_code").val();  
+    vExamSourceDesc=$("#txt_bx_exam_source").val();  
+    $("#lbl_exam_code").empty();
+    $("#lbl_exam_code").append("Exam UID:");
+    $("#lbl_exam_code").append(vExamCode);
+    $("#hdn_exam_code").val(vExamCode);
+    // 
+    $("#lbl_exam_start_date").empty();
+    $("#lbl_exam_start_date").append("Start Date:");
+    $("#lbl_exam_start_date").append(vExamStartDate);
+    //
+    $("#lbl_exam_end_date").empty();
+    $("#lbl_exam_end_date").append("End Date:");
+    $("#lbl_exam_end_date").append(vExamEndDate);
+    //
+    
+    $("#lbl_exam_total_questions").empty();
+    $("#lbl_exam_total_questions").append("Total Questions:");
+    $("#lbl_exam_total_questions").append(vExamTotalQuestions);
+    //
+    $("#lbl_exam_full_marks").empty();
+    $("#lbl_exam_full_marks").append("Full Marks:");
+    $("#lbl_exam_full_marks").append(vExamFullMarks);
+    //
+    $("#lbl_exam_duration").empty();
+    $("#lbl_exam_duration").append("Duration (Mins):");
+    $("#lbl_exam_duration").append(vExamDuration);
+    //
+    $("#lbl_exam_level").empty();
+    $("#lbl_exam_level").append("Level:");
+    $("#lbl_exam_level").append(vExamLevel);
+    $("#hdn_exam_level_code").val(vExamLevelCode);
+    
+    //
+    $("#lbl_exam_subject").empty();
+    $("#lbl_exam_subject").append("Subject:");
+    $("#lbl_exam_subject").append(vExamSubject);
+    $("#hdn_exam_subject_code").val(vExamSubjectCode);
+    
+    //
+    $("#lbl_exam_is_released").empty();
+    $("#lbl_exam_is_released").append("Is Exam Released?:");
+    $("#lbl_exam_is_released").append(vExamIsReleased);
+    $("#hdn_exam_is_released").val(vExamIsReleased);
+    //
+    $("#lbl_exam_source_desc").empty();
+    $("#lbl_exam_source_desc").append("Exam Source:");
+    $("#lbl_exam_source_desc").append(vExamSourceDesc);
+    $("#hdn_exam_source_code").val(vExamSourceCode);                
+    //
+    if(vExamTotalQuestions>0){
+      populateQuestionId(vExamCode); // this is defined in exam_question_ajax.html
+    }    
+    document.getElementById("div_teacher_exam_Q_content_box_content_col1").style.display="none";
+    document.getElementById("div_teacher_exam_Q_content_box_content_col2").style.display="none";        
+    $("#teacher_msg").text("Examination-->Question");                             
+    disableQuestionAllButtons();    // this is defined in exam_question_ajax.html
+    disableQuestionInputElements(); // this is defined in exam_question_ajax.html
+    if((vExamIsReleased=="NO" && vExamSourceCode=="FRS")||(vExamIsReleased=="NO" && vExamSourceCode=="CPY")){
+      $("#btn_exam_Q_create").prop('disabled', false); 
+      
+           
+    }
+
+    $("#btn_exam_Q_create").prop('disabled', false); ///added for testing purpose; when no exam in list then Question button is disable.
+
+      
+  }); 
+  
+
+  //----------fire event when Delete button is hit----
+  $("#btn_exam_delete").click(function(){
+    vIsExamReleased=$("#txt_bx_exam_is_released").val();
+    
+    if(vIsExamReleased=="YES"){
+      $("#msg_teacher_exam_crud").show();
+      $("#msg_teacher_exam_crud").text("Released Exams Can't be deleted !!!");  
+                
+    }else{
+      var r = confirm("Are Your Sure To Delete?");
+      if (r == true) {
+        event.preventDefault();
+        let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+        let vUID=$("#txt_bx_exam_id").val();  
+        DataSendToServer={ 
+          csrfmiddlewaretoken:vCsrfToken,
+          hUID:vUID,  
+        };
+        
+        $.ajax({url:"{% url 'delete_exam' %}",
+            method:"POST",
+            data:DataSendToServer,
+            dataType:"json",
+            success:function(response){
+                vSuccess=response['status'];
+                vSuccessDesc=response['status_desc'];
+                vExamUID= response['ExamUID']; 
+                if(vSuccess==1){
+                  
+                  $("#txt_bx_exam_search_id").val(vUID);
+                  deleteListItem('txt_bx_exam_search_id','ul_content_exam');
+                  $("#txt_bx_exam_search_id").val("");
+
+                  $("#msg_teacher_exam_crud").show();
+                  $("#msg_teacher_exam_crud").text("Exam UID("+vExamUID+") Deleted Successfully !!!");  
+                  //delete data from lst_bx_exam_id  
+                  refreshExamEntryForm();
+                  setTimeout(function(){								
+                    $("#msg_teacher_exam_crud").hide();
+                  }, 5000);              
+
+                }else if(vSuccess==0){
+                  
+                  $("#msg_teacher_exam_crud").show();
+                  $("#msg_teacher_exam_crud").text("Exam UID("+vExamUID+") " +vSuccessDesc);  
+                  //delete data from lst_bx_exam_id  
+                  refreshExamEntryForm();
+                  setTimeout(function(){								
+                    $("#msg_teacher_exam_crud").hide();
+                  }, 5000);              
+
+                }  else{
+                  console.log("Ajax Call Failed !!!");
+                }
+                    
+              },
+            
+        });
+
+      } else {
+        //Do nothing in case of cancel
+      }
+    } 
+    
+    
+
+  });  
+  
+  
+  
+  //---------fire event when Create Button is hit-----
+  $("#btn_exam_create").click(function(){                       
+    document.getElementById("tbl_exam_crud_input").style.display="block";
+    disableExamAllButtons();
+    enableExamInputElements();
+    refreshExamEntryForm();
+    $("#msg_teacher_exam_crud").hide();
+    $("#msg_teacher_exam_crud").text(""); 
+    $("#btn_exam_create").prop('disabled', false);
+    $("#btn_exam_save").prop('disabled', false);    
+    
+      
+  });  
+
+  
+
+  // -----------SAVING EXAM DATA in databse when SAVE button is hit
+  $("#btn_exam_save").click(function(){
+    event.preventDefault();
+    
+    let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+    let vUID=$("#txt_bx_exam_id").val();
+    
+	  let vStartDate=$("#date_exam_start_date").val();
+    let vEndDate=$("#date_exam_end_date").val();
+    let vDuration=$("#txt_bx_exam_duration").val();
+    let vLevel=$("#select_exam_level").val();
+    let vSection=$("#select_exam_section").val();
+    let vSubject=$("#select_exam_subject").val();
+    var vCurrentDateTime = new Date();
+    var vTempStartDate=new Date(vStartDate);
+    var vTempEndDate=new Date(vStartDate);
+    var vSource=$("#txt_bx_exam_source").val();
+    vExamType=$("input[type='radio'][name='rdo_name_exam_type']:checked").val();    
+    if(vExamType=="1"){
+      vExamType="LS";
+    }else if(vExamType=="2"){
+      vExamType="SS";
+    }else{
+      vExamType=="NA";
+    }
+    $("#msg_teacher_exam_crud").show();
+    
+    if(vStartDate==""){
+      $("#msg_teacher_exam_crud").text("Select Exam Start Date !!!");
+      
+    }else if(vTempStartDate<vCurrentDateTime){
+      $("#msg_teacher_exam_crud").text("Start Date Must Be Greater Than Current Date & Time !!!");
+    }else if(vEndDate==""){
+      $("#msg_teacher_exam_crud").text("Select Exam End Date !!!");      
+    }else if(vTempEndDate<vCurrentDateTime){
+      $("#msg_teacher_exam_crud").text("End Date Must Be Greater Than Current Date & Time !!!");
+    }else if(vEndDate<vStartDate){
+      $("#msg_teacher_exam_crud").text("Exam End Date Must Be Greater Than Start Date !!!");  
+    }
+    else if(vDuration==0){
+      $("#msg_teacher_exam_crud").text("Enter Exam Duration !!!");      
+    }else if(vLevel=="none"){
+      $("#msg_teacher_exam_crud").text("Select Exam Level !!!");      
+    }else if(vSection=="none"){
+      $("#msg_teacher_exam_crud").text("Select Exam Section !!!");      
+    }else if(vSubject=="none"){
+      $("#msg_teacher_exam_crud").text("Select Exam Subject !!!");      
+    }
+
+    else{
+        $("#msg_teacher_exam_crud").hide();
+
+        DataSendToServer={ 
+        csrfmiddlewaretoken:vCsrfToken,
+        hUID:vUID,  
+        hStartDate:vStartDate,
+        hEndDate:vEndDate,
+        hDuration:vDuration,
+        hLevel:vLevel,
+        hSection:vSection,
+        hSubject:vSubject,
+        hType:vExamType,
+        //hSource:vSource,//this is not required as it is hardcoded in view while inserting the record    
+      };
+      
+      $.ajax({url:"{% url 'save_exam' %}",
+          method:"POST",
+          data:DataSendToServer,
+          dataType:"json",
+          success:function(response){
+              vSuccess=response['status'];
+              vExamUID= response['ExamUID']; 
+              if(vSuccess==1){
+                $("#btn_exam_questions").prop('disabled', false);  
+                $("#msg_teacher_exam_crud").show();
+                $("#msg_teacher_exam_crud").text("Exam UID("+vExamUID+") Saved Successfully !!!");    
+                $("#txt_bx_exam_id").val(vExamUID);
+                document.getElementById("btn_exam_delete").disabled=false;
+                if(vUID=="20991231E9999"){
+                  vSLNO=vSLNO+1;
+                  addItemInUL("ul_content_exam","getExamDetails",vExamUID,vSLNO);
+                }
+                
+                setTimeout(function(){								
+								  $("#msg_teacher_exam_crud").hide();
+							  }, 5000);              
+
+              } else{
+                console.log("Ajax Call Failed !!!");
+              }
+                  
+            },
+          
+      });
+
+    }	
+             
+  });
+  
+
+  //----fire event when start date changes----
+  $("#date_exam_start_date").change(function(){     
+    blankEndDateTime();
+    
+  });
+  
+  //----fire event when duration changes; event will be fired when loss focus----
+  $("#txt_bx_exam_duration").change(function(){    
+    vExamType=$("input[type='radio'][name='rdo_name_exam_type']:checked").val();    
+    if(vExamType=="2"){
+      calulateEndDateAndTime();
+    }
+  }); 
+
+  //----fire event when exam type option change;   
+  $('input[type=radio][name=rdo_name_exam_type]').change(function() {  
+    vExamType=$("input[type='radio'][name='rdo_name_exam_type']:checked").val();
+    blankEndDateTime();
+    if(vExamType=="1"){
+      //$('input:radio[name="rdo_name_exam_type"]').filter('[value="1"]').attr('checked', true); // default     
+      $("#date_exam_end_date").prop('disabled', false);
+      
+    }else{
+      
+      $("#date_exam_end_date").prop('disabled', true);
+            
+    }
+  
+  });
+
+  //-----fire event when release button is hit---------
+  document.getElementById("btn_exam_release").addEventListener("click",function(){
+    vExamIsReleased=$("#txt_bx_exam_is_released").val();
+    if(vExamIsReleased=="NO"){    
+      document.getElementById("div_teacher_exam_released").style.display="block";
+      document.getElementById("div_teacher_dashboard").style.display="none";	  
+      document.getElementById("div_teacher_exam_crud").style.display="none";
+      document.getElementById("div_teacher_exam_check").style.display="none";
+      $("#teacher_msg").text("Examination-->Relesae Examination");
+      //populate exam release popup information 
+      vExamCode=$("#txt_bx_exam_id").val();
+      vExamStartDate=$("#date_exam_start_date").val();
+      vExamEndDate=$("#date_exam_end_date").val();
+      vExamDuration=$("#txt_bx_exam_duration").val();
+      vExamTotalQuestions=$("#txt_bx_exam_no_of_questions").val();
+      vExamFullMarks=$("#txt_bx_exam_full_marks").val();
+      vExamLevel=$('#select_exam_level :selected').text();
+      vExamLevelCode=$('#select_exam_level :selected').val();
+      vExamSection=$('#select_exam_section :selected').text();
+      vExamSectionCode=$('#select_exam_section :selected').val();
+      vExamSubject=$('#select_exam_subject :selected').text();
+      vExamSubjectCode=$('#select_exam_subject :selected').val();
+            
+      $("#release_info_exam_code").text(vExamCode);
+      $("#release_info_exam_start").text(vExamStartDate);
+      $("#release_info_exam_duration").text(vExamDuration);
+      $("#release_info_exam_marks").text(vExamFullMarks);
+      $("#release_info_exam_questions").text(vExamTotalQuestions);
+      $("#release_info_exam_level").text(vExamLevel);
+      $("#release_info_exam_section").text(vExamSection);
+      $("#release_info_exam_subject").text(vExamSubject);
+      populateQuestionInfo(vExamCode);// this funciton populates the question information on release screen
+    }else{
+      alert("This Exam is already released !!!");
+    }  
+
+  });
+
+  //-----fire event when close button is hit---------
+  document.getElementById("btn_exam_close").addEventListener("click",function(){
+    document.getElementById("div_teacher_dashboard").style.display="block";
+    document.getElementById("div_teacher_exam_released").style.display="none";
+    document.getElementById("div_teacher_exam_crud").style.display="none";
+    document.getElementById("div_teacher_exam_check").style.display="none";
+    $("#teacher_msg").text("Dashboard");
+
+  });
+
+  
+
+  //-----fire event when re-release button is hit---------
+  document.getElementById("btn_exam_re_release").addEventListener("click",function(){  
+    // $("#teacher_msg").text("Dashboard");
+    vEUID=$("#txt_bx_exam_id").val();
+    let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+    vDataSendToServer={ 
+      csrfmiddlewaretoken:vCsrfToken,
+      hEUID:vEUID,
+    };
+    
+    $.ajax({url:"{% url 're_release_exam' %}",
+				method:"POST",
+				data:vDataSendToServer,
+				dataType:"json",
+				success:function(response){
+						vSuccess=response['status'];							
+						if(vSuccess==1){							                            
+              vData=response.djExamUID   
+              vExamUID= response['djExamUIDList'];  
+              //alert("disable re-release button once its code is completed");
+              $("#btn_exam_re_release").prop('disabled',true);    
+              $("#btn_exam_create_copy").prop('disabled',true);        
+              $("#msg_teacher_exam_crud").show();
+              $("#msg_teacher_exam_crud").text("Exam UID("+vEUID+") Is Re-Released As ("+vExamUID[0]['uid']+")!!!");   
+              setTimeout(function(){								
+                    $("#msg_teacher_exam_crud").hide();
+                  }, 5000);               
+              //vSourceCode=ExamUID[0]['source_code'] 
+              vSourceDesc=vExamUID[0]['source_desc']               
+              vIsExamReleased=vExamUID[0]['is_released']  
+              vExamType=vExamUID[0]['type_code'] 
+              $("#txt_bx_exam_id").val(vExamUID[0]['uid']);     
+              $("#txt_bx_exam_source").val(vSourceDesc);  
+              $("#txt_bx_exam_is_released").val(vIsExamReleased);  
+              if(vExamType=="LS"){
+                $("#rdo_id_exam_type_long").prop('checked',true)
+              }else if(vExamType=="SS"){
+                $("#rdo_id_exam_type_short").prop('checked',true)
+              }else{
+                //DO NOTHING
+              }
+              //----WORK HERE - get value of exam type and disable enable accordingly 
+              enableExamReReleaseElements();
+              //vTypeCode=ExamUID[0]['type_code'] 
+              //vTypeDesc=ExamUID[0]['type_desc'] 
+              //vNoOfQuestions=$("#txt_bx_exam_no_of_questions").val();
+              //vFullMarks=$("#txt_bx_exam_full_marks").val();            
+              //$("#txt_bx_exam_no_of_questions").val(vNoOfQuestions);  
+              //$("#txt_bx_exam_full_marks").val(vFullMarks);
+
+            } else{
+							console.log("Ajax Call Failed !!!");
+						}
+								
+					},				
+    });	
+
+
+
+  });
+
+
+
+  //-----fire event when copy button is hit---------
+  document.getElementById("btn_exam_create_copy").addEventListener("click",function(){    
+    // $("#teacher_msg").text("Dashboard");
+    vEUID=$("#txt_bx_exam_id").val();
+    let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+    vDataSendToServer={ 
+      csrfmiddlewaretoken:vCsrfToken,
+      hEUID:vEUID,
+    };
+    
+    $.ajax({url:"{% url 'create_exam_copy' %}",
+				method:"POST",
+				data:vDataSendToServer,
+				dataType:"json",
+				success:function(response){
+						vSuccess=response['status'];							
+						if(vSuccess==1){							                            
+              vData=response.djExamUID   
+              vExamUID= response['djExamUIDList'];  
+              //alert("disable re-release button once its code is completed");
+              //$("#btn_exam_re_release").prop('disabled',true);    
+              $("#btn_exam_create_copy").prop('disabled',true);        
+              $("#msg_teacher_exam_crud").show();
+              $("#msg_teacher_exam_crud").text("Copy Of Exam UID("+vEUID+") Is Created Successfully As ("+vExamUID[0]['uid']+")!!!");    
+              
+              setTimeout(function(){								
+                    $("#msg_teacher_exam_crud").hide();
+                  }, 5000);               
+              //vSourceCode=ExamUID[0]['source_code'] 
+              vSourceDesc=vExamUID[0]['source_desc']               
+              vIsExamReleased=vExamUID[0]['is_released']  
+              vExamType=vExamUID[0]['type_code'] 
+              $("#txt_bx_exam_id").val(vExamUID[0]['uid']);     
+              $("#txt_bx_exam_source").val(vSourceDesc);  
+              $("#txt_bx_exam_is_released").val(vIsExamReleased);  
+              if(vExamType=="LS"){
+                $("#rdo_id_exam_type_long").prop('checked',true)
+              }else if(vExamType=="SS"){
+                $("#rdo_id_exam_type_short").prop('checked',true)
+              }else{
+                //DO NOTHING
+              }
+              //----WORK HERE - get value of exam type and disable enable accordingly 
+              // enableExamReReleaseElements(); // work here 
+              //vTypeCode=ExamUID[0]['type_code'] 
+              //vTypeDesc=ExamUID[0]['type_desc'] 
+              //vNoOfQuestions=$("#txt_bx_exam_no_of_questions").val();
+              //vFullMarks=$("#txt_bx_exam_full_marks").val();            
+              //$("#txt_bx_exam_no_of_questions").val(vNoOfQuestions);  
+              //$("#txt_bx_exam_full_marks").val(vFullMarks);
+
+            } else{
+							console.log("Ajax Call Failed !!!");
+						}
+								
+					},				
+    });	
+
+  
+
+  });  
+
+///////////////////////////////////////////////////
+
+
+  //-------Function definition which are used in all events (Task Achievement Functions)------    
+
+  //----------------Refresh form
+  function refreshExamEntryForm(){
+      $("#txt_bx_exam_id").val("20991231E9999");
+      $("#date_exam_start_date").val(Date()); // assign blank values 
+      $("#date_exam_end_date").val(Date()); // assign blank values 
+      $("#txt_bx_exam_duration").val(0);
+      $('#select_exam_level option[value="none"]').attr('selected', true);
+      $('#select_exam_subject option[value="none"]').attr('selected', true);
+      document.getElementById('date_exam_start_date').value = GetTodayDate(); // this is defined in templates/home/common_functions.html
+      //document.getElementById('date_exam_end_date').value = GetTodayDate();
+      document.getElementById("btn_exam_delete").disabled=true;
+      document.getElementById("select_exam_level").value="none";
+      document.getElementById("select_exam_subject").value="none";
+      document.getElementById("txt_bx_exam_search_id").value="";
+      //$('input:radio[name="rdo_name_exam_type"]').filter('[value="1"]').attr('checked', true);
+      $("#rdo_id_exam_type_long").prop('checked',true)
+      $("#txt_bx_exam_source").val("FRESH EXAM");
+      $("#txt_bx_exam_is_released").val("NO");
+      
+  }
+    
+//---------------populate exam id in search box =====(START)---
+function populateExamId(){  
+  let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+  mydata={ csrfmiddlewaretoken:vCsrfToken,
+            hUID:"",// initially when form is loading then we do not have Exam ID; but when user search from search box then we will have exam id  
+  };
+  vSLNO=0; 
+  removeItemsFromUnOrderedList("ul_content_exam");
+  $.ajax({url:"{% url 'populate_exam' %}",
+				method:"POST",
+				data:mydata,
+				dataType:"json",
+				success:function(response){
+						vSuccess=response['status'];							
+						if(vSuccess==1){							              
+              vData=response.djExamList;
+                                         
+              for (i=0;i<vData.length;i++){  
+                  vSLNO=i+1;
+                  addItemInUL("ul_content_exam","getExamDetails",vData[i].uid,vSLNO);//this is defined in common_function.html
+
+                  //console.log(vData[i].quid);
+                      
+              }
+
+						} else{
+							console.log("Ajax Call Failed !!!");
+						}
+								
+					},
+				
+
+  });	
+  
+}
+
+
+  function populateQuestionInfo(pEUID){ // this funciton populates the question information on release screen
+    let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+    vDataSendToServer={ 
+      csrfmiddlewaretoken:vCsrfToken,
+      hEUID:pEUID,
+    };
+    $.ajax({url:"{% url 'get_exam_specific_all_question_data' %}",
+				method:"POST",
+				data:vDataSendToServer,
+				dataType:"json",
+				success:function(response){
+						vSuccess=response['status'];							
+						if(vSuccess==1){							                            
+              vData=response.djQuestionDataList               
+              var vTableEl = document.getElementById("tbl_exam_release_info_question");                       
+              $("#tbl_exam_release_info_question > tbody").empty();
+              for (i=0;i<vData.length;i++){ 
+              //alert("for loop "+vData[i][0]);  //['quid']+"  "+vData[i]['particulars']+"  "+vData[i]['marks']
+                vTableEl.innerHTML +=` 
+                <tr style="border: 1px solid rgba(141, 137, 137, 0.692);">
+                  <td>
+                    <span>#${i+1}|${vData[i][0]}</span>        
+                  </td>
+                  <td>
+                    <span>${vData[i][1]}</span> 
+                  </td>
+                  <td style="text-align: center; vertical-align: middle;">
+                    <span>${vData[i][2]}</span> 
+                  </td>
+                </tr>  
+              `;
+              }
+              
+              vTableEl.innerHTML +=` 
+                <tr style="border: 1px solid rgba(141, 137, 137, 0.692); font-weight:bold">
+                  <td>
+                    <span class="impact">Disclaimer</span>       
+                  </td>
+                  <td>                  
+                    <span style="color:red">
+                    Make Sure You Have Verified All The Questions 
+                    <br>
+                    Once exam is released then you cannot edit the question.
+                    </span>  
+                </td>
+                  <td style="text-align: center; vertical-align: middle;">
+                    <input type="checkbox" value="0" id="exam_release_disclaimer" name="exam_release_disclaimer" onclick="proceedExamRelease(this)">
+                  </td>
+                </tr>  
+              `;
+              $("#exam_release_disclaimer").prop("checked", false);
+              $("#btn_exam_release_proceed").prop('disabled',true);
+            } else{
+							console.log("Ajax Call Failed !!!");
+						}
+								
+					},				
+    });	
+	
+  }
+
+  function getExamDetails(pEUID){
+    document.getElementById("tbl_exam_crud_input").style.display="block";
+    disableExamAllButtons();
+    disableExamInputElements();
+    $("#btn_exam_questions").prop('disabled', false); 
+    $("#btn_exam_create").prop('disabled', false); 
+    $("#msg_teacher_exam_crud").hide();
+    let vCsrfToken=$("input[name=csrfmiddlewaretoken]").val();
+    DataSendToServer={ 
+        csrfmiddlewaretoken:vCsrfToken,
+        hUID:pEUID,  
+    };
+    $.ajax({url:"{% url 'get_exam_data' %}",
+        method:"POST",
+        data:DataSendToServer,
+        dataType:"json",
+        success:function(response){
+            vSuccess=response['status'];            
+            if(vSuccess==1){                 
+                $("#txt_bx_exam_id").val(pEUID);
+                $("#date_exam_start_date").val("");             
+                $("#date_exam_end_date").val(""); 
+                vData=response.djExam                    
+                vExamSourceCode=vData[0].source_code;
+                vIsExamReleased=vData[0].is_released;  
+                vTotalQuestions=response.djTotalQuestions;
+                vTotalMarks=response.djTotalMarks; 
+                /////////////
+                vDuration=vData[0].duration;
+                vStartDate=vData[0].start_date.substring(0,16);
+                vEndDate=vData[0].end_date.substring(0,16);
+                vExamLevelCode=vData[0].level_code;
+                vExamSectionCode=vData[0].section_code;
+                vExamSubjectCode=vData[0].subject_code;                 
+                vExamType=vData[0].type_code;
+                vExamSourceDesc=vData[0].source_desc;
+                ////
+                var vCurrentDateTime = new Date();
+                var vTempEndDateAndTime= new Date(vEndDate);
+                //Note:All buttons and Input are disabled when this function starts
+                if(vExamSourceCode=="FRS" && vIsExamReleased=="NO" && vTotalQuestions>0){
+                  $("#btn_exam_release").prop('disabled',false);
+                  $("#btn_exam_delete").prop('disabled', false);  
+                  $("#select_exam_section").attr("disabled",false);   
+                }else if(vExamSourceCode=="FRS" && vIsExamReleased=="NO" && vTotalQuestions<=0){
+                  enableExamInputElements();
+                  $("#btn_exam_release").prop('disabled',true);
+                  //Disable Release Button; Disable Re-Release; Disable Copy
+                  //above buttons are disabled at starting of this fucntion by calling disableExamAllButtons();
+                }else if(vExamSourceCode=="FRS" && vIsExamReleased=="YES" && vTotalQuestions>0 && vCurrentDateTime>vTempEndDateAndTime){                                        
+                    $("#btn_exam_re_release").prop('disabled',false);
+                    $("#btn_exam_create_copy").prop('disabled',false);                                     
+                   
+                }else if(vExamSourceCode=="FRS" && vIsExamReleased=="YES" && vTotalQuestions<=0){
+                  //this scenario will not come becasue an exam can only be released when it has questions; 
+                }else if(vExamSourceCode=="RER" && vIsExamReleased=="YES" && vTotalQuestions>0 && vCurrentDateTime>vTempEndDateAndTime){                                         
+                    $("#btn_exam_re_release").prop('disabled',false);
+                    $("#btn_exam_create_copy").prop('disabled',false);                                       
+                }else if(vExamSourceCode=="RER" && vIsExamReleased=="NO" && vTotalQuestions>0){
+                  $("#btn_exam_release").prop('disabled',false);
+                  $("#btn_exam_delete").prop('disabled', false);
+                  enableExamReReleaseElements();
+                }else if(vExamSourceCode=="CPY" && vIsExamReleased=="NO" && vTotalQuestions>0){
+                  $("#btn_exam_release").prop('disabled',false);
+                  $("#btn_exam_delete").prop('disabled', false);
+                  enableExamCopyElements();
+                }else if(vExamSourceCode=="CPY" && vIsExamReleased=="NO" && vTotalQuestions<=0){                  
+                  $("#btn_exam_delete").prop('disabled', false);
+                  enableExamCopyElements();
+                }else if(vExamSourceCode=="CPY" && vIsExamReleased=="YES" && vTotalQuestions>0 && vCurrentDateTime>vTempEndDateAndTime){
+                  $("#btn_exam_re_release").prop('disabled',false);
+                  $("#btn_exam_create_copy").prop('disabled',false); 
+                }else {
+                  //Do nothing
+                }
+                $("#txt_bx_exam_duration").val(vDuration);
+                $("#date_exam_start_date").val(vStartDate);             
+                $("#date_exam_end_date").val(vEndDate);                   
+                $("#txt_bx_exam_source").val(vExamSourceDesc);                                     
+                $("#txt_bx_exam_is_released").val(vIsExamReleased);
+                $("#hdn_exam_source_code").val(vExamSourceCode);
+                if(vExamType=="LS"){
+                  $("#rdo_id_exam_type_long").prop('checked',true)
+                }else if(vExamType=="SS"){
+                  $("#rdo_id_exam_type_short").prop('checked',true)
+                }else{
+                  //DO NOTHING
+                }                                
+                $('#select_exam_level option[value='+vExamLevelCode+']').attr('selected', true);
+                $('#select_exam_section option[value='+vExamSectionCode+']').attr('selected', true);
+                $('#select_exam_subject option[value="'+vExamSubjectCode+'"]').attr('selected', true);
+                document.getElementById("select_exam_level").value=vExamLevelCode;
+                document.getElementById("select_exam_section").value=vExamSectionCode;
+                document.getElementById("select_exam_subject").value=vExamSubjectCode;                            
+                // djTotalQuestions=response.djTotalQuestions;
+                // djTotalMarks=response.djTotalMarks;                                    
+                $("#txt_bx_exam_no_of_questions").val(vTotalQuestions);
+                $("#txt_bx_exam_full_marks").val(vTotalMarks);
+                //disable level and subject drop down if exam has questions
+            } else{
+                console.log("Ajax Call Failed !!!");
+            }
+                
+            },
+        
+    });
+
+        
+        setTimeout(function(){
+          displayStartAndEndTime();
+        }, 100);
+
+
+
+    }
+    
+  function calulateEndDateAndTime(){
+    vStartDateTime=new Date($("#date_exam_start_date").val());
+    vDuration=$("#txt_bx_exam_duration").val();//duration cannot be more than 600 -- validate in in exam screen
+    vStartTime=('0' + vStartDateTime.getHours()).slice(-2)+":"+('0' + vStartDateTime.getMinutes()).slice(-2);
+    $("#txt_bx_exam_start_time").val(vStartTime);  
+    vEndDateTime=getEndDate(vStartDateTime,vDuration);
+    $("#date_exam_end_date").val(vEndDateTime);    
+    vEndDateTime=new Date(vEndDateTime);
+    vEndTime=('0' + vEndDateTime.getHours()).slice(-2)+":"+('0' + vEndDateTime.getMinutes()).slice(-2);
+    $("#txt_bx_exam_end_time").val(vEndTime);  
+    vExamType=$("input[type='radio'][name='rdo_name_exam_type']:checked").val();
+  }
+
+  function displayStartAndEndTime(){
+    vStartDateTime=new Date($("#date_exam_start_date").val());
+    vStartTime=('0' + vStartDateTime.getHours()).slice(-2)+":"+('0' + vStartDateTime.getMinutes()).slice(-2);
+    $("#txt_bx_exam_start_time").val(vStartTime);  
+    vEndDateTime=new Date($("#date_exam_end_date").val());    
+    vEndTime=('0' + vEndDateTime.getHours()).slice(-2)+":"+('0' + vEndDateTime.getMinutes()).slice(-2);
+    $("#txt_bx_exam_end_time").val(vEndTime);  
+    
+  }
+
+  function blankEndDateTime(){
+    $("#txt_bx_exam_duration").val("");
+    $("#date_exam_end_date").val("");
+    $("#txt_bx_exam_end_time").val("");
+  }
+
+
+  //-------Function definition which are used in all events (Disable/Enable Elements)------    
+  function disableExamInputElements(){
+    $("#rdo_id_exam_type_long").attr("disabled",true);
+    $("#rdo_id_exam_type_short").attr("disabled",true);	
+    $("#date_exam_start_date").attr('disabled', true); 
+    $("#txt_bx_exam_duration").attr('disabled', true); 	
+    $("#date_exam_end_date").attr("disabled",true);
+    $("#select_exam_level").attr("disabled",true);
+    $("#select_exam_section").attr("disabled",true);
+    $("#select_exam_subject").attr("disabled",true);
+  }
+  
+  function enableExamInputElements(){
+    $("#rdo_id_exam_type_long").attr("disabled",false);
+    $("#rdo_id_exam_type_short").attr("disabled",false);	
+    $("#date_exam_start_date").attr('disabled', false); 
+    $("#txt_bx_exam_duration").attr('disabled', false); 	
+    $("#date_exam_end_date").attr("disabled",false);
+    $("#select_exam_level").attr("disabled",false);
+    $("#select_exam_section").attr("disabled",false);
+    $("#select_exam_subject").attr("disabled",false);
+    
+  }	
+
+  function enableExamReReleaseElements(){
+    $("#date_exam_start_date").prop('disabled', false); 
+    $("#date_exam_end_date").prop("disabled",false);
+    $("#select_exam_section").prop("disabled",false);
+    
+  }
+
+  function enableExamCopyElements(){
+    $("#rdo_id_exam_type_long").attr("disabled",false);
+    $("#rdo_id_exam_type_short").attr("disabled",false);	
+    $("#date_exam_start_date").attr('disabled', false); 
+    $("#date_exam_end_date").attr("disabled",false);
+    $("#txt_bx_exam_duration").attr('disabled', false); 	
+    $("#select_exam_section").attr("disabled",false);
+    
+  }
+
+  
+  function disableExamAllButtons(){
+    $("#btn_exam_create_copy").prop('disabled', true); 
+    $("#btn_exam_re_release").prop('disabled', true); 
+    $("#btn_exam_release").prop('disabled', true); 
+    $("#btn_exam_questions").prop('disabled', true); 
+    $("#btn_exam_create").prop('disabled', true); 
+    $("#btn_exam_delete").prop('disabled', true); 
+    $("#btn_exam_save").prop('disabled', true); 
+
+  }
+
+
+</script>

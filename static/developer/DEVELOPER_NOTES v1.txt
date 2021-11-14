@@ -1,0 +1,825 @@
+
+
+To be Implemented
+======================
+1. Institute Registration  [Done]
+2. Individual Registration [DONE]
+3. Login    [Done] - 21-June-2021
+4. Teacher Console [OPEN]
+5. Student Console [OPEN]
+
+<table id="empTable" class="table table-bordered table-hover table-striped">
+
+from django.db import connection
+cursor=connection.cursor()
+cursor.execute('select a.uid as "quid",a.particulars as "particulars", b.marks as "marks" from teacher_question a ,teacher_question_marks b where a.uid=b.quid and b.euid="'+vEUID+'"')
+result=cursor.fetchall()  
+connection.close()
+return JsonResponse ({'status':1,'djQuestionDataList':result})  
+====================
+vQsUserData=User.objects.values('id','username','first_name','last_name','email','user_extra_info__contact1','user_extra_info__contact2','user_extra_info__profile_pic_path','user_extra_info__status' ).filter(username__icontains=vStr)
+vUserDataList=list(vQsUserData)             
+updated_date=datetime.today()
+$("#img_student_photo").attr("src", "/media/"+vUserProfilePicPath); 
+=================
+                            
+vSQL="""
+                    select 
+                        a.level_id,b.level,a.section_id,c.section 
+                    from  
+                        student_department a, home_ref_level b, home_ref_section c 
+                    where 1=1 
+                    and a.level_id=b.code
+                    and a.section_id=c.code
+                    and a.user_id= """+"'"+vStudentDbId+"'"
+            cursor=connection.cursor()
+            cursor.execute(vSQL)
+            vStudentLevelAndSectionList=cursor.fetchall()  
+            connection.close()
+            
+            print("BP====>",vStudentLevelAndSectionList)
+
+vQsExam=Exam.objects.values().filter(uid__exact=vEUID)
+        vExamList=list(vQsExam)  
+        #-------Insert New Valeus in Exam Table  
+        vLevelCode=vQsExam[0]['level_code']
+        vSubjectCode=vQsExam[0]['subject_code']
+        vInstituteDbId=vQsExam[0]['institute_id']
+        vUserDbId=vQsExam[0]['user_id']
+        vSectionCode=vQsExam[0]['section_code']
+        vTypeCode=vQsExam[0]['type_code']
+        vTypeDesc=vQsExam[0]['type_desc']
+======================================
+Current Work Item 
+==>
+1. delete question from question qscreen
+2. delete question/exam item from the list 
+=======================================
+
+====returning list=====
+vListOfAllowedSubject=Department.objects.filter(user_id__exact=vUserDbId).values_list('subject_id', flat=True).distinct()                         
+vQsSubject=Ref_Subject.objects.values().filter(code__in=vListOfAllowedSubject).order_by('subject') 
+
+====How to use not equal to ====
+vUserIdList=Institute_User.objects.filter(institute_id__exact=vLoginInstDbId,).exclude(user_id__exact=vLoginUserDbId).values_list('user_id', flat=True).distinct()                         
+
+
+
+#vIsInstituteAndProfileMatched=Institute_User.objects.filter(institute_id__exact=vUserInstitute , type__exact=vUserLoginProfile).count()
+                        
+
+                    
+
+#qInst=Institute.objects.get(institute_name=vInstituteName)
+#qInst=Institute.objects.filter(institute_name__icontains=vInstituteName).all()
+#qInst=Institute.objects.filter(institute_name__iexact=vInstituteName).get()
+#qInst=Institute.objects.filter(institute_name__iexact=vInstituteName).all()
+#qInst=Institute.objects.filter(institute_name=vInstituteName).count()
+
+#------How to use in condition in django model------
+# vQsQuestionData=Question.objects.values().filter(uid__in=
+# Question_Marks.objects.values('quid').filter(euid__exact=vEUID))
+# vQuestionDataList=list(vQsQuestionData)
+
+vQsQuestionData=Question.objects.values('uid','particulars').filter(uid__in=
+Question_Marks.objects.values('quid').filter(euid__exact=vEUID))                        
+vQuestionDataList=list(vQsQuestionData)
+
+------How to test if a check bock is checked or not 
+vFlag=$("#exam_release_disclaimer").is(":checked");
+
+#-----------------select specific column in django model--------------
+#vUserDbId,vInstDbId=get_user_institute_id(request)         
+# vQsQuestion=Question_Marks.objects.values('quid','marks').filter(euid__exact=vEUID).order_by('quid')         
+# vQuestionList=list(vQsQuestion) 
+# print("BP 1======>",vQuestionList)
+# for vCursor in vQuestionList:
+#     print("BP===>",vCursor['quid']) 
+#     print("BP===>",vCursor['marks'])   
+
+<td><button onclick="openExamAttendPortal(${pExamCode})">Attend</button></td>
+// var a = document.createElement("a");
+        // a.textContent = "Attend";//"#"+pSLNO+"|"+pUId;
+        // a.setAttribute('href', 'javascript:openExamAttendPortal("'+pExamCode+'")');    
+        
+        
+
+====disable all elements of a div
+$("#id *").('disabled', true)
+
+input[type="text"]:disabled {
+  background-color: rgb(222, 222, 222); 
+}
+
+
+print("BP===> get_question_data Called ....")    
+        print("BP===> Track Start\n")
+        
+
+        print("BP===> Track End")
+
+===>Query set API====>Student/School example
+https://www.youtube.com/watch?v=8VC62i_WI3w 
+https://www.youtube.com/watch?v=Bfgtp62VFeU  ==> AJAX CRUD
+
+{{field.institute_name|lower| capfirst}}
+
+no of login attempt ====write in view 
+attempt=request.session.get("attempt")
+request.session["attempt"]=attempt+1
+
+https://www.youtube.com/watch?v=ZTVolKEa2O4   [user registration]
+
+<form action ={% url 'reg' %}>
+
+
+
+
+/* -----------All text area and drop downbox-------------- */
+textarea,select
+{
+	color: #000000; 
+	font-family: Areal; 
+	font-size: 13px; 
+	background-color: #FFFFff;
+	border:1px solid #808000;
+}
+
+/* --------header color of tables----------------- */
+.panel{  
+    font-size: 16px;
+    font-family:Times New Roman;
+    font-weight:bold;
+    background-color: #CCE6FF;
+    color: #003399;
+    border:3px solid #CCE6FF;    
+}
+
+/* -------------help text------------ */
+.note{
+	font-size: 9px;
+    font-family:Arial;    
+    color: #999966;    
+}
+
+/* -----------table row decoration-------------- */
+.entry
+{  
+    background-color: #F1F1F1;
+    color: #000000;
+    border:3px solid #F1F1F1;
+    font-family: Palatino; 
+	font-size: 13px; 
+}
+.border{
+	border:2px solid LightSteelBlue;	
+	border:2px solid Orange;
+	border:2px solid SteelBlue;	
+}
+
+.background{
+	background-color:LightSteelBlue;
+	background-color:Orange;	
+	background-color:SteelBlue;	
+}
+
+
+/* ---------display red colored * for mandatory fields---------------- */
+.redstar
+{
+    font-weight:bold;
+    color:#FF0000;
+    font-family: Arial; 
+	font-size: 13px; 
+	
+}
+
+            
+
+            <script type="text/javascript">
+    // jQuery
+    $(document).ready( function () {
+      document.getElementById("hInst").val("hello")
+    });
+     
+    
+  </script>
+
+
+DIV VIDEO
+https://www.youtube.com/watch?v=r9XHdzmLC3g
+
+CSS postions: static(default), absolute, raltive, fixed, sticky, (code with harry)
+https://www.youtube.com/watch?v=MwGHiVl-gqk
+
+div display
+https://www.youtube.com/watch?v=F59AAHSkt0Q
+
+HTML WEB DEVELOPMENT
+https://www.youtube.com/watch?v=6mbwJ2xhgzM&list=PLu0W_9lII9agiCUZYRsvtGTXdxkzPyItg
+
+
+
+
+djngo - docs
+https://docs.djangoproject.com/
+
+image-CRUD
+https://www.youtube.com/watch?v=SYrIfiolb6s&list=PL_99hMDlL4d3IB7b0aD05xS4gcsbpqdCB&index=1
+
+file upload with name 
+https://www.youtube.com/watch?v=bbuKRunDh7g
+
+
+password reset using OTP from email
+https://www.youtube.com/watch?v=Kf60VD93AaQ
+
+
+image read
+https://stackoverflow.com/questions/56608460/how-to-display-the-uploaded-image-using-django-and-ajax/56617611
+
+
+
+
+
+
+==>ajax file upload 
+https://www.youtube.com/watch?v=g3h1OC3S5Lo
+
+
+
+
+
+
+
+        https://stackoverflow.com/questions/56033605/how-to-upload-photos-by-ajax-in-django
+
+
+        <input type="file" id="ava_up" name="ava_up" accept="image/png, image/jpeg, image/gif, image/jpg" />
+
+        https://gist.github.com/DerevenetsArtyom/cbb642f54d352b5a05def72d45f079fb
+
+        javascript email validation
+        https://www.youtube.com/watch?v=vPVx-zGFh0w
+
+=====>AUTO FORM SUBMIT=====
+<h1><input type="text" id="seconds" name="seconds"></h1>
+<input type="button" value="Click Me!" onclick="myFunction()">
+
+
+<script type="text/javascript">
+    window.onload=function(){ 
+        alert("I am Loaded");   
+        var counter = 20;
+        
+        var interval = setInterval(function() {
+            counter--;
+            //document.getElementById("#seconds").text(counter);
+            document. getElementById("seconds"). value=counter;
+            if (counter == 0) {
+                // redirect();
+                myFunction()
+                clearInterval(interval);
+            }
+        }, 1000);
+
+    };
+
+    function redirect() {
+        document.checkout_paypal.submit();
+    }
+    function myFunction() {
+        // alert("I am clicked");
+        // document.getElementById("seconds").text("counter");
+        document. getElementById("seconds"). value='$time';
+        document.getElementById("myForm").submit();
+    }
+
+</script>
+
+Drop down population on fly
+https://www.youtube.com/watch?v=U_qPp6vPl-g
+
+
+<body onload="myFunction()">
+
+
+ajax data fetch
+https://www.youtube.com/watch?v=tx7TnjZ_nVk
+
+
+====highlight drop down using javascript
+selectElement('leaveCode', '11')
+function selectElement(id, valueToSelect) {    
+    let element = document.getElementById(id);
+    element.value = valueToSelect;
+}
+
+
+//write java script code equivalent to below 
+      //<option value="none" selected disabled hidden>Select Level</option>    
+      //<option value="none" selected disabled hidden>Select Subject</option> 
+        
+
+django query 
+        def list_project(request):
+queryset = Project.objects.raw(
+    'SELECT scrum_rest_project.id, scrum_rest_project.name_project, scrum_rest_user1.user_name FROM scrum_rest_user1,scrum_rest_project WHERE scrum_rest_user1.id = scrum_rest_project.leader_id')
+queryset = serializers.serialize('json', queryset)
+return HttpResponse(queryset, content_type="application/json")
+
+how to update 
+approach 1
+MyModel.objects.filter(field1='Computer').update(field2='cool')
+
+aproach2
+q = MyModel.objects.get(pk=some_value)
+q.field1 = 'some value'
+q.save()
+
+aproach 3
+MyModel.objects.update_or_create(pk=some_value,defaults={'field1':'some value'})
+
+
+var x = document.createElement("INPUT");
+x.setAttribute("type", "date");
+
+
+<input type="button">
+<input type="checkbox">
+<input type="color">
+<input type="date">
+<input type="datetime-local">
+<input type="email">
+<input type="file">
+<input type="hidden">
+<input type="image">
+<input type="month">
+<input type="number">
+<input type="password">
+<input type="radio">
+<input type="range">
+<input type="reset">
+<input type="search">
+<input type="submit">
+<input type="tel">
+<input type="text">
+<input type="time">
+<input type="url">
+<input type="week">
+
+
+function myFunction() {
+  var d = new Date();
+  var x = document.getElementById("demo");
+  var h = addZero(d.getHours());
+  var m = addZero(d.getMinutes());
+  var s = addZero(d.getSeconds());
+  x.innerHTML = h + ":" + m + ":" + s;
+}
+
+var date = new Date(); //create date object var min_date = date.toISOString().slice(0,10); ////get current date specific part "2018-02-02"
+https://stackoverflow.com/questions/6982692/how-to-set-input-type-dates-default-value-to-today
+
+https://stackoverflow.com/questions/30166338/setting-value-of-datetime-local-from-date
+set date 
+
+new Date().getDate()          // Get the day as a number (1-31)
+new Date().getDay()           // Get the weekday as a number (0-6)
+new Date().getFullYear()      // Get the four digit year (yyyy)
+new Date().getHours()         // Get the hour (0-23)
+new Date().getMilliseconds()  // Get the milliseconds (0-999)
+new Date().getMinutes()       // Get the minutes (0-59)
+new Date().getMonth()         // Get the month (0-11)
+new Date().getSeconds()       // Get the seconds (0-59)
+new Date().getTime()          // Get the time (milliseconds since January 1, 1970)
+
+
+function getActualFullDate() {
+    var d = new Date();
+    var day = addZero(d.getDate());
+    var month = addZero(d.getMonth()+1);
+    var year = addZero(d.getFullYear());
+    var h = addZero(d.getHours());
+    var m = addZero(d.getMinutes());
+    var s = addZero(d.getSeconds());
+    return day + ". " + month + ". " + year + " (" + h + ":" + m + ")";
+}
+
+function getActualHour() {
+    var d = new Date();
+    var h = addZero(d.getHours());
+    var m = addZero(d.getMinutes());
+    var s = addZero(d.getSeconds());
+    return h + ":" + m + ":" + s;
+}
+
+function getActualDate() {
+    var d = new Date();
+    var day = addZero(d.getDate());
+    var month = addZero(d.getMonth()+1);
+    var year = addZero(d.getFullYear());
+    return day + ". " + month + ". " + year;
+}
+
+  function GetTodayDate() {
+   var tdate = new Date();
+   var dd = tdate.getDate(); //yields day
+   var MM = tdate.getMonth(); //yields month
+   var yyyy = tdate.getFullYear(); //yields year
+   var currentDate= dd + "-" +( MM+1) + "-" + yyyy;
+   return currentDate;
+}
+
+#vLevel=Ref_Level.objects.values().filter(code='A05').order_by('-level')  
+onchange="ShowExamData()"
+
+search box
+https://www.w3schools.com/howto/howto_js_filter_dropdown.asp
+
+javascript string match 
+let str = "The rain in SPAIN stays mainly in the plain"; 
+document.getElementById("demo").innerHTML = str.match(/main/gi);
+
+
+//--------------Exam Search Box ------
+  function filterFunction() {
+    var input, filter, ul, li, a, i;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    div = document.getElementById("myDropdown");
+    a = div.getElementsByTagName("a");
+    for (i = 0; i < a.length; i++) {
+      txtValue = a[i].textContent || a[i].innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        a[i].style.display = "";
+      } else {
+        a[i].style.display = "none";
+      }
+    }
+ }
+
+
+<=====backup codes for removing items from drop down (not working correctly,only for ref purpose) ======>
+vListBox=document.getElementById("lst_bx_exam_id");
+    vSearchBox=document.getElementById("txt_bx_exam_search_id");
+    vSearchText=vSearchBox.value.toUpperCase();
+    var vTempText = "";
+    var n=vListBox.length,j=0;
+    const vRemovingIndex = [];
+    for (var i = 0; i <n ; i++) {
+        vTempText = "";
+        vTempText = vListBox.options[i].value;
+        //txt = txt + "\n" + vListBox.options[i].text;
+        //vTempText=vTempText.toUpperCase();
+        vStringMatched=vTempText.match(vSearchText);
+        
+        if(vStringMatched==null){          
+          //$("#lst_bx_exam_id option[value="+vTempText+"]").remove();
+          //keep remove index 
+          vRemovingIndex[j++]=i;
+          //vListBox.remove(i);
+          
+        }else{
+          // do nothing
+        }
+    }
+
+
+    console.log("rmoving length="+vRemovingIndex.length);
+    for (var i = 0; i <vRemovingIndex.length ; i++) {
+      console.log("removing index ="+vRemovingIndex[i]);
+      vListBox.remove(vRemovingIndex[i]);
+    }
+
+    // let str = "The rain in SPAIN stays mainly in the plain"; 
+    // document.getElementById("demo").innerHTML = str.match(/main/gi);
+    // alert(txt);
+
+    combined_queryset = User.objects.filter(income__gte=5000) | User.objects.filter(income__isnull=True)
+ordered_queryset = combined_queryset.order_by('-income')
+
+
+https://www.encodedna.com/javascript/practice-ground/default.htm?pg=read_data_from_an_table_in_javascript
+
+https://www.encodedna.com/javascript/practice-ground/default.htm?pg=read_data_from_an_table_in_javascript
+
+
+Basic syntax is: $(selector).action()
+$(this).hide() - hides the current element.
+
+$("p").hide() - hides all <p> elements.
+
+$(".test").hide() - hides all elements with class="test".
+
+$("#test").hide() - hides the element with id="test".
+
+
+$(document).ready(function(){
+
+  // jQuery methods go here...
+
+});
+
+
+$("#btn1").click(function(){
+  $("#test1").text("Hello world!");
+});
+$("#btn2").click(function(){
+  $("#test2").html("<b>Hello world!</b>");
+});
+$("#btn3").click(function(){
+  $("#test3").val("Dolly Duck");
+});
+
+$("#btn1").click(function(){
+  alert("Value: " + $("#test").val());
+});
+
+$("button").click(function(){
+  alert($("#w3s").attr("href"));
+});
+
+
+$(document).ready(function(){
+  $("p").eq(1);
+});
+
+$(document).ready(function(){
+  $("div").last();
+});
+$(document).ready(function(){
+  $("div").first();
+});
+
+load text conten in dev from given file
+$(document).ready(function(){
+  $("button").click(function(){
+    $("#div1").load("demo_test.txt");
+  });
+});
+
+$("#div1").load("demo_test.txt #p1");
+
+$("button").click(function(){
+  $("#div1").load("demo_test.txt", function(responseTxt, statusTxt, xhr){
+    if(statusTxt == "success")
+      alert("External content loaded successfully!");
+    if(statusTxt == "error")
+      alert("Error: " + xhr.status + ": " + xhr.statusText);
+  });
+}); 
+
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myList li").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+
+search some value in table
+<===========================================>
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<h2>Filterable Table</h2>
+<p>Type something in the input field to search the table for first names, last names or emails:</p>  
+<input id="myInput" type="text" placeholder="Search..">
+<br><br>
+
+<table>
+  <thead>
+  <tr>
+    <th>Firstname1</th>
+    <th>Lastname</th>
+    <th>Email</th>
+  </tr>
+  </thead>
+  <tbody id="myTable">
+  <tr>
+    <td>John</td>
+    <td>Doe</td>
+    <td>john@example.com</td>
+  </tr>
+  <tr>
+    <td>Mary</td>
+    <td>Moe</td>
+    <td>mary@mail.com</td>
+  </tr>
+  <tr>
+    <td>July</td>
+    <td>Dooley</td>
+    <td>july@greatstuff.com</td>
+  </tr>
+  <tr>
+    <td>Anja</td>
+    <td>Ravendale</td>
+    <td>a_r@test.com</td>
+  </tr>
+   <tr>
+    <td>BALARAM </td>
+    <td>prAJApati</td>
+    <td>abp@gmail.com</td>
+  </tr>
+  </tbody>
+</table>
+  
+<p>Note that we start the search in tbody, to prevent filtering the table headers.</p>
+
+</body>
+</html>
+<=========================BP================================>
+
+// Or conventionaly, you could use:
+                //$('#lbl_exam_code').val(vUID);
+                
+                // $("#LabelID").text("some value");
+                // OR
+
+                // $("#LabelID").html("some value");
+
+button with image 
+<button id="close" class="closing" onClick="javascript:close_clip()"><img src="icons/close.png" /></button>
+
+
+image
+https://codepen.io/mobifreaks/pen/LIbca
+
+imgInp.onchange = evt => {
+  const [file] = imgInp.files
+  if (file) {
+    blah.src = URL.createObjectURL(file)
+  }
+}
+<form runat="server">
+  <input accept="image/*" type='file' id="imgInp" />
+  <img id="blah" src="#" alt="your image" />
+</form>
+
+
+0) Q Type (SMCQ, MMCQ, Input based)
+1) Question Text
+2) Q Image
+3) Options + Answer / Key
+4) Marks
+
+
+ // if(myTab.rows.length>1){   
+  //   $('input[name=radio_Q_type]').attr("disabled",true);
+  // }else{
+  //   $('input[name=radio_Q_type]').attr("disabled",false);  
+  // }
+
+===========
+var file_data = $('#sortpicture').prop('files')[0];   
+    var form_data = new FormData();                  
+    form_data.append('file', file_data);
+
+<==============Select a particular row from table==================>
+<table border='1' id="myTable">
+      <tr>
+      <th>Id</th>
+      <th>Product Name</th>
+      <th>Description</th>
+      <th>Action</th>
+      </tr>
+      <tr>
+      <td>1</td>
+      <td>Moto G</td>
+      <td>Moto G next generation smart phone</td>
+      <td><button class="btnSelect">Select</button></td>
+      </tr>
+      <tr>
+      <td>2</td>
+      <td>Iphone SE</td>
+      <td>Iphone laucnhed new phone bosy of 5s with feature of 6s</td>
+      <td><button class="btnSelect">Select</button></td>
+      </tr>
+      
+      <tr>
+      <td>3</td>
+      <td>Sony z3</td>
+      <td>This is waterproof, well designed, etc</td>
+      <td><button class="btnSelect">Select</button></td>
+      </tr>
+      
+      <tr>
+      <td>4</td>
+      <td>Moto X Play</td>
+      <td>Another class product from Moto G Family</td>
+      <td><button class="btnSelect">Select</button></td>
+      </tr>
+      
+      <tr>
+      <td>5</td>
+      <td>Samsung S7</td>
+      <td>Best smart phone, nice UI etc.</td>
+      <td><button class="btnSelect">Select</button></td>
+      </tr>
+      </table>
+$(document).ready(function(){
+
+  // code to read selected table row cell data (values).
+  $("#myTable").on('click','.btnSelect',function(){
+      // get the current row
+      var currentRow=$(this).closest("tr"); 
+      
+      var col1=currentRow.find("td:eq(0)").text(); // get current row 1st TD value
+      var col2=currentRow.find("td:eq(1)").text(); // get current row 2nd TD
+      var col3=currentRow.find("td:eq(2)").text(); // get current row 3rd TD
+      var data=col1+"\n"+col2+"\n"+col3;
+      
+      alert(data);
+  });
+});
+
+<==============Select a particular row from table   [END]  ==================>
+
+
+let vOptTag='A';
+  let vOptTagArray=[26];
+  let vOptIndex=0;
+
+for r in vOptArray:
+                    for c in r:
+                        print(c,end = " ")
+                    print()
+
+===========how to access 2D array ============
+for i in range(len(vOptArray)):
+  for j in range (len(vOptArray[i])):
+    print(vOptArray[i][j],end=" ")
+
+========================================
+==========Add question type =============
+1. Subjective Answer
+2. Single Word Answer
+3. Single Correct Answer
+4. Multiple Correct Answers
+
+
+
+response_data = {
+                'url': uploaded_image.img.url,
+            }
+media operation
+    os.remove(os.path.join(media_root, file_))
+
+    def deleteProduct(request, pk):
+    prod = Item.objects.get(id=pk)
+    if len(prod.image) > 0:
+        os.remove(prod.image.path)
+    prod.delete()
+    messages.success(request,"Product Deleted Successfuly")
+    return redirect('/')
+
+    s = '  Hello  World   From Pankaj \t\n\r\tHi There  '
+print(s)
+
+======================
+ vData=response.djExam
+                            // document.getElementById("lst_bx_exam_id").innerHTML =null;
+                            // for (i=0;i<vData.length;i++){
+                            //     $('#lst_bx_exam_id').append(
+                            //         `
+                            //         <option value=${vData[i].uid}>${vData[i].uid}</option>
+                            //         `
+                            //         )
+                                    
+                            // }
+
+                            --Insert Section Drop Down Values
+INSERT into teacher_exam(uid,start_date,end_date,is_released,duration,subject_code,level_code,institute_id,user_id,section_code) VALUES ('20991231E9999','2021-10-31 10:30:00','2021-10-31 10:30:00',1,30,'A10','A20',27,8,'A03');
