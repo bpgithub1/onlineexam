@@ -33,7 +33,7 @@ from onlineexam import settings
 
 #-----------------Re-Release Exam---------------
 def create_exam_copy(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :# and request.is_ajax(): #removed as it is depricated in django 4.0
         #------Values Comming from Client Page-------------
         vLoginId=request.user
         vEUID=request.POST.get('hEUID')        
@@ -91,7 +91,7 @@ def create_exam_copy(request):
 
 #-----------------Re-Release Exam---------------
 def re_release_exam(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :# and request.is_ajax(): #removed as it is depricated in django 4.0
         #------Values Comming from Client Page-------------
         vLoginId=request.user
         vEUID=request.POST.get('hEUID')  
@@ -147,7 +147,7 @@ def re_release_exam(request):
 
 #--------------------delete exam-------------------------
 def release_exam(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :# and request.is_ajax(): #removed as it is depricated in django 4.0
         #------Values Comming from Client Page-------------
         vUID=request.POST.get('hEUID')  
         vFullMarks=request.POST.get('hFullMarks')  
@@ -226,7 +226,7 @@ def release_exam(request):
 
 #------------Get All Question Data Associated with a particular exam-------    
 def get_exam_specific_all_question_data(request):      
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :# and request.is_ajax(): #removed as it is depricated in django 4.0
         vEUID=request.POST.get('hEUID') 
         cursor=connection.cursor()
         cursor.execute('select a.uid as "quid",a.particulars as "particulars", b.marks as "marks" from teacher_question a ,teacher_question_marks b where a.uid=b.quid and b.euid="'+vEUID+'"')
@@ -238,7 +238,7 @@ def get_exam_specific_all_question_data(request):
 
 #------------------Delete Question------------------------
 def delete_question(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :# and request.is_ajax(): #removed as it is depricated in django 4.0
         vEUID=request.POST.get('hEUID') 
         vQUID=request.POST.get('hQUID') 
         vExamSourceCode=request.POST.get('hExamSourceCode') 
@@ -266,20 +266,22 @@ def delete_question(request):
 
 
 #-------Populate Exam Ids --------
-def populate_exam(request):    
-    if request.method=='POST' and request.is_ajax():
+def populate_exam(request):  
+    if request.method=='POST':# and request.is_ajax(): #removed as it is depricated in django 4.0
+        print(">>>BP [TRACK START]>>>")  
         vEUID=request.POST.get('hEUID') 
         vUserLoginId=request.user 
         vUserDbId=getUserDbId(vUserLoginId)
         vInstDbId=getInstituteDbId(vUserLoginId) 
-        vListOfAllowedSubject=Department.objects.filter(user_id__exact=vUserDbId).values_list('subject_id', flat=True).distinct()        
+        vListOfAllowedSubject=Department.objects.filter(user_id__exact=vUserDbId).values_list('subject_id', flat=True).distinct()   
+        print(">>>BP>>>",vListOfAllowedSubject)     
         vQsExam=Exam.objects.values().filter(institute_id__exact=vInstDbId,subject_code__in=vListOfAllowedSubject).order_by('uid') 
         vExamList=list(vQsExam)                            
         return JsonResponse ({'status':1,'djExamList':vExamList}) 
 
 #--------------------get specific exam id data-------------------------
 def get_exam_data(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :# and request.is_ajax(): #removed as it is depricated in django 4.0
         vUID=request.POST.get('hUID') 
         vQsExam=Exam.objects.values().filter(uid__exact=vUID)
         vExam=list(vQsExam)
@@ -296,7 +298,7 @@ def get_exam_data(request):
 
 #-------Populate Question Ids from given Exam Id--------
 def populate_question(request):    
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :# and request.is_ajax(): #removed as it is depricated in django 4.0
         vEUID=request.POST.get('hEUID') 
         vUserLoginId=request.user 
         #vUserDbId,vInstDbId=get_user_institute_id(vUserLoginId)         
@@ -306,7 +308,7 @@ def populate_question(request):
         
 #--------------------get specific question  data-------------------------
 def get_question_data(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :# and request.is_ajax(): #removed as it is depricated in django 4.0
         vUserLoginId=request.user 
         vUserDbId=getUserDbId(vUserLoginId)
         vInstDbId=getInstituteDbId(vUserLoginId) 
@@ -337,7 +339,7 @@ def get_question_data(request):
 
 #----------------SAVE QUESTION DATA------------------#
 def save_exam_question(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :# and request.is_ajax(): #removed as it is depricated in django 4.0
         vEUID=request.POST.get('hEUID')
         vQUID=request.POST.get('hQUID')
         vQType=request.POST.get('hQType')    
@@ -456,7 +458,7 @@ def save_exam_question(request):
 
 #----------------SAVE QUESTION IMAGE------------------#
 def save_exam_question_image(request):
-    if request.method=='POST' and request.is_ajax(): 
+    if request.method=='POST' :# and request.is_ajax(): #removed as it is depricated in django 4.0 
         vImageSrc = request.FILES.get('img_question')                    
         vQUID=request.POST.get('hQUID') 
         vDeleteImageFlag=request.POST.get('hDeleteImageFlag') 
@@ -485,7 +487,7 @@ def save_exam_question_image(request):
 
 #--------------------Populate Drop Down (All Exams Related)-------------------------
 def populate_exam_drop_down(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :# and request.is_ajax(): #removed as it is depricated in django 4.0
         vUserLoginId=request.user 
         vUserDbId=getUserDbId(vUserLoginId)
         vInstDbId=getInstituteDbId(vUserLoginId)
@@ -520,7 +522,7 @@ def populate_exam_drop_down(request):
 
 #------------------Delete Exam------------------------
 def delete_exam(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :# and request.is_ajax(): #removed as it is depricated in django 4.0
         vUID=request.POST.get('hUID') 
         vQsExam=Exam.objects.values().filter(uid__exact=vUID)
         vIsReleased=vQsExam[0]['is_released']
@@ -543,7 +545,7 @@ def delete_exam(request):
 
 #--------------------delete exam-------------------------
 def save_exam(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :# and request.is_ajax(): #removed as it is depricated in django 4.0
         #------Values Comming from Client Page-------------
         vLoginId=request.user
         vUID=request.POST.get('hUID')        
