@@ -45,3 +45,7 @@ def get_available_exams(request):
         # # vExamList=list(vQsExam)     
         print("bp---->",vUserDbId,"----",result)                        
         return JsonResponse ({'djStatus':1,'djExamList':result}) 
+
+
+def setcookie(request): #only for RnD
+    
