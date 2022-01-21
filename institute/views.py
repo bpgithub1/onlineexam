@@ -35,7 +35,7 @@ from onlineexam import settings
 
 #----save institute details-------
 def save_institute_details(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :#and request.is_ajax():
         vStr=request.user
         vId=request.POST.get('hId')
         vName=request.POST.get('hName')
@@ -110,7 +110,7 @@ def get_institute_data(request):
 
 #-----SAVE TEACHER DATA
 def save_teacher_data(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :#and request.is_ajax():
         vTeacherUserId=request.POST.get('hTeacherUserId') 
         vAction=request.POST.get('hAction') 
         vIsSubjectDefined=request.POST.get('hIsSubjectDefined')
@@ -155,7 +155,7 @@ def save_teacher_data(request):
 
 #-----SAVE STUDENT DATA
 def save_student_data(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :#and request.is_ajax():
         vStudentUserId=request.POST.get('hStudentUserId') 
         vAction=request.POST.get('hAction') 
         vIsLevelSectionDefined=request.POST.get('hIsLevelSectionDefined')
@@ -268,7 +268,7 @@ def save_student_data(request):
 
 #-----------------Populate all the Student's Drop Down---------------
 def populate_student_drop_down(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :#and request.is_ajax():
         vLevelList,vSectionList=getLevelSectionList(request)        
         return JsonResponse ({'djStatus':1,'djLevelList':vLevelList,'djSectionList':vSectionList,})
 
@@ -312,7 +312,7 @@ def populate_student_user_ids(request):
 
 #-----------------Populate all the Student's Drop Down---------------
 def populate_teacher_user_ids(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :#and request.is_ajax():
         #---find list of students which is belongs to admin's ibstitute
         vLoginId=request.user
         vLoginUserDbId=getUserDbId(vLoginId)
@@ -391,7 +391,7 @@ def search_student(request):
 
 #-----------------Search Teacher---------------
 def search_teacher(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :#and request.is_ajax():
         vStr=request.POST.get('hSearchString') 
         vUserCount=User.objects.filter(username__icontains=vStr).count() 
         #print("===>",vUserCount)

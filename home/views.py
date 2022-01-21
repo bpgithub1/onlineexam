@@ -93,7 +93,7 @@ def profile_details(request):
     return JsonResponse ({'djStatus':1,'djUserDetails':vUserDataList})  
 
 def profile_details_save(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :#and request.is_ajax():
         vStr=request.user
         vDbId=request.POST.get('hDbId')
         vFirstName=request.POST.get('hNameFirst')
@@ -113,7 +113,7 @@ def profile_details_save(request):
     return JsonResponse ({'djStatus':1}) 
 
 def profile_extra_details_save(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :#and request.is_ajax():
         vStr=request.user
         vDbId=request.POST.get('hDbId')
         vContact1=request.POST.get('hContact1')

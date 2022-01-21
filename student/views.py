@@ -1,3 +1,4 @@
+#Latest Change:request.is_ajax(): #removed as it is depricated in django 4.0
 from django.shortcuts import render
 from django.http.response import JsonResponse
 from django.db import connection
@@ -8,7 +9,7 @@ from teacher.models import EXAM_ATTENDENCE
 #------------------------functions----------
 #-------Get All Available Exams List --------
 def get_available_exams(request):    
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST':#and request.is_ajax():
         vUserLoginId=request.user 
         vUserDbId=getUserDbId(vUserLoginId)
         vInstDbId=getInstituteDbId(vUserLoginId) 

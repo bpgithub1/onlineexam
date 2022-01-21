@@ -1,3 +1,4 @@
+#Latest Change:request.is_ajax(): #removed as it is depricated in django 4.0
 #-----Django
 from django.shortcuts import render,HttpResponse, resolve_url
 from django.http.response import JsonResponse
