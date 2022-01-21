@@ -274,7 +274,7 @@ def populate_student_drop_down(request):
 
 #-----------------Populate all the Student's Drop Down---------------
 def populate_teacher_drop_down(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :#and request.is_ajax():
         vSubjectList=getSubjectList(request)        
         return JsonResponse ({'djStatus':1,'djSubjectList':vSubjectList,})
 
@@ -282,7 +282,7 @@ def populate_teacher_drop_down(request):
 
 #-----------------Populate all the Student's Drop Down---------------
 def populate_student_user_ids(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :#and request.is_ajax():
         #---find list of students which is belongs to admin's ibstitute
         vLoginId=request.user
         vLoginUserDbId=getUserDbId(vLoginId)
@@ -343,7 +343,7 @@ def populate_teacher_user_ids(request):
 
 #-----------------Search Student---------------
 def search_student(request):
-    if request.method=='POST' and request.is_ajax():
+    if request.method=='POST' :#and request.is_ajax():
         vStr=request.POST.get('hSearchString') 
         vUserCount=User.objects.filter(username__icontains=vStr).count() 
         #print("===>",vUserCount)
