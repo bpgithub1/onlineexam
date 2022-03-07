@@ -1,0 +1,12 @@
+QID|QUESTION
+QUESTION1|Who was the writer of RAMAYAN?
+QUESTION2|Who was the writer of RAMCHARITMANAS?
+QUESTION3|How Many AVTAR of GOD VISHNU?
+QUESTION4|how many chapters are there in gita?
+QUESTION5|Bhagwan RAM ne Mata SABRI JI ko KITNI BHAKTI ka gyan diya tha?
+QUESTION6|what will be the answer of (a+b)*(a+b)?
+QUESTION7|Who was the director of TV Serial Chankya?
+QUESTION8|What are all the states of India which was ealier comes in Vijay Nagaram?
+QUESTION9|Tenaliram was belongs to which Kingdome?
+QUESTION10|Who was the writer of Mudraraksha?
+QUESTION11|what was the distance of Lanka from Rameswaram?

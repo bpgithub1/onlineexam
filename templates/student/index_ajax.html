@@ -2,6 +2,7 @@
      $(document).ready(function () {
         document.getElementById("div_student_dashboard").style.display="block";
         document.getElementById("div_student_notice_board").style.display="none";
+        document.getElementById("div_student_exam_portal").style.display="none";
         $("#student_msg").text("Dashboard");
 
     });
@@ -73,7 +74,14 @@
     function openExamAttendPortal(pExamCode){
         var r = confirm("Are Your Sure To Attend The Exam?");        
         if (r == true) {
-            alert("Open Exam Portal for "+pExamCode);
+            //alert("Open Exam Portal for "+pExamCode);
+            $("#student_msg").text("Examination("+pExamCode+") In Progress . . .");
+            $("#btn_dashboard").attr("disabled",true);
+            $("#btn_notice_board").attr("disabled",true);
+            document.getElementById("div_student_dashboard").style.display="none";
+            document.getElementById("div_student_notice_board").style.display="none";
+            document.getElementById("div_student_exam_portal").style.display="block";
+            //Now Design the exam portal layout and progress . . .            
         }else{
             //Do Nothing
         }

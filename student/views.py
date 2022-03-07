@@ -48,4 +48,5 @@ def get_available_exams(request):
 
 
 def setcookie(request): #only for RnD
+    pass
     
